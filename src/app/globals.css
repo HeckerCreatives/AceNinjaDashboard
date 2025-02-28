@@ -88,7 +88,7 @@ body {
 }
 
 .input{
-  @apply bg-zinc-900 text-sm p-3 rounded-md w-full
+  @apply bg-zinc-900 text-xs p-2 rounded-md w-full
 }
 
 
@@ -127,4 +127,16 @@ body {
   100% {
       transform: rotate(360deg);
   }
-  } 
+}
+
+.bg-light{
+  @apply bg-[#531414]
+}
+
+.bg-semi{
+  @apply bg-[#330F0D]
+}
+
+.bg-dark{
+  @apply bg-[#220909]
+}

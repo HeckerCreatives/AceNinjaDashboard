@@ -46,8 +46,8 @@ const chartConfig = {
 
 export default function Linechart() {
   return (
-    <Card>
-      <CardHeader className=" flex justify-between">
+    <Card className=" border-[1px] border-amber-500 overflow-hidden">
+      <CardHeader className=" flex justify-between bg-light">
         <div className=" w-full flex justify-between">
           <div className=" flex flex-col gap-1">
             <CardTitle>Line Chart - Linear</CardTitle>
@@ -55,10 +55,10 @@ export default function Linechart() {
           </div>
 
           <Select>
-          <SelectTrigger className="w-[100px] bg-zinc-900 text-xs">
+          <SelectTrigger className="w-[112px] h-[30px] text-xs">
             <SelectValue placeholder="Filter" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="">
             <SelectItem value="light">Light</SelectItem>
             <SelectItem value="dark">Dark</SelectItem>
             <SelectItem value="system">System</SelectItem>

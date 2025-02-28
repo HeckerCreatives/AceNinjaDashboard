@@ -45,8 +45,8 @@ const chartConfig = {
 
 export default function Barchart() {
   return (
-    <Card>
-      <CardHeader>
+    <Card className=" border-[1px] border-amber-500 overflow-hidden">
+      <CardHeader className=" bg-light">
         <div className=" w-full flex justify-between">
           <div className=" flex flex-col gap-1">
             <CardTitle>Bar Chart</CardTitle>
@@ -54,7 +54,7 @@ export default function Barchart() {
           </div>
 
           <Select>
-          <SelectTrigger className="w-[100px] bg-zinc-900 text-xs">
+          <SelectTrigger className="w-[100px] h-[30px] text-xs">
             <SelectValue placeholder="Filter" />
           </SelectTrigger>
           <SelectContent>

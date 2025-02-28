@@ -1,4 +1,9 @@
 import { Gamepad, Gem, Globe, Home, LayoutGrid, ShoppingBag, ShoppingBasket, Swords, TicketCheck, User, UserRound, Users, UsersRound } from "lucide-react";
+import { FaBullhorn } from "react-icons/fa";
+import { GrVmMaintenance } from "react-icons/gr";
+import { RiGamepadFill } from "react-icons/ri";
+
+
 
 export const userRoutes = [
     {route:'/user/dashboard', name: 'Dashboard', icon: <Home size={15}/> },
@@ -10,23 +15,30 @@ export const userRoutes = [
 
 export const superadminRoutes = [
     {route:'/superadmin/dashboard', name: 'Dashboard', icon: <LayoutGrid size={15}/>, subitems: [] },
-    {route:'/superadmin/players', name: 'Players', icon: <UsersRound size={15}/>, subitems: [] },
-    {route:'/superadmin/', name: 'Website', icon: <Globe size={15}/>,
-    subitems: [
-        {route:'/superadmin/website/news', name: 'News', icon: <Home size={15}/>},
+    {route:'/superadmin/players', name: 'Manage Players', icon: <UsersRound size={15}/>, subitems: [] },
+     {route:'/superadmin/', name: 'Newsletter', icon: <FaBullhorn size={15}/>,
+     subitems: [
+         {route:'/superadmin/newsletter/subscribers', name: 'Subscribers', icon: <FaBullhorn size={15}/>},
+         {route:'/superadmin/newsletter/registered', name: 'Registered', icon: <FaBullhorn size={15}/>},
        
-    ] },
-    {route:'/superadmin/game', name: 'Game', icon: <Gamepad size={15}/>,
-    subitems: [
-        {route:'/superadmin/game/announcement', name: 'Announcement'},
-        {route:'/superadmin/game/redeemcodes', name: 'Redeem Codes'},
-        {route:'/superadmin/game/dailyquest', name: 'Daily Quest'},
-        {route:'/superadmin/game/battlepass', name: 'Battle Pass'},
-        {route:'/superadmin/game/pvp', name: 'PvP'},
-        {route:'/superadmin/game/rewards', name: 'Rewards'},
-        {route:'/superadmin/game/maintenance', name: 'Maintenance'},
-    ] },
-    {route:'/superadmin/profile', name: 'Profile', icon: <UserRound size={15}/>, subitems: [] },
+     ] },
+    // {route:'/superadmin/maintenance', name: 'Maintenance', icon: <GrVmMaintenance size={15}/>, subitems: [] },
+    // {route:'/superadmin/', name: 'Announcement', icon: <FaBullhorn size={15}/>,
+    //  subitems: [
+    //      {route:'/superadmin/announcement/message', name: 'Message', icon: <FaBullhorn size={15}/>},
+    //      {route:'/superadmin/announcement/update', name: 'Update', icon: <FaBullhorn size={15}/>},
+       
+    //  ] },
+
+    //  {route:'/superadmin/', name: 'Games', icon: <RiGamepadFill size={15}/>,
+    //  subitems: [
+    //      {route:'/superadmin/games/pvp', name: 'PVP', icon: null},
+    //      {route:'/superadmin/games/quest', name: 'Quest', icon: null},
+    //      {route:'/superadmin/games/store', name: 'Store', icon: null},
+    //      {route:'/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null},
+       
+    //  ] },
+
 
 
 ]
