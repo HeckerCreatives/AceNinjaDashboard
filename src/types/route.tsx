@@ -1,4 +1,4 @@
-import { Gamepad, Gem, Globe, Home, LayoutGrid, ShoppingBag, ShoppingBasket, Swords, TicketCheck, User, UserRound, Users, UsersRound } from "lucide-react";
+import { Box, Gamepad, Gem, Globe, Globe2, Home, LayoutGrid, ShoppingBag, ShoppingBasket, Swords, TicketCheck, User, UserRound, Users, UsersRound } from "lucide-react";
 import { FaBullhorn } from "react-icons/fa";
 import { GrVmMaintenance } from "react-icons/gr";
 import { RiGamepadFill } from "react-icons/ri";
@@ -22,22 +22,33 @@ export const superadminRoutes = [
          {route:'/superadmin/newsletter/registered', name: 'Registered', icon: <FaBullhorn size={15}/>},
        
      ] },
-    // {route:'/superadmin/maintenance', name: 'Maintenance', icon: <GrVmMaintenance size={15}/>, subitems: [] },
-    // {route:'/superadmin/', name: 'Announcement', icon: <FaBullhorn size={15}/>,
-    //  subitems: [
-    //      {route:'/superadmin/announcement/message', name: 'Message', icon: <FaBullhorn size={15}/>},
-    //      {route:'/superadmin/announcement/update', name: 'Update', icon: <FaBullhorn size={15}/>},
-       
-    //  ] },
+     {route:'/superadmin/maintenance', name: 'Maintenance', icon: <GrVmMaintenance size={15}/>, subitems: [] },
+     {route:'/superadmin/', name: 'Announcement', icon: <FaBullhorn size={15}/>,
+      subitems: [
+          {route:'/superadmin/announcement/message', name: 'Message', icon: <FaBullhorn size={15}/>},
+          {route:'/superadmin/announcement/update', name: 'Update', icon: <FaBullhorn size={15}/>},
+ 
+      ] },
 
-    //  {route:'/superadmin/', name: 'Games', icon: <RiGamepadFill size={15}/>,
-    //  subitems: [
-    //      {route:'/superadmin/games/pvp', name: 'PVP', icon: null},
-    //      {route:'/superadmin/games/quest', name: 'Quest', icon: null},
-    //      {route:'/superadmin/games/store', name: 'Store', icon: null},
-    //      {route:'/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null},
-       
-    //  ] },
+      {route:'/superadmin/', name: 'Games', icon: <RiGamepadFill size={15}/>,
+      subitems: [
+          {route:'/superadmin/games/pvp', name: 'PVP', icon: null},
+          {route:'/superadmin/games/quest', name: 'Quest', icon: null},
+          {route:'/superadmin/games/store', name: 'Store', icon: null},
+          {route:'/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null},
+ 
+      ] },
+     {route:'/superadmin/grant', name: 'Grant', icon: <Box size={15}/>, subitems: [] },
+
+     {route:'/superadmin/', name: 'Website', icon: <Globe2 size={15}/>,
+      subitems: [
+          {route:'/superadmin/website/news', name: 'News', icon: null},
+          {route:'/superadmin/website/downloadlinks', name: 'Download Links', icon: null},
+          {route:'/superadmin/website/socialmedia', name: 'Social Media', icon: null},
+ 
+      ] },
+
+      
 
 
 

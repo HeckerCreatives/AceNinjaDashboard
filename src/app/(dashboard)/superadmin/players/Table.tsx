@@ -70,7 +70,7 @@ export default function Playertable() {
           <DialogTrigger>
           <button className=' bg-zinc-500 flex items-center gap-1 px-3 py-1 text-xs rounded-md'><OctagonAlert size={15} className=' text-red-500'/> Ban / Unban</button>
           </DialogTrigger>
-          <DialogContent className=''>
+          <DialogContent className=' w-full h-auto p-6 max-w-[600px]'>
             <DialogHeader>
               <DialogTitle>Are you absolutely sure, you want to ban this user?</DialogTitle>
               <DialogDescription>

@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Plus} from 'lucide-react'
+import { ImageUp, Plus} from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -9,78 +9,93 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { createCode, CreateCode } from '@/schema/schema'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {useForm} from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createNews, CreateNews } from '@/schema/schema'
 
 
-export default function CreateCodesFrom() {
+
+const tabs = [
+  'Image',
+  'Video',
+]
+
+export default function CreateQuestForm() {
+    const [image, setImage] = useState('')
     const [open, setOpen] = useState(false)
+    const [tab, setTab] = useState('Image')
 
-    //validation
+    //create news validation
     const {
-        register,
-        handleSubmit,
-        setValue,
-        reset,
-        trigger,
-        formState: { errors },
-      } = useForm<CreateCode>({
-        resolver: zodResolver(createCode),
-      });
-    
-      // create codes
-      const createRedeemcode = async ( data: CreateCode) => {
-        console.log(data)
-       
-      }
-    
-      console.log(errors)
+      register,
+      handleSubmit,
+      setValue,
+      reset,
+      trigger,
+      formState: { errors },
+    } = useForm<CreateNews>({
+      resolver: zodResolver(createNews),
+    });
 
-      //reset form
-      useEffect(() => {
+    //create news
+    const createWebsiteNews = async ( data: CreateNews) => {
+      console.log(data)
+     
+    }
+
+    //reset form value
+    useEffect(() => {
         reset()
-      },[open])
-
+    },[open])
+  
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger>
-              <button className=' active-gradient px-4 py-2 text-xs flex items-center gap-1'><Plus size={15}/>Create Codes</button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create Code</DialogTitle>
-                <DialogDescription>
-                
-                </DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleSubmit(createRedeemcode)} className=' text-xs mt-4 flex flex-col'>
-                  <label htmlFor="">Code</label>
-                  <input type="text" placeholder='Code' className={` input ${errors.code && 'border-[1px] focus:outline-none border-red-500'} `} {...register('code')} />
-                  {errors.code && <p className=' text-[.6em] text-red-500'>{errors.code.message}</p>}
+    <DialogTrigger className=' bg-yellow-500 text-black px-6 py-2 rounded-md flex items-center w-fit text-xs font-semibold'>
+    <Plus size={15}/>Create
+    </DialogTrigger>
+    <DialogContent className=' max-w-[800px] h-auto border-amber-500/80 border-[1px]'>
+      <DialogHeader className=' w-full bg-light p-3'>
+        <DialogTitle className=' text-sm'>Create Codes</DialogTitle>
+        <DialogDescription>
+         
+        </DialogDescription>
+      </DialogHeader>
+      <form onSubmit={handleSubmit(createWebsiteNews)} className=' text-xs flex flex-col gap-2 p-6'>
+
+            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            <label htmlFor="">Code</label>
+            <input type="text" placeholder='Code' className={` input ${errors.title && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('title')} />
+            {errors.title && <p className=' text-[.6em] text-red-500'>{errors.title.message}</p>}
+            </div>
+
+            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            <label htmlFor="">Rewards</label>
+            <input type="text" placeholder='Rewards' className={` input ${errors.title && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('title')} />
+            {errors.title && <p className=' text-[.6em] text-red-500'>{errors.title.message}</p>}
+            </div>
 
 
-                  <label htmlFor="" className=' mt-4'>Rewards</label>
-                  <input type="text" placeholder='Rewards' className={` input ${errors.rewards && 'border-[1px] focus:outline-none border-red-500'} `} {...register('rewards')} />
-                  {errors.rewards && <p className=' text-[.6em] text-red-500'>{errors.rewards.message}</p>}
+            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            <label htmlFor="">Expiration</label>
+            <input type="date" placeholder='Expiration' className={` input ${errors.title && 'border-[1px] focus:outline-none border-red-500'} `} {...register('title')} />
+            {errors.title && <p className=' text-[.6em] text-red-500'>{errors.title.message}</p>}
+            </div>
+
+          
+
+         
 
 
-                  <label htmlFor="" className=' mt-4'>Expiration</label>
-                  <input type="date"  className={` input ${errors.rewards && 'border-[1px] focus:outline-none border-red-500'} `} {...register('expiration')} />
-                  {errors.expiration && <p className=' text-[.6em] text-red-500'>{errors.expiration.message}</p>}
-
-                  
-
-                  <div className=' w-full flex items-end justify-end gap-4 mt-6 text-white'>
-                    {/* <button className=' bg-zinc-800 px-6 py-2 rounded-md'>Cancel</button> */}
-                    <button className=' active-gradient px-6 py-2 rounded-md'>Save</button>
-
-                  </div>
+          <div className=' w-full flex items-end justify-end gap-4 mt-6 text-white'>
+            <button className=' bg-yellow-500 text-black text-xs px-8 py-2 rounded-md'>Save</button>
+            {/* <button className=' bg-red-500 text-black text-xs px-8 py-2 rounded-md'>Cancel</button> */}
+          </div>
 
 
-                </form>
-            </DialogContent>
+         </form>
+    </DialogContent>
     </Dialog>
   )
 }

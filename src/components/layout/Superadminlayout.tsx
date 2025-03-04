@@ -193,7 +193,7 @@ const matchedRoutes = superadminRoutes
                     <p className=' text-xs'>Superadmin</p>
 
                   </div>
-                  <img src="/dashboard/small Logo.png" alt="user" width={60} height={60} />
+                  <img src="/dashboard/small LOGO.png" alt="user" width={60} height={60} />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
