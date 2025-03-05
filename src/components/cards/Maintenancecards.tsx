@@ -28,10 +28,10 @@ export default function MaintenanceCard(prop:Props){
       // }}
     >
 
-      <img src={prop.img} alt="bg" className='' />
+      <img src={prop.img} alt="bg" className=' w-full' />
 
       <div className=' absolute z-10 w-full h-full flex '>
-        <div className=' w-full flex flex-col gap-4 p-6'>
+        <div className=' w-full h-full flex flex-col justify-center gap-4 p-6'>
               <p className=' text-sm font-semibold '>{prop.name}</p>
               <Switch checked={check} onCheckedChange={setCheck}/>
 

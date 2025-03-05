@@ -54,7 +54,7 @@ export default function CreateNewsForm() {
     <DialogTrigger className=' bg-yellow-500 text-black px-6 py-2 rounded-md flex items-center w-fit text-xs font-semibold'>
     <Plus size={15}/>Create
     </DialogTrigger>
-    <DialogContent className=' max-w-[800px] h-auto border-amber-500/80 border-[1px]'>
+    <DialogContent className=' max-w-[800px] h-auto max-h-[90%] border-amber-500/80 border-[1px]'>
       <DialogHeader className=' w-full bg-light p-3'>
         <DialogTitle className=' text-sm'>Create News</DialogTitle>
         <DialogDescription>

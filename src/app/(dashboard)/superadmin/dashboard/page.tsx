@@ -35,14 +35,14 @@ export default function Home() {
 
   return (
     <Superadminlayout>
-    <div className='p-6 top-0 left-0 w-full flex flex-col gap-8 justify-between h-auto max-w-[1920px]'>
+    <div className='p-6 top-0 left-0 w-full flex flex-col gap-8 justify-between h-auto max-w-[1625px]'>
 
-      <div className=" relative w-full flex flex-col items-center justify-center gap-8 px-8">
+      <div className=" relative w-full flex flex-col items-center justify-center gap-8 ~px-2/8">
 
         <div className=" w-full h-[80%] bg-[#330F0D] absolute border-t-2 border-amber-900/50 rounded-md">
 
         </div>
-        <div className=' relative z-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
+        <div className=' relative z-10 w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8'>
           <Card name={"Current Season"} value={1} isAmount={false} icon={<ArrowUpRight size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true} />
           <Card name={"Total Users"} value={999999} isAmount={false} icon={<UsersRound size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
           <Card name={"Total Active Users"} value={999999} isAmount={false} icon={<UserRoundCheck size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
@@ -50,7 +50,7 @@ export default function Home() {
           
         </div>
 
-        <div className=' relative z-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 bg-[#531414] rounded-md border-[1px] border-amber-900 px-8 py-2'>
+        <div className=' relative z-10 w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8 bg-[#531414] rounded-md border-[1px] border-amber-900 ~px-2/8 py-2'>
           <Card name={"Total Sales"} value={999999} isAmount={true} icon={<DollarSign size={20} />} isLoading={false} bg={"bg-[#220909]"} border={false}/>
           <Card name={"Website Sales"} value={999999} isAmount={true} icon={<LaptopMinimal size={20} />} isLoading={false} bg={"bg-[#220909]"} border={false}/>
           <Card name={"Playstore / Ios Sales"} value={999999} isAmount={true} icon={<TabletSmartphone size={20} />} isLoading={false} bg={"bg-[#220909]"} border={false}/>
@@ -59,7 +59,7 @@ export default function Home() {
       </div>
       
 
-      <div className=' w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#330F0D] border-t-2 border-amber-900/50 rounded-md p-8'>
+      <div className=' w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#330F0D] border-t-2 border-amber-900/50 rounded-md ~p-2/8'>
         <Linechart/>
         <Barchart/>
         

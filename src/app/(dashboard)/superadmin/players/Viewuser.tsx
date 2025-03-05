@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Boxes, Eye, ShoppingBag, Ticket, Users } from 'lucide-react'
+import { Boxes, Eye, Menu, Navigation, ShoppingBag, Ticket, Users } from 'lucide-react'
 import { GiWhirlpoolShuriken } from "react-icons/gi";
 import { TbSwords } from "react-icons/tb";
 import { PiPath } from "react-icons/pi";
@@ -20,6 +20,15 @@ import BattlePass from './viewuser/BattlePass';
 import Friends from './viewuser/Friends';
 import Purchase from './viewuser/Purchase';
 import { IoClose } from "react-icons/io5";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+  
 
 const viewnavigation = [
     {name: 'Dashboard', path: 'dashboard' , icon: <GiWhirlpoolShuriken size={20}/>},
@@ -43,7 +52,7 @@ export default function Viewuser() {
          
           </DialogTrigger>
           <DialogContent className=' flex flex-col items-center min-h-[90%] w-[90%] border-[1px] border-amber-500 overflow-y-auto'>
-            <nav className="sticky top-0 w-full bg-light flex items-center justify-between gap-4 px-4 py-2 z-10">
+            <nav className="sticky hidden top-0 w-full bg-light lg:flex items-center justify-between gap-4 px-4 py-2 z-10">
                 <div className='flex items-center gap-4'>
                     {viewnavigation.map((item, index) => (
                     <React.Fragment key={index}>
@@ -58,6 +67,30 @@ export default function Viewuser() {
                     </p>
                     </React.Fragment>
                 ))}
+                </div>
+
+                <button onClick={() => setOpen(!open)} className=''>
+                <IoClose size={30} className=' text-yellow-500'/>
+                </button>
+            
+            </nav>
+
+            <nav className="sticky lg:hidden top-0 w-full bg-light flex items-center justify-between gap-4 px-4 py-2 z-10">
+                <div className='flex items-center gap-4'>
+                <DropdownMenu>
+                <DropdownMenuTrigger className=' bg-amber-900 p-1 rounded-md'>
+                    <Menu size={15}/>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className=' translate-x-8'>
+                    <DropdownMenuLabel className=' text-sm'>Menu</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {viewnavigation.map((item, index) => (
+                    <DropdownMenuItem onClick={() => setTab(item.path)} className={`text-xs ${item.path === tab && ' text-yellow-500'}`}>{item.icon}{item.name}</DropdownMenuItem>
+                    ))}
+                   
+                </DropdownMenuContent>
+                </DropdownMenu>
+
                 </div>
 
                 <button onClick={() => setOpen(!open)} className=''>

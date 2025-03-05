@@ -61,7 +61,7 @@ export default function CreateQuestForm() {
          
         </DialogDescription>
       </DialogHeader>
-      <form onSubmit={handleSubmit(createWebsiteNews)} className=' text-xs flex flex-col gap-2 p-6'>
+      <form onSubmit={handleSubmit(createWebsiteNews)} className=' text-xs flex flex-col gap-2 ~p-2/6'>
 
         <div className=' w-full flex items-center gap-4'>
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>

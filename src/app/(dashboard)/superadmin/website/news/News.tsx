@@ -16,7 +16,7 @@ import Pagination from '@/components/common/Pagination'
 
 export default function News() {
   return (
-    <div className=' w-full p-8'>
+    <div className=' w-full ~p-2/8'>
 
         <div className=' bg-dark border-t-2 border-amber-900/50 px-2 py-6 rounded-md'>
 

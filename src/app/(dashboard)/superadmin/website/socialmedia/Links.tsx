@@ -5,7 +5,7 @@ export default function Links() {
   return (
     
 
-    <div className=' w-full p-8'>
+    <div className=' w-full ~p-2/8'>
 
         <div className=' bg-dark border-t-2 border-amber-900/50 px-2 py-6 rounded-md '>
 
@@ -14,7 +14,7 @@ export default function Links() {
                 <p className=' text-lg font-semibold'>Social Media</p>
             </div>
 
-            <div className=' flex flex-wrap items-center justify-center gap-20 w-full p-8 h-auto'>
+            <div className='w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 ~p-6/32'>
                 <Cardlinks image={<img src="/FB Image.svg" alt="playstore" height={100} width={120} className=' mb-4'/>} link={''}/>
                 <Cardlinks image={<img src="/X Image.svg" alt="playstore" height={100} width={120} className=' mb-4'/>} link={''}/>
                 <Cardlinks image={<img src="/Discord Image.svg" alt="playstore" height={100} width={120} className=' mb-4'/>} link={''}/>

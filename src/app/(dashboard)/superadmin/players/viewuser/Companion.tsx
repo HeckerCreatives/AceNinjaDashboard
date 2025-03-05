@@ -8,7 +8,7 @@ export default function Companion() {
 
         </div>
 
-        <div className=' w-full h-auto flex items-center justify-center gap-4 p-8'>
+        <div className=' w-full h-auto flex flex-wrap items-center justify-center gap-4 p-8'>
             <div className=' h-auto flex flex-col gap-4'>
                 <div className=' flex flex-col gap-6 p-4 bg-dark max-w-[300px] w-full'>
                     <p className=' text-lg font-semibold'>Passive:</p>

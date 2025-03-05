@@ -20,7 +20,7 @@ export default function RedeemCodes() {
     const [tab, setTab] = useState('Daily')
     
   return (
-    <div className=' w-full p-8'>
+    <div className=' w-full ~p-2/8'>
 
         <div className=' bg-dark border-t-2 border-amber-900/50 px-2 py-6 rounded-md'>
 
@@ -29,7 +29,7 @@ export default function RedeemCodes() {
                 <p className=' text-lg font-semibold'>Redeem Codes</p>
             </div>
 
-            <div className=' flex flex-col gap-8 p-8'>
+            <div className=' flex flex-col gap-8 ~p-2/8'>
 
                 <RedeemCards/>
 

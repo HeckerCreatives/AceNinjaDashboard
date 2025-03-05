@@ -44,7 +44,7 @@ export default function Playertable() {
           <Search size={15} className=' absolute right-4'/>
         </div>
       </div>
-    <Table>
+    <Table className=' text-xs'>
     <TableCaption>User list.</TableCaption>
     <TableHeader>
         <TableRow>

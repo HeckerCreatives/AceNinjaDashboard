@@ -128,58 +128,64 @@ const matchedRoutes = superadminRoutes
             <Sheet>
               <SheetTrigger asChild>
                 <button
-                  className="shrink-0 lg:hidden bg-zinc-800"
+                  className="shrink-0 lg:hidden bg-amber-950 p-1 rounded-md"
                 >
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-4 w-4" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="left" className="flex flex-col bg-zinc-950 border-r-2 border-zinc-800">
+              <SheetContent side="left" className="flex flex-col bg-zinc-950 border-r-2 border-zinc-800 "
+            style={{backgroundImage:"url('/dashboard/Side Panel.png')", backgroundSize:'cover', backgroundPosition:'right'}}
+              
+              >
                 <div className=' flex items-center justify-center gap-2 text-white p-4'>
                   <img src="/logo.png" alt="" width={100} height={100} />
                  
                 </div>
-                <nav className="grid gap-2 text-lg">
-                {superadminRoutes.map((item, index) => (
-                  <>
-                  {item.subitems?.length === 0 ? (
-                    <Link
-                    key={index}
-                    href={item.route}
-                    className={` ${path.includes(item.route) ? 'active-gradient' : 'text-zinc-100 hover:text-amber-300 '}   text-sm flex items-center gap-3 rounded-lg px-3  py-2 transition-all`}
-                  >
-                    {item.icon}
-                    {item.name}
-                  </Link>
-                  ): (
-                    <Accordion type="single" collapsible>
-                    <AccordionItem value="item-1">
-                      <div className={`  px-3 flex items-center w-full gap-2 ${path.includes(item.name.toLowerCase()) ? 'active-gradient' : 'text-zinc-100 hover:text-amber-300' }`}>
-                        {item.icon}
-                        <AccordionTrigger className=' w-[200px] text-sm'>{item.name}</AccordionTrigger>
-                      </div>
-                      
-                      <AccordionContent className=' pl-8'>
-
-                        {item.subitems?.map((item, index) => (
-                           <Link
-                           key={index}
-                           href={item.route}
-                           className={` ${path.includes(item.route) ? ' text-amber-300' : 'text-zinc-100 hover:text-amber-300'} text-sm flex items-center gap-3 rounded-lg px-3  py-2 transition-all`}
-                         >
-                           
-                           {item.name}
-                         </Link>
-                        ))}
+                <nav className=" flex flex-col gap-2 px-2 text-sm font-medium lg:px-4">
+                  {superadminRoutes.map((item, index) => (
+                    <>
+                    {item.subitems?.length === 0 ? (
+                      <Link
+                      key={index}
+                      href={item.route}
+                      className={` ${path.includes(item.route) ? ' text-yellow-400' : 'text-white hover:text-amber-300 '}   text-sm flex items-center gap-3 rounded-lg px-3  py-2 transition-all`}
+                    >
+                      {item.icon}
+                      {item.name}
+                    </Link>
+                    ): (
+                      <Accordion type="single" collapsible>
+                      <AccordionItem value="item-1">
+                        <div className={`  px-3 flex items-center w-full gap-2 ${path.includes(item.name.toLowerCase()) ? 'text-yellow-400' : 'text-zinc-100 hover:text-amber-300' }`}>
                         
-                      </AccordionContent>
-                    </AccordionItem>
-                    </Accordion>
-                  )}
-                  
-                  </>
-                  
-                ))}
-                
+                          <AccordionTrigger className=' w-[160px] text-sm'> 
+                            <div className=' flex items-center gap-2'>
+                            {item.icon}{item.name}
+                            </div>
+                            </AccordionTrigger>
+                        </div>
+                        
+                        <AccordionContent className=' pl-8'>
+
+                          {item.subitems?.map((item, index) => (
+                            <Link
+                            key={index}
+                            href={item.route}
+                            className={` ${path.includes(item.route) ? ' text-amber-300' : 'text-zinc-100 hover:text-amber-300'} text-sm flex items-center gap-3 rounded-lg px-3  py-2 transition-all`}
+                          >
+                            
+                            {item.name}
+                          </Link>
+                          ))}
+                          
+                        </AccordionContent>
+                      </AccordionItem>
+                      </Accordion>
+                    )}
+                    
+                    </>
+                    
+                  ))}
                 </nav>
                
               </SheetContent>
@@ -197,13 +203,13 @@ const matchedRoutes = superadminRoutes
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Superadmin</DropdownMenuLabel>
+                <DropdownMenuLabel className=' text-sm'>Superadmin</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem ><a href="/">Logout</a></DropdownMenuItem>
+                <DropdownMenuItem className=' text-xs' ><a href="/">Logout</a></DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
-          <main className=" relative flex flex-1 flex-col items-center gap-4 bg-zinc-900  ">
+          <main className=" w-full relative flex flex-1 flex-col items-center gap-4 bg-zinc-900">
               {children}
           </main>
         </div>

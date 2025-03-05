@@ -9,7 +9,7 @@ import Companion from './Companion'
 export default function Dashboard() {
   return (
     <div className=' w-full max-w-[1540px] h-auto flex flex-col gap-6 items-center p-4'>
-        <div className=' w-full h-[200px] flex items-center justify-between bg-light px-6 border-[1px] border-amber-900 rounded-md'>
+        <div className=' w-full h-auto flex lg:flex-row flex-col gap-4 items-center justify-between bg-light py-4 px-6 border-[1px] border-amber-900 rounded-md'>
             <div className=' flex flex-col items-center gap-2 px-20'>
                 <p className=' text-xl font-bold'>Username</p>
                 <p className=' w-[130px] text-center py-1 bg-dark text-[.7rem]'>Current: Lvl 99</p>
@@ -35,13 +35,13 @@ export default function Dashboard() {
 
         </div>
 
-        <div className=' w-full grid grid-cols-3 gap-6'>
+        <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6'>
             <ViewCard name={'Coins'} value={9999} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
             <ViewCard name={'Emerald'} value={9999} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
             <ViewCardSecondary name={'ROOKIE'} value={9999} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
         </div>
 
-        <div className=' w-full grid grid-cols-2 gap-6'>
+        <div className=' w-full grid grid-cols-1 md:grid-cols-2 gap-6'>
             <Stats/>
             <EquipedItems/>
 

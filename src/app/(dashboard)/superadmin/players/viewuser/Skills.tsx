@@ -23,9 +23,9 @@ export default function Skills() {
     const [tab, setTab] = useState('Basic Skills')
   return (
     <div className=' w-full flex flex-col max-w-[1540px] p-8 '>
-        <div className=' flex items-center gap-[1px]'>
+        <div className=' flex items-center whitespace-nowrap gap-[1px] overflow-x-auto'>
             {tabs.map((item, index) => (
-            <button onClick={() => setTab(item)} key={index} className={` transition-all duration-300 w-[110px] py-2 rounded-t-lg  text-xs ${item === tab ? 'bg-yellow-500 text-black' : 'bg-zinc-600'}`}>{item}</button>
+            <button onClick={() => setTab(item)} key={index} className={` transition-all duration-300 min-w-[110px] py-2 rounded-t-lg  text-xs ${item === tab ? 'bg-yellow-500 text-black' : 'bg-zinc-600'}`}>{item}</button>
 
             ))}
         </div>

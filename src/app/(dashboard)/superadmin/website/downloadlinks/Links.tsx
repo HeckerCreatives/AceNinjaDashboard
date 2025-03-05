@@ -5,7 +5,7 @@ export default function Links() {
   return (
     
 
-    <div className=' w-full p-8'>
+    <div className=' w-full ~p-2/8 h-full'>
 
         <div className=' bg-dark border-t-2 border-amber-900/50 px-2 py-6 rounded-md '>
 
@@ -14,7 +14,7 @@ export default function Links() {
                 <p className=' text-lg font-semibold'>Download Links</p>
             </div>
 
-            <div className=' w-full flex flex-wrap items-center justify-center gap-20 p-8 h-[400px]'>
+            <div className='  w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 ~p-6/32'>
                 <Cardlinks image={<img src="/playstore.svg" alt="playstore" height={100} width={200} className=' mb-4'/>} link={''}/>
                 <Cardlinks image={<img src="/appstore.svg" alt="playstore" height={100} width={200} className=' mb-4'/>} link={''}/>
                 <Cardlinks image={<img src="/steam.svg" alt="playstore" height={100} width={200} className=' mb-4'/>} link={''}/>

@@ -56,7 +56,7 @@ export default function Home() {
      
 
       <div className=" max-w-[1240px] w-[90%] h-[90%] lg:h-[700px] grid grid-cols-1 lg:grid-cols-2 rounded-lg overflow-hidden shadow-xl"
-        style={{backgroundImage: "url('/Contact Bg.png')", backgroundSize: "cover", backgroundPosition: "left", backgroundRepeat:"no-repeat"}}
+        style={{backgroundImage: "url('/Contact BG.png')", backgroundSize: "cover", backgroundPosition: "left", backgroundRepeat:"no-repeat"}}
 
       >
         <div className=" relative hidden lg:flex w-full h-full"

@@ -15,7 +15,7 @@ import GrantItems from '@/components/forms/GrantItems'
 
 export default function Grant() {
   return (
-    <div className=' w-full p-8'>
+    <div className=' w-full ~p-2/8'>
 
         <div className=' bg-dark border-t-2 border-amber-900/50 px-2 py-6 rounded-md'>
 
@@ -24,9 +24,9 @@ export default function Grant() {
                 <p className=' text-lg font-semibold'>Grant</p>
             </div>
 
-            <div className=' flex flex-col gap-4 p-8'>
+            <div className=' flex flex-col gap-4 ~p-2/8'>
 
-                <div className=' w-full flex items-center justify-between'>
+                <div className=' w-full flex flex-wrap gap-4 items-center justify-between'>
                     <button className=' py-2 px-4 bg-yellow-500 text-black text-xs w-fit rounded-r-md flex items-center gap-2'>Select Item <ChevronDown size={15}/></button>
 
                     <div className=' relative flex items-center'>

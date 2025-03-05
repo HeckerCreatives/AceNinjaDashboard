@@ -31,7 +31,7 @@ export default function Store() {
     const [tab, setTab] = useState('Weapon')
     
   return (
-    <div className=' w-full p-8'>
+    <div className=' w-full ~p-2/8'>
 
         <div className=' bg-dark border-t-2 border-amber-900/50 px-2 py-6 rounded-md'>
 
@@ -40,12 +40,12 @@ export default function Store() {
                 <p className=' text-lg font-semibold'>Quest</p>
             </div>
 
-            <div className=' flex flex-col gap-4 p-8'>
+            <div className=' flex flex-col gap-4 ~p-2/8'>
 
               
-                <div className=' flex items-center gap-[1px] mt-4 mb-1'>
+                <div className=' flex items-center w-auto whitespace-nowrap gap-[1px] mt-4 mb-1 overflow-x-auto'>
                     {tabs.map((item, index) => (
-                    <p onClick={() => setTab(item)} key={index} className={` cursor-pointer transition-all duration-300  text-center w-[90px] py-2 rounded-t-lg  text-xs ${item === tab ? 'bg-yellow-500 text-black' : 'bg-zinc-600'}`}>{item}</p>
+                    <p onClick={() => setTab(item)} key={index} className={` whitespace-nowrap cursor-pointer transition-all duration-300  text-center min-w-[90px] py-2 rounded-t-lg  text-xs ${item === tab ? 'bg-yellow-500 text-black' : 'bg-zinc-600'}`}>{item}</p>
 
                     ))}
                 </div>
