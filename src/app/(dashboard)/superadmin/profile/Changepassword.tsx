@@ -1,5 +1,5 @@
 'use client'
-import { changePassword, ChangePassword } from '@/schema/schema'
+import { changePassword, ChangePassword } from '@/validation/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeClosed, EyeOff } from 'lucide-react'
 import React, { useState } from 'react'

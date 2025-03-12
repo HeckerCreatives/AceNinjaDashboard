@@ -12,7 +12,7 @@ import {
 import PaginitionComponent from '@/components/common/Pagination'
   
 
-export default function TableInventory() {
+export default function TopupHistory() {
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
   
@@ -21,7 +21,7 @@ export default function TableInventory() {
     setCurrentPage(page)
   }
   return (
-    <div className=' bg-zinc-950 p-4 w-full h-[400px]'>
+    <div className=' bg-zinc-950 p-4 w-full h-[400px] border-[1px] border-amber-900 rounded-md'>
     <Table>
     <TableCaption>Top up history</TableCaption>
     <TableHeader>

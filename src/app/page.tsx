@@ -1,54 +1,44 @@
 'use client'
-import AnimatedInput from "@/components/common/InputAnimatedLabel";
-import Loader from "@/components/common/Loader";
-import { handleAxiosError } from "@/utils/ErrorHandler";
-import axios, { AxiosError } from "axios";
-import { url } from "inspector";
+import axiosInstance from "@/lib/axiosInstance";
+import { handleApiError } from "@/lib/errorHandler";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
+import router from "next/router";
+
+interface Login {
+  username: string
+  password: string
+}
+
 
 export default function Home() {
 
-  const router = useRouter()
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
-  const login = () => {
-    if(username === 'user'){
+  const authLogin = async ( data: Login) => {
+    setLoading(true)
+    try {
+      const response = await axiosInstance.get(
+        "/auth/login",
+        {params : data}
+    );
+    console.log(response.data)
+    if(response.data.data.auth === 'player'){
       router.push('/user/dashboard')
-    } else if( username === 'superadmin') {
-      router.push('/superadmin/dashboard')
+    }
 
+    if(response.data.data.auth === 'superadmin'){
+      router.push('/superadmin/dashboard')
+    }
+    setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      handleApiError(error)
     }
   }
-
-  // const loginUser = async () => {
-  //   setLoading(true)
-  //   try {
-  //       const response = await axios.get(`${process.env. NEXT_PUBLIC_API_URL}/auth/login`,
-  //           {
-  //               withCredentials: true,
-  //               headers: {
-  //               'Content-Type': 'application/json'
-  //               }
-  //           }
-  //       )
-
-     
-  //   if (response.data.data.auth === 'superadmin' ){
-  //       toast.success('Successfully logged in')
-  //       router.push('/superadmin/dashboard')
-  //       setLoading(false)
-  //   }
-        
-  //   } catch (error) {
-  //       setLoading(false)
-  //       handleAxiosError(error, router);
-  //   }
-  // };
-
 
   return (
     <div className=" w-full h-screen bg-zinc-100 flex items-center justify-center">
@@ -80,11 +70,13 @@ export default function Home() {
             <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Username" className=" p-3 bg-zinc-200 text-black rounded-sm" />
 
             <div className=" w-full flex items-center justify-center">
-              <button onClick={login} className=" relative w-fit rounded-md mt-10 font-semibold flex items-center gap-2 justify-center">
+              <button onClick={() => authLogin({username, password})}  className=" relative w-fit rounded-md mt-10 font-semibold flex items-center gap-2 justify-center">
                 {/* <Loader/> */}
                 <img src="/Submit BUTTON.png" alt="" className=""/>
                 <div className=" absolute z-20 w-full flex items-center justify-center gap-2">
+                  {loading && (
                   <div className="loader"></div>
+                  )}
                   <p className="  text-sm font-semibold">Sign in</p>
                 </div>
               </button>

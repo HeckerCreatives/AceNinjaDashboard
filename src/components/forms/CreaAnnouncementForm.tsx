@@ -12,7 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createAnnouncement, CreateAnnouncement} from '@/schema/schema'
+import { createAnnouncement, CreateAnnouncement} from '@/validation/schema'
 
 type Prop = {
     children: React.ReactNode

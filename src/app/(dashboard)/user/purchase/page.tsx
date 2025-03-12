@@ -1,17 +1,19 @@
-import React from 'react'
-import TableInventory from './Table'
 import Userlayout from '@/components/layout/Userlayout'
+import React from 'react'
+import Purchase from './Purchase'
 
 export default function page() {
   return (
     <Userlayout>
-    <div className='p-6 top-0 left-0 w-full flex flex-col gap-6 h-auto'>
+    <div className=' w-full ~p-2/8'>
+        <div className=' w-full flex flex-col items-center border-[1px] border-amber-900 bg-zinc-950 rounded-md'>
+                <div className=' w-full bg-light p-3'>
+                    <p className=' text-lg font-semibold'>Purchase</p>
+                </div>
 
-        <p className=' text-sm'>Purchase History</p>
-       <TableInventory/>
-      
+                <Purchase/>
+            </div>
     </div>
- 
-  </Userlayout>
+    </Userlayout>
   )
 }

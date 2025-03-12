@@ -74,6 +74,6 @@ export const userRoutes = [
     {name: 'Skills', path: '/user/skills' , icon: <GiWhirlpoolShuriken size={20}/>},
     {name: 'Battle Pass', path: '/user/bp' , icon: <Ticket size={20}/>},
     {name: 'Friends', path: '/user/friends' , icon: <Users size={20}/>},
-    {name: 'Purchase', path: '/user/purchase' , icon: <ShoppingBag size={20}/>},
-    {name: 'Top Up', path: '/user/topup' , icon: <FaMoneyBill size={20}/>},
+    // {name: 'Purchase', path: '/user/purchase' , icon: <ShoppingBag size={20}/>},
+    // {name: 'Top Up', path: '/user/topup' , icon: <FaMoneyBill size={20}/>},
 ]
