@@ -9,15 +9,16 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import { ChevronDown, Plus, Search } from 'lucide-react'
-import CreateNewsForm from '@/components/forms/CreateNewsForm'
-import CreateQuestForm from '@/components/forms/CreateQuest'
 import RedeemCards from './RedeemCards'
 import CreateCodesFrom from '@/components/forms/CreateCodesFrom'
+import { useGetRedeemCodes } from '@/client_actions/superadmin/redeemcodes'
 
 
 export default function RedeemCodes() {
     const [tab, setTab] = useState('Daily')
+    const {data} = useGetRedeemCodes()
+
+    console.log(data)
     
   return (
     <div className=' w-full ~p-2/8'>

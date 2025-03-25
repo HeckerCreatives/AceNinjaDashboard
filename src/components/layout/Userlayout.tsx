@@ -15,33 +15,55 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Cookies from "js-cookie";
-import { Menu } from "lucide-react";
+import { Check, Cog, LogOut, Menu, Settings } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { userRoutes } from "@/types/route";
 import Loader from "@/app/loader";
+import { useGetCharacters } from "@/client_actions/user/characters/characters";
+import useCharacterStore from "@/hooks/character";
+import toast from "react-hot-toast";
+import useCharacterNameStore from "@/hooks/characterUsername";
+import useDialogStore from "@/hooks/globals";
+import ChangePasswordUser from "../forms/ChangePassword";
+
 
 export default function Userlayout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const params = useSearchParams();
   const router = useRouter();
-  const [isChecking, setIsChecking] = useState(true); // <-- State to manage loading
+  const [isChecking, setIsChecking] = useState(true); 
+  const {data , isLoading} = useGetCharacters()
+  const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
+  const { charactername, setCharactername} = useCharacterNameStore()
+  const {isOpen, openDialog, closeDialog} = useDialogStore()
+
 
   useEffect(() => {
     const sessionToken = Cookies.get("sessionToken");
 
     if (!sessionToken) {
-      router.replace("/"); // Redirect if no session
+      toast.error('Unauthorized, to view this page')
+      router.push("/");
     } else {
-      setIsChecking(false); // Allow rendering after check
+      setIsChecking(false); 
     }
   }, []);
 
-  // 🔹 Show a loading screen while checking auth
+  //charcter id persist
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setCharacterid(data[0].id);
+      setCharactername(data[0].username)
+    }
+  }, [data, setCharacterid]); 
+
+  
   if (isChecking) {
     return <div className="flex items-center justify-center min-h-screen">
       <Loader/>
     </div>;
   }
+
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full overflow-hidden">
@@ -67,11 +89,29 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
                   <img src="/dashboard/small LOGO.png" alt="user" width={60} height={60} />
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel className="text-sm">Username</DropdownMenuLabel>
+              <DropdownMenuContent align="end" className=" min-w-[170px]">
+                {/* <DropdownMenuLabel className="text-sm">Account</DropdownMenuLabel>
+                <DropdownMenuSeparator /> */}
+                <DropdownMenuLabel className="text-xs font-medium">Characters</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {data?.map((item, index) => (
+                   <DropdownMenuItem key={item.id} onClick={() => setCharacterid(item.id)} className="text-xs cursor-pointer">
+                    {characterid === item.id ? (
+                      <Check size={5} className=" text-green-400"/>
+                    ): (
+                      <>
+                      <div className=" w-4"></div></>
+                    )}
+                   {/* <div className=" h-6 w-6 rounded-full bg-zinc-700"></div>  */}
+                   {item.username}
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-xs" onSelect={(e) => e.preventDefault()}>
+                  <ChangePasswordUser/>
+                </DropdownMenuItem>
                 <DropdownMenuItem className="text-xs">
-                  <a href="/">Logout</a>
+                  <LogOut size={10}/><a href="/">Logout</a>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

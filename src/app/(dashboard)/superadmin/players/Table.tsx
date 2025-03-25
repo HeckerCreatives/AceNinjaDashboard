@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Table,
     TableBody,
@@ -9,19 +9,14 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import { Eye, LoaderCircle, OctagonAlert, Plus, Search } from 'lucide-react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Search } from 'lucide-react'
 import PaginitionComponent from '@/components/common/Pagination'
-import SelectStatus from '@/components/common/SelectStatus'
-import { Button } from '@/components/ui/button'
+import SelectStatus, { StatusDot } from '@/components/common/SelectStatus'
 import Viewuser from './Viewuser'
+import { useGetUserList } from '@/client_actions/superadmin/manageplayer'
+import Loader from '@/components/common/Loader'
+import BanUnbanPlayer from '@/components/forms/BanUnbanPlayer'
+import useCharacterStore from '@/hooks/character'
 
 
   
@@ -29,76 +24,83 @@ import Viewuser from './Viewuser'
 export default function Playertable() {
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
+  const [search, setSearch] = useState('')
+  const {data, isLoading} = useGetUserList(currentPage,10,'',search)
+  const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
+  
 
   //paginition
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
 
+ useEffect(() => {
+  setTotalPage(data?.data.totalPages || 0)
+ },[data])
+
   return (
-    <div className=' flex flex-col gap-6 bg-zinc-950 w-full h-[600px] border-amber-500 border-[1px] rounded-md overflow-hidden'>
+    <div className=' flex flex-col gap-6 bg-zinc-950 w-full h-auto border-amber-500 border-[1px] rounded-md overflow-hidden'>
       <div className=' w-full flex flex-col gap-2 md:flex-row items-center justify-between text-sm bg-light p-3'>
 
         <div className=' relative flex items-center'>
-          <input type="text" placeholder='Search player' className=' h-[30px] p-2 bg-zinc-800 rounded-md' />
-          <Search size={15} className=' absolute right-4'/>
+          <input value={search} onChange={(e) => setSearch(e.target.value)} type="text" placeholder='Search player' className=' h-[30px] p-2 bg-zinc-800 rounded-md' />
+          <Search  size={15} className=' absolute right-4'/>
         </div>
       </div>
     <Table className=' text-xs'>
-    <TableCaption>User list.</TableCaption>
+      {data?.data.playerListData.length === 0 && (
+        <TableCaption>No data.</TableCaption>
+      )}
+
+      {isLoading && (
+        <TableCaption>
+          <Loader/>
+        </TableCaption>
+      )}
     <TableHeader>
         <TableRow>
-        <TableHead className="">User Id</TableHead>
-        <TableHead>Username</TableHead>
+        <TableHead className="">Owner</TableHead>
+        <TableHead>Character Name</TableHead>
         <TableHead>Coins</TableHead>
         <TableHead>Crystal</TableHead>
+        <TableHead>Emerald</TableHead>
+        <TableHead>Current level</TableHead>
         <TableHead className="">Status</TableHead>
         <TableHead className="">Action</TableHead>
         </TableRow>
     </TableHeader>
     <TableBody>
-        <TableRow>
-        <TableCell className="">00011</TableCell>
-        <TableCell>Name</TableCell>
-        <TableCell>Rank</TableCell>
-        <TableCell className="">Status</TableCell>
-        <TableCell className=" text-green-200">Active</TableCell>
-        <TableCell className=" flex items-center gap-2">
-
-          <Viewuser/>
-          <Dialog>
-          <DialogTrigger>
-          <button className=' bg-zinc-500 flex items-center gap-1 px-3 py-1 text-xs rounded-md'><OctagonAlert size={15} className=' text-red-500'/> Ban / Unban</button>
-          </DialogTrigger>
-          <DialogContent className=' w-full h-auto p-6 max-w-[600px]'>
-            <DialogHeader>
-              <DialogTitle>Are you absolutely sure, you want to ban this user?</DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently delete your account
-                and remove your data from our servers.
-              </DialogDescription>
-            </DialogHeader>
-            <SelectStatus/>
-
-            <Button className=' w-fit'>
-            <LoaderCircle
-              className="-ms-1 me-2 animate-spin"
-              size={16}
-              strokeWidth={2}
-              aria-hidden="true"
-            />
-            Continue
-          </Button>
-
-          </DialogContent>
-        </Dialog>
-
-        </TableCell>
+    {data?.data.playerListData.map((user, userIndex) => (
+      user.character.map((character, charIndex) => (
+        <TableRow key={`${user.id}-${charIndex}`}>
+          <TableCell>{user.username}</TableCell>
+          <TableCell>{character.username || "No Character"}</TableCell>
+          <TableCell>{character.wallet[0]?.ammount || 0}</TableCell>
+          <TableCell>{character.wallet[1]?.ammount || 0}</TableCell>
+          <TableCell>{character.wallet[2]?.ammount || 0}</TableCell>
+          <TableCell className="">{character.level || 0}</TableCell>
+          <TableCell className={` ${user.status === 'active' ? 'text-green-200' : 'text-red-500'}`}>{user.status}</TableCell>
+          <TableCell className="flex items-center gap-2">
+            <Viewuser userid={user.id} characterid={character.id} />
+            <BanUnbanPlayer userid={user.id}/>
+          </TableCell>
         </TableRow>
+      ))
+    ))}
+
+       
     </TableBody>
     </Table>
 
-    <PaginitionComponent currentPage={0} total={0} onPageChange={handlePageChange}/>
+    
+    {data?.data.playerListData.length !== 0 && (
+      <div className=' w-full flex items-center justify-center mb-4'>
+      <PaginitionComponent currentPage={currentPage} total={totalPage} onPageChange={handlePageChange}/>
+
+      </div>
+
+      )}
+
 
     </div>
   )

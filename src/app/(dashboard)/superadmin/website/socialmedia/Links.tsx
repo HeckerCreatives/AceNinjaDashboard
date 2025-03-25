@@ -1,7 +1,12 @@
+'use client'
+import { useGetSocialMedia } from '@/client_actions/superadmin/socialmedia'
 import Cardlinks from '@/components/cards/Cardlinks'
 import React from 'react'
 
 export default function Links() {
+  const {data} = useGetSocialMedia()
+
+
   return (
     
 
@@ -15,13 +20,12 @@ export default function Links() {
             </div>
 
             <div className='w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 ~p-6/32'>
-                <Cardlinks image={<img src="/FB Image.svg" alt="playstore" height={100} width={120} className=' mb-4'/>} link={''}/>
-                <Cardlinks image={<img src="/X Image.svg" alt="playstore" height={100} width={120} className=' mb-4'/>} link={''}/>
-                <Cardlinks image={<img src="/Discord Image.svg" alt="playstore" height={100} width={120} className=' mb-4'/>} link={''}/>
-                <Cardlinks image={<img src="/IG Image.svg" alt="playstore" height={100} width={120} className=' mb-4'/>} link={''}/>
-                <Cardlinks image={<img src="/Tiktok Image.svg" alt="playstore" height={100} width={120} className=' mb-4'/>} link={''}/>
-                <Cardlinks image={<img src="/Yt Image.svg" alt="playstore" height={100} width={120} className=' mb-4'/>} link={''}/>
-
+                <Cardlinks image={<img src="/FB Image.svg" alt="playstore" height={100} width={120} className=' mb-4' />} title={'Facebook'} type={'fb'}/>
+                <Cardlinks image={<img src="/X Image.svg" alt="playstore" height={100} width={120} className=' mb-4' />} title={'X'} type={'x'}/>
+                <Cardlinks image={<img src="/Discord Image.svg" alt="playstore" height={100} width={120} className=' mb-4' />} title={'Discord'} type={'dc'}/>
+                <Cardlinks image={<img src="/IG Image.svg" alt="playstore" height={100} width={120} className=' mb-4' />} title={'Instagram'} type={'ig'} />
+                <Cardlinks image={<img src="/Tiktok Image.svg" alt="playstore" height={100} width={120} className=' mb-4' />} title={'Tiktok'} type={'tk'} />
+                <Cardlinks image={<img src="/Yt Image.svg" alt="playstore" height={100} width={120} className=' mb-4' />} title={'Youtube'} type={'yt'}/>
             </div>
         
         </div>

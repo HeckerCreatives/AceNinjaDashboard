@@ -18,6 +18,8 @@ import {
   Bomb,
 } from "lucide-react"
 import StatItem from "./stats-item"
+import { useUserData } from "@/client_actions/user/dashboard/dashboard"
+import useCharacterStore from "@/hooks/character"
 
 const icons = [
     {name: 'Health', img: '/manage/Health.png'},
@@ -37,27 +39,31 @@ const icons = [
 ]
 
 const StatsPanel: FC = () => {
+  const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
+  const { data, isLoading } = useUserData(characterid)
+
+
   return (
     <div className="w-full max-w-3xl bg-light p-4 ">
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
         <div className="space-y-2">
-          <StatItem icon={<Heart className="h-5 w-5 text-red-500" />} label="Health" value="1000" />
-          <StatItem icon={<Zap className="h-5 w-5 text-cyan-400" />} label="Energy" value="1000" />
-          <StatItem icon={<Shield className="h-5 w-5 text-blue-400" />} label="Armor" value="0" />
-          <StatItem icon={<Sparkles className="h-5 w-5 text-purple-400" />} label="Magic Resist" value="0" />
-          <StatItem icon={<Footprints className="h-5 w-5 text-yellow-500" />} label="Speed" value="50" />
-          <StatItem icon={<Droplets className="h-5 w-5 text-red-400" />} label="Lifesteal" value="0%" />
-          <StatItem icon={<Infinity className="h-5 w-5 text-pink-400" />} label="Omnivamp" value="0%" />
+          <StatItem icon={<Heart className="h-5 w-5 text-red-500" />} label="Health" value={`${data?.stats.health}`} />
+          <StatItem icon={<Zap className="h-5 w-5 text-cyan-400" />} label="Energy"  value={`${data?.stats.energy}`} />
+          <StatItem icon={<Shield className="h-5 w-5 text-blue-400" />} label="Armor"  value={`${data?.stats.armor}`} />
+          <StatItem icon={<Sparkles className="h-5 w-5 text-purple-400" />} label="Magic Resist"  value={`${data?.stats.magicresist}`} />
+          <StatItem icon={<Footprints className="h-5 w-5 text-yellow-500" />} label="Speed" value={`${data?.stats.speed}`} />
+          <StatItem icon={<Droplets className="h-5 w-5 text-red-400" />} label="Lifesteal"  value={`${data?.stats.lifesteal}`} />
+          <StatItem icon={<Infinity className="h-5 w-5 text-pink-400" />} label="Omnivamp"  value={`${data?.stats.omnivamp}`} />
         </div>
 
         <div className="space-y-2">
-          <StatItem icon={<Swords className="h-5 w-5 text-gray-300" />} label="Attack Damage" value="0" />
-          <StatItem icon={<Flame className="h-5 w-5 text-blue-300" />} label="Magic Damage" value="0" />
-          <StatItem icon={<Target className="h-5 w-5 text-gray-300" />} label="Armor Penetration" value="0" />
-          <StatItem icon={<Wand className="h-5 w-5 text-blue-300" />} label="Magic Penetration" value="0" />
-          <StatItem icon={<Percent className="h-5 w-5 text-yellow-400" />} label="Critical Chance" value="5%" />
-          <StatItem icon={<HeartPulse className="h-5 w-5 text-green-400" />} label="Heal and Shield Power" value="0%" />
-          <StatItem icon={<Bomb className="h-5 w-5 text-yellow-500" />} label="Critical Damage" value="70%" />
+          <StatItem icon={<Swords className="h-5 w-5 text-gray-300" />} label="Attack Damage" value={`${data?.stats.attackdamage}`} />
+          <StatItem icon={<Flame className="h-5 w-5 text-blue-300" />} label="Magic Damage"  value={`${data?.stats.magicdamage}`} />
+          <StatItem icon={<Target className="h-5 w-5 text-gray-300" />} label="Armor Penetration"  value={`${data?.stats.armorpen}`} />
+          <StatItem icon={<Wand className="h-5 w-5 text-blue-300" />} label="Magic Penetration"  value={`${data?.stats.magicpen}`} />
+          <StatItem icon={<Percent className="h-5 w-5 text-yellow-400" />} label="Critical Chance"  value={`${data?.stats.critchance}`} />
+          <StatItem icon={<HeartPulse className="h-5 w-5 text-green-400" />} label="Heal and Shield Power" value={`${data?.stats.healshieldpower}`} />
+          <StatItem icon={<Bomb className="h-5 w-5 text-yellow-500" />} label="Critical Damage"  value={`${data?.stats.critdamage}`} />
         </div>
       </div>
     </div>

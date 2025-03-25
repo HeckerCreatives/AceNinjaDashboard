@@ -1,33 +1,80 @@
 import axiosInstance from "@/lib/axiosInstance";
-import { handleApiError } from "@/lib/errorHandler";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import router from "next/router";
-import toast from "react-hot-toast";
 
 
-export const getData = async () => { 
+interface WalletItem {
+  type: string;
+  amount: number;
+}
+
+interface InventoryItem {
+  item: string;
+  quantity: number;
+  isEquipped: boolean;
+  _id: string;
+  acquiredAt: string;
+}
+
+interface InventoryCategory {
+  type: string;
+  items: InventoryItem[]; // Can be empty or contain multiple items
+}
+interface Stats {
+  health: number,
+  energy: number,
+  armor: number,
+  magicresist: number,
+  speed: number,
+  attackdamage: number,
+  armorpen: number,
+  magicpen: number,
+  critchance: number,
+  magicdamage: number,
+  lifesteal: number,
+  omnivamp: number,
+  healshieldpower: number,
+  critdamage: number
+}
+
+interface UserCharacter {
+  _id: string;
+  userid: string
+  username: string;
+  title: number;
+  level: number;
+  user: string;
+  status: string;
+  mmr: number;
+  wallet: WalletItem[];
+  inventory: InventoryCategory[];
+  stats: Stats
+  experience: number
+}
+
+interface UserDataResponse {
+  message: string;
+  data: UserCharacter[];
+}
+
+
+
+export const getData = async (characterid: string): Promise<UserCharacter | null> => { 
   const response = await axiosInstance.get(
-    "/dashboard/user",
+    "/character/getplayerdata",
+    {params: {characterid}}
   );
-  return response.data;
+  return response.data.data.length > 0 ? response.data.data[0] : null;
 };
 
 
-export const useUserData = () => {
-    return useQuery({
-      queryKey: ["userdata"],
-      queryFn: async () => {
-        try {
-          return await getData();
-        } catch (error) {
-        //   handleApiError(error, router); 
-          throw error;
-        }
-      },
-        staleTime: 5 * 60 * 1000,
-        refetchOnMount: false, 
-        refetchOnWindowFocus: false,
-    });
+export const useUserData = (characterid: string) => {
+  return useQuery({
+    queryKey: ["userdata", characterid],
+    queryFn: () => getData(characterid),
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false, 
+    refetchOnWindowFocus: false,
+  });
   };
   
 

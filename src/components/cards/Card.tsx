@@ -1,19 +1,22 @@
 import React from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import Countdown from 'react-countdown';
 
 type Props = {
     name: string
-    // icon: ReactElement
-    value: number
+    value: number | string
     isAmount: boolean
     icon: React.ReactElement
     isLoading: boolean
     bg: string
     border: boolean
+    subtext?: any
+    timeleft?: number
 }
 
 export default function Card(prop:Props){
+  const remainingTime = prop.timeleft || 0;
 
 
   return (
@@ -29,11 +32,30 @@ export default function Card(prop:Props){
               <Skeleton/>
             </SkeletonTheme>
           ): (
-            <p className=' text-4xl font-semibold'>{prop.isAmount === true && '$'}{prop.value.toLocaleString()}</p>
+            <p className=' text-4xl font-semibold'>{prop.isAmount === true && '$'}{prop.value?.toLocaleString()}</p>
 
           )}
+
+          {prop.timeleft !== undefined ? ( // Ensure prop.timeleft exists before rendering Countdown
+            <Countdown
+              className="mt-2"
+              date={Date.now() + prop.timeleft * 1000} // Convert to milliseconds
+              renderer={({ days, hours, minutes, seconds, completed }) =>
+                completed ? (
+                  <span className="text-xs w-fit bg-green-950 px-4 py-1 text-green-500 rounded-sm">
+                    {prop.value} is ended
+                  </span>
+                ) : (
+                  <span className="text-xs w-fit bg-green-950 px-4 py-1 text-green-500 rounded-sm">
+                    Ends in: {days} days : {hours} : {minutes} : {seconds}
+                  </span>
+                )
+              }
+            />
+          ) : null}
+        
+           
             
-            <p className=' text-xs w-fit bg-green-950 px-4 py-1 text-green-500 rounded-sm'>Last month</p>
         </div>
 
 

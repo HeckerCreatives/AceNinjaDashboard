@@ -30,7 +30,7 @@ export default function Changepassword() {
     <div className=' max-w-[600px] h-auto w-full flex flex-col gap-6 bg-zinc-950 rounded-md p-6'>
         <p className=' text-sm font-semibold'>Change Password</p>
 
-        <form onSubmit={handleSubmit(changeSuperadminpassword)} className=' flex flex-col'>
+        {/* <form onSubmit={handleSubmit(changeSuperadminpassword)} className=' flex flex-col'>
             <label htmlFor="" className=' text-xs text-zinc-400'>New password</label>
             <div className=' relative'>
                 <input type={show} placeholder='New password' className={` input ${errors.new && 'border-[1px] focus:outline-none border-red-500'} `} {...register('new')} />
@@ -51,7 +51,7 @@ export default function Changepassword() {
                 <button className=' active-gradient py-2 px-4 w-fit text-sm'>Save</button>
             </div>
 
-        </form>
+        </form> */}
 
     </div>
   )

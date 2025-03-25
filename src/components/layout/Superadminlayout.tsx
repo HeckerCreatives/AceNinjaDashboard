@@ -24,14 +24,12 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
   
-  
 import { ArrowLeft, CircleUser, Home, Menu, User, Users } from 'lucide-react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { superadminRoutes } from '@/types/route';
-import { Item } from '@radix-ui/react-dropdown-menu';
   
 
-export default function Superadminlayoutcopy({
+export default function Superadminlayout({
     children,
   }: {
     children: React.ReactNode;
@@ -71,7 +69,7 @@ const matchedRoutes = superadminRoutes
                     {item.name}
                   </Link>
                   ): (
-                    <Accordion type="single" collapsible>
+                    <Accordion key={index} type="single" collapsible>
                     <AccordionItem value="item-1">
                       <div className={`  px-3 flex items-center w-full gap-2 ${path.includes(item.name.toLowerCase()) ? 'text-yellow-400' : 'text-zinc-100 hover:text-amber-300' }`}>
                        
@@ -154,7 +152,7 @@ const matchedRoutes = superadminRoutes
                       {item.name}
                     </Link>
                     ): (
-                      <Accordion type="single" collapsible>
+                      <Accordion key={index} type="single" collapsible>
                       <AccordionItem value="item-1">
                         <div className={`  px-3 flex items-center w-full gap-2 ${path.includes(item.name.toLowerCase()) ? 'text-yellow-400' : 'text-zinc-100 hover:text-amber-300' }`}>
                         

@@ -34,7 +34,7 @@ export default function RootLayout({
           {children}
         </QueryClientProvider>
         <Toaster
-              position="top-center"
+              position="top-right"
               reverseOrder={false}
             
              toastOptions={{

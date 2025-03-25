@@ -28,6 +28,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
+import useCharacterStore from '@/hooks/character';
   
 
 const viewnavigation = [
@@ -38,16 +39,23 @@ const viewnavigation = [
     {name: 'Skills', path: 'skills' , icon: <GiWhirlpoolShuriken size={20}/>},
     {name: 'Battle Pass', path: 'bp' , icon: <Ticket size={20}/>},
     {name: 'Friends', path: 'friends' , icon: <Users size={20}/>},
-    {name: 'Purchase', path: 'purchase' , icon: <ShoppingBag size={20}/>},
+    // {name: 'Purchase', path: 'purchase' , icon: <ShoppingBag size={20}/>},
 ]
 
-export default function Viewuser() {
+type Props = {
+    userid: string
+    characterid: string
+}
+
+export default function Viewuser( data: Props) {
     const [tab, setTab] = useState('dashboard')
     const [open, setOpen] = useState(false);
+    const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger>
+          <DialogTrigger onClick={() => setCharacterid(data.characterid)} className=''>
           <p className=' bg-blue-500 flex items-center gap-1 px-3 py-1 text-xs rounded-md'><Eye size={15}/> View user</p>
          
           </DialogTrigger>

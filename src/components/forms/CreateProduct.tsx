@@ -12,7 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createNews, CreateNews } from '@/validation/schema'
+import { createNewsData, CreateNewsData } from '@/validation/schema'
 
 
 const tabs = [
@@ -33,12 +33,12 @@ export default function CreateProduct() {
       reset,
       trigger,
       formState: { errors },
-    } = useForm<CreateNews>({
-      resolver: zodResolver(createNews),
+    } = useForm<CreateNewsData>({
+      resolver: zodResolver(createNewsData),
     });
 
     //create news
-    const createWebsiteNews = async ( data: CreateNews) => {
+    const createWebsiteNews = async ( data: CreateNewsData) => {
       console.log(data)
      
     }

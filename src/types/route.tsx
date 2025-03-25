@@ -1,8 +1,8 @@
 import { Box, Boxes, Gamepad, Gem, Globe, Globe2, Home, LayoutGrid, ShoppingBag, ShoppingBasket, Swords, Ticket, TicketCheck, User, UserRound, Users, UsersRound } from "lucide-react";
 import { FaBullhorn, FaMoneyBill } from "react-icons/fa";
-import { GiWhirlpoolShuriken } from "react-icons/gi";
+import { GiRank1, GiWhirlpoolShuriken } from "react-icons/gi";
 import { GrVmMaintenance } from "react-icons/gr";
-import { PiPath } from "react-icons/pi";
+import { PiPath, PiRanking } from "react-icons/pi";
 import { RiGamepadFill } from "react-icons/ri";
 import { TbSwords } from "react-icons/tb";
 
@@ -35,6 +35,7 @@ export const superadminRoutes = [
 
       {route:'/superadmin/', name: 'Games', icon: <RiGamepadFill size={15}/>,
       subitems: [
+          {route:'/superadmin/games/ranktier', name: 'Rank Tier', icon: null},
           {route:'/superadmin/games/pvp', name: 'PVP', icon: null},
           {route:'/superadmin/games/quest', name: 'Quest', icon: null},
           {route:'/superadmin/games/store', name: 'Store', icon: null},
@@ -50,6 +51,8 @@ export const superadminRoutes = [
           {route:'/superadmin/website/socialmedia', name: 'Social Media', icon: null},
  
       ] },
+     {route:'/superadmin/seasons', name: 'Seasons', icon: <PiRanking size={15}/>, subitems: [] },
+
 
       
 
@@ -74,6 +77,6 @@ export const userRoutes = [
     {name: 'Skills', path: '/user/skills' , icon: <GiWhirlpoolShuriken size={20}/>},
     {name: 'Battle Pass', path: '/user/bp' , icon: <Ticket size={20}/>},
     {name: 'Friends', path: '/user/friends' , icon: <Users size={20}/>},
-    {name: 'Purchase', path: '/user/purchase' , icon: <ShoppingBag size={20}/>},
+    {name: 'Marketplace', path: '/user/purchase' , icon: <ShoppingBag size={20}/>},
     {name: 'Top Up', path: '/user/topup' , icon: <FaMoneyBill size={20}/>},
 ]

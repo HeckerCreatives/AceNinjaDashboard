@@ -12,7 +12,10 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createNews, CreateNews } from '@/validation/schema'
+import { useCreateNews } from '@/client_actions/superadmin/website'
+import { createNewsData, CreateNewsData } from '@/validation/schema'
+import toast from 'react-hot-toast'
+import { Input } from '../ui/input'
 
 
 const tabs = [
@@ -22,8 +25,18 @@ const tabs = [
 
 export default function CreateNewsForm() {
     const [image, setImage] = useState('')
+    const [preview, setPreview] = useState<string | null>(null);
     const [open, setOpen] = useState(false)
     const [tab, setTab] = useState('Image')
+    const {mutate: createNews, isPending} = useCreateNews()
+
+     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+          setValue("file", file); // Update React Hook Form value
+          setPreview(URL.createObjectURL(file)); // Show image preview
+        }
+      };
 
     //create news validation
     const {
@@ -33,13 +46,19 @@ export default function CreateNewsForm() {
       reset,
       trigger,
       formState: { errors },
-    } = useForm<CreateNews>({
-      resolver: zodResolver(createNews),
+    } = useForm<CreateNewsData>({
+      resolver: zodResolver(createNewsData),
     });
 
     //create news
-    const createWebsiteNews = async ( data: CreateNews) => {
+    const createWebsiteNews = async ( data: CreateNewsData) => {
       console.log(data)
+      createNews({title: data.title, content: data.description, contentType: tab.toLowerCase(), url: data.file ?? ''},{
+        onSuccess: () => {
+          toast.success(`News created successfully`);
+          setOpen(false)
+        },
+      })
      
     }
 
@@ -47,6 +66,12 @@ export default function CreateNewsForm() {
     useEffect(() => {
         reset()
     },[open])
+
+    useEffect(() => {
+      reset({
+        file: ''
+      })
+    },[tab])
   
 
   return (
@@ -54,7 +79,7 @@ export default function CreateNewsForm() {
     <DialogTrigger className=' bg-yellow-500 text-black px-6 py-2 rounded-md flex items-center w-fit text-xs font-semibold'>
     <Plus size={15}/>Create
     </DialogTrigger>
-    <DialogContent className=' max-w-[800px] h-auto max-h-[90%] border-amber-500/80 border-[1px]'>
+    <DialogContent className=' max-w-[600px] h-auto max-h-[90%] border-amber-500/80 border-[1px]'>
       <DialogHeader className=' w-full bg-light p-3'>
         <DialogTitle className=' text-sm'>Create News</DialogTitle>
         <DialogDescription>
@@ -71,7 +96,7 @@ export default function CreateNewsForm() {
 
         <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px] mt-4'>
           <label htmlFor="" className=''>Description</label>
-          <textarea placeholder='Title' className={` input h-[120px] ${errors.description && 'border-[1px] focus:outline-none border-red-500'}`} {...register('description')} />
+          <textarea placeholder='Title' className={` input h-[80px] ${errors.description && 'border-[1px] focus:outline-none border-red-500'}`} {...register('description')} />
           {errors.description && <p className=' text-[.6em] text-red-500'>{errors.description.message}</p>}
         </div>
 
@@ -85,19 +110,28 @@ export default function CreateNewsForm() {
         {tab === 'Image' ? (
 
           <div className=' w-full p-4 bg-light border-amber-800 border-[1px] rounded-md overflow-hidden'>
-            <div className=' w-full h-[200px] bg-zinc-900 flex items-center justify-center border-2 border-dashed border-zinc-700 rounded-md '>
+            <div className=' w-full aspect-video overflow-hidden bg-zinc-900 flex items-center justify-center border-2 border-dashed border-zinc-700 rounded-md '>
               <label htmlFor="dropzone-file" className=' w-full h-full flex flex-col items-center justify-center'>
 
                 <div className=' w-full h-full flex flex-col items-center justify-center gap-2 text-xs'>
-                  <ImageUp size={25}/>
-                  <p>Click to upload</p>
-                  <p>SPNG or JPG (MAX. 5mb)</p>
-
-                  <p className=' text-zinc-400 mt-4'>{image}</p>
+                 {preview ? (
+                    <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                    <>
+                        <ImageUp size={25} />
+                        <p>Click to upload</p>
+                        <p>PNG or JPG (MAX. 5MB)</p>
+                    </>
+                    )}
                 </div>
-
-                
-                <input value={image} type="file" id='dropzone-file'  className=' hidden'/>
+                <input
+                    type="file"
+                    id="dropzone-file"
+                    accept="image/png, image/jpeg"
+                    className="hidden"
+                    {...register("file")}
+                    onChange={handleFileChange}
+                />
               </label>
             </div>
           </div>
@@ -105,24 +139,14 @@ export default function CreateNewsForm() {
         ):(
 
           <div className=' w-full p-4 bg-light border-amber-800 border-[1px] rounded-md overflow-hidden'>
-            <div className=' w-full h-[200px] bg-zinc-900 flex items-center justify-center border-2 border-dashed border-zinc-700 rounded-md'>
-            <label htmlFor="dropzone-file" className=' w-full h-full flex flex-col items-center justify-center'>
-
-              <div className=' w-full h-full flex flex-col items-center justify-center gap-2 text-xs'>
-                <ImageUp size={25}/>
-                <p>Click to upload</p>
-                <p>MP4 (MAX. 20mb)</p>
-
-                <p className=' text-zinc-400 mt-4'>{image}</p>
-              </div>
-
-              
-              <input value={image} onChange={(e) => setImage(e.target.value)} type="file" id='dropzone-file'  className=' hidden'/>
-            </label>
+            <div className=' w-fullh-auto bg-zinc-900 flex items-center justify-center border-zinc-700 rounded-md'>
+           <Input placeholder='Video url' className=' text-xs placeholder:text-xs' {...register('file')}/>
           </div>
           </div>
           
         )}
+          {errors.file && <p className=' text-[.6em] text-red-500'>{errors.file.message}</p>}
+
           
 
       

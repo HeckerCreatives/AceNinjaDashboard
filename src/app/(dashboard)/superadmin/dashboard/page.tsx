@@ -1,4 +1,6 @@
 'use client'
+import { useGetCounts } from "@/client_actions/superadmin/dashboard";
+import { useGetCurrentSeason } from "@/client_actions/superadmin/season";
 import Card from "@/components/cards/Card";
 import Barchart from "@/components/charts/Barchart";
 import Linechart from "@/components/charts/Linechart";
@@ -10,28 +12,10 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [loading, setLoading] = useState(true)
+  const {data, isLoading} = useGetCounts()
+  const {data: currentSeason} = useGetCurrentSeason()
 
-  //get list
-  useEffect(() => {
-    setLoading(true)
-    const getData = async () => {
-      try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}`,{
-          withCredentials: true,
-          headers:{
-            'Content-Type': 'application/json'
-          }
-        })
 
-      setLoading(false)
-      } catch (error) {
-      setLoading(false)
-
-        
-      }
-    }
-    getData()
-  },[])
 
   return (
     <Superadminlayout>
@@ -43,10 +27,10 @@ export default function Home() {
 
         </div>
         <div className=' relative z-10 w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8'>
-          <Card name={"Current Season"} value={1} isAmount={false} icon={<ArrowUpRight size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true} />
-          <Card name={"Total Users"} value={999999} isAmount={false} icon={<UsersRound size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
-          <Card name={"Total Active Users"} value={999999} isAmount={false} icon={<UserRoundCheck size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
-          <Card name={"Total Inactive Users"} value={999999} isAmount={false} icon={<UserRoundX size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
+          <Card name={"Current Season"} value={currentSeason?.data.title || 'No Data'} isAmount={false} icon={<ArrowUpRight size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true} timeleft={currentSeason?.data.timeleft} />
+          <Card name={"Total Users"} value={data?.data.totalUsers || 0} isAmount={false} icon={<UsersRound size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
+          <Card name={"Total Active Users"} value={data?.data.totalActiveUsers || 0} isAmount={false} icon={<UserRoundCheck size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
+          <Card name={"Total Inactive Users"} value={data?.data.totalInactiveUsers || 0} isAmount={false} icon={<UserRoundX size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
           
         </div>
 

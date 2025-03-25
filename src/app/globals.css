@@ -140,3 +140,7 @@ body {
 .bg-dark{
   @apply bg-[#220909]
 }
+
+.input-error{
+  @apply text-red-600 text-[.6rem]
+}
