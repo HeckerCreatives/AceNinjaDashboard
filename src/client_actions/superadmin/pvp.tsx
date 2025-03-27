@@ -72,7 +72,7 @@ type RankingData = {
   createdAt: string; 
   updatedAt: string;
   __v: number;
-  lose: number;
+  lost: number;
   totalMatches: number;
   win: number;
   winRate: number;

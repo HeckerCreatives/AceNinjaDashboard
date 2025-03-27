@@ -13,7 +13,7 @@ export default function PvpCards() {
         <ViewCard name={'Rank'} value={data?.data.rank || 0} isAmount={false} icon={<ArrowUpRight size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
         <ViewCard name={'MMR'} value={data?.data.mmr || 0} isAmount={false} icon={<ArrowUpRight size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
         <ViewCard name={'Wins'} value={data?.data.win || 0} isAmount={false} icon={<ArrowUpRight size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
-        <ViewCard name={'Loses'} value={data?.data.lose || 0} isAmount={false} icon={<ArrowUpRight size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
+        <ViewCard name={'Loses'} value={data?.data.lost || 0} isAmount={false} icon={<ArrowUpRight size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
 
     </div>
   )

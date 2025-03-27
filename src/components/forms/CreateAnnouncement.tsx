@@ -60,6 +60,7 @@ export default function CreateAnnoucement(prop: Props) {
         onSuccess: () => {
           toast.success(`Announcement created successfully`);
           setOpen(false)
+          setPreview(null)
         },
       })
      

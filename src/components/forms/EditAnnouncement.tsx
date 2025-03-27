@@ -42,13 +42,13 @@ export default function EditAnnoucement(prop: Props) {
     const [tab, setTab] = useState('')
     const {mutate: editAnnouncement, isPending} = useEditAnnouncement()
 
-     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-          setValue("file", file); 
-          setPreview(URL.createObjectURL(file));
-        }
-      };
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] ?? null
+    
+        setValue("file", file, { shouldValidate: true })
+    
+        setPreview(file ? URL.createObjectURL(file) : null)
+      }
 
     const {
       register,
@@ -61,7 +61,9 @@ export default function EditAnnoucement(prop: Props) {
       resolver: zodResolver(editNewsdata),
       defaultValues: ({
         title: prop.title,
-        description: prop.content
+        description: prop.content,
+        file: prop.url || undefined
+      
       })
     });
 
@@ -81,10 +83,10 @@ export default function EditAnnoucement(prop: Props) {
         reset({
           title: prop.title,
           description: prop.content,
-          file:  prop.url, 
+          file:  prop.url || undefined , 
         });
     
-      }, [tab, prop]);
+      }, [tab, prop, reset]);
 
     useEffect(() => {
         setTab(prop.type)

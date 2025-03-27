@@ -36,21 +36,22 @@ export const editNewsdata = z.object({
   title: z.string().nonempty("Title is empty"),
   description: z.string().nonempty("Description is empty"),
   file: z
-    .union([
-      z
-        .custom<File>((file) => file instanceof File, {
-          message: "Invalid file type.",
-        })
-        .refine((file) => file.type.startsWith("image/"), {
-          message: "Only image files are allowed (JPEG, PNG, etc.).",
-        }),
-      z.string()
-        .url("Invalid video URL. Please provide a valid URL.")
-        .optional(), 
-      z.null(), 
-      z.undefined(),
-    ])
-    .optional(),
+  .custom<File | string | null | undefined>((val) => {
+    if (val === null || val === undefined) return true; // No file change (valid case)
+    if (val instanceof File) return val.type.startsWith("image/"); // Ensure it's an image
+    if (typeof val === "string") {
+      try {
+        new URL(val); // Validate if it's a valid URL
+        return true;
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  }, {
+    message: "Only image files (JPEG, PNG, etc.) or a valid video URL are allowed.",
+  })
+  .optional(),
 });
 
 export const createNewsLetter = z.object({
