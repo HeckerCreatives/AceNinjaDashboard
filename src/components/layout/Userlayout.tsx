@@ -45,13 +45,6 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
     }
   }, [data, setCharacterid]); 
 
-  
-  if (isChecking) {
-    return <div className="flex items-center justify-center min-h-screen">
-      <Loader/>
-    </div>;
-  }
-
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full overflow-hidden">
