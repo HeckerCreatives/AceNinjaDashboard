@@ -134,7 +134,6 @@ export const useGetCurrentSeason = () => {
     return useQuery({
       queryKey: ["season"],
       queryFn: () => getCurrentSeason(),
-      staleTime: 5 * 60 * 1000,
       refetchOnMount: false, 
       refetchOnWindowFocus: false,
     });

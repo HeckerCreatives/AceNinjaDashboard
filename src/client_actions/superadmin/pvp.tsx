@@ -42,29 +42,108 @@ interface LeaderboardResponse {
     selectedSeason: SelectedSeason;
 }
 
+type PvPMatch = {
+  _id: string;
+  opponent: string;  
+  status: 0 | 1;     
+  owner: string;    
+  createdAt: string;
+};
+
+type PvPResponse = {
+  message: "success" | "failed";
+  data: PvPMatch[]; 
+  totalPages: number;
+};
+
+
+type RankingResponse = {
+  message: "success";
+  data: RankingData;
+};
+
+
+type RankingData = {
+  _id: string;
+  owner: {
+      _id: string;
+  };
+  mmr: number;
+  createdAt: string; 
+  updatedAt: string;
+  __v: number;
+  lose: number;
+  totalMatches: number;
+  win: number;
+  winRate: number;
+  rank: number
+};
 
 
 
-
-export const getPvpHistory = async (page: number, limit: number, seasonid: string): Promise<ApiResponse> => { 
+export const getPvpHistory = async (page: number, limit: number, characterid: string, datefilter: string): Promise<PvPResponse> => { 
   const response = await axiosInstance.get(
-    "/pvp/getpvphistorybyseason",
-    {params:{page, limit, seasonid}}
+    "/pvp/getpvphistoryplayer",
+    {params:{page, limit,characterid, datefilter}}
   
   );
   return response.data;
 };
 
 
-export const useGetPvpHistory = (page: number, limit: number, seasonid: string) => {
+export const useGetPvpHistory = (page: number, limit: number, characterid: string, datefilter: string) => {
   return useQuery({
-    queryKey: ["pvp",page, limit, seasonid ],
-    queryFn: () => getPvpHistory(page, limit, seasonid ),
+    queryKey: ["pvp",page, limit, characterid, datefilter ],
+    queryFn: () => getPvpHistory(page, limit, characterid, datefilter),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 
     refetchOnWindowFocus: false,
   });
 };
+
+export const getRankingStats = async (characterid: string): Promise<RankingResponse> => { 
+    const response = await axiosInstance.get(
+      "/pvp/getcharacterpvpstatsplayer",
+      {params:{characterid}}
+    
+    );
+    return response.data;
+  };
+  
+  
+  export const useGetRankStats = (characterid: string) => {
+    return useQuery({
+      queryKey: ["pvp", characterid],
+      queryFn: () => getRankingStats(characterid),
+      staleTime: 5 * 60 * 1000,
+      refetchOnMount: false, 
+      refetchOnWindowFocus: false,
+    });
+  };
+    
+
+
+
+
+// export const getPvpHistory = async (page: number, limit: number, seasonid: string): Promise<ApiResponse> => { 
+//   const response = await axiosInstance.get(
+//     "/pvp/getpvphistorybyseason",
+//     {params:{page, limit, seasonid}}
+  
+//   );
+//   return response.data;
+// };
+
+
+// export const useGetPvpHistory = (page: number, limit: number, seasonid: string) => {
+//   return useQuery({
+//     queryKey: ["pvp",page, limit, seasonid ],
+//     queryFn: () => getPvpHistory(page, limit, seasonid ),
+//     staleTime: 5 * 60 * 1000,
+//     refetchOnMount: false, 
+//     refetchOnWindowFocus: false,
+//   });
+// };
 
 
 export const getPvpRankings = async (page: number, limit: number, seasonid: string, username: string): Promise<LeaderboardResponse> => { 

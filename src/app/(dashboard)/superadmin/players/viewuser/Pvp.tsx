@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import PvpCards from './PvpCards'
 import {
     Table,
@@ -9,34 +10,66 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
+import useCharacterStore from '@/hooks/character'
+import { useGetPvpHistory } from '@/client_actions/superadmin/pvp'
+import PaginitionComponent from '@/components/common/Pagination'
   
 
 export default function Pvp() {
+  const {characterid} = useCharacterStore()
+  const [currentPage, setCurrentpage] = useState(0)
+  const [totalpage, setTotalpage] = useState(0)
+  const [date, setDate] = useState('')
+  const {data, isLoading} = useGetPvpHistory(currentPage, 10, characterid, date)
+
+   //paginition
+   const handlePageChange = (page: number) => {
+    setCurrentpage(page)
+  }
+
+  
+  useEffect(() => {
+    setTotalpage(data?.totalPages || 0)
+  },[data])
+
   return (
-    <div className=' w-full flex flex-col gap-8 max-w-[1540px] p-8'>
+    <div className=' w-full flex flex-col gap-8 p-8'>
         <PvpCards/>
 
-        <input type="date" name="date" className=' w-fit bg-yellow-500 text-xs text-black p-2 rounded-r-lg' />
+        <input value={date} onChange={(e) => setDate(e.target.value)} type="date" name="date" className=' w-fit bg-yellow-500 text-xs text-black p-2 rounded-r-lg' />
 
         <Table className=' text-xs'>
-        <TableCaption></TableCaption>
+         {data?.data.length === 0 && (
+           <TableCaption className=' text-xs'>No Data</TableCaption>
+           )}
+           {isLoading && (
+           <TableCaption className=' text-xs'><div className=' loader'></div></TableCaption>
+
+           )}
         <TableHeader>
             <TableRow>
-            <TableHead className="">Match Id</TableHead>
             <TableHead>Opponent</TableHead>
             <TableHead>Result</TableHead>
-            <TableHead className="">Status</TableHead>
+            <TableHead className="">Date</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
-            {/* <TableRow>
-            <TableCell className="">INV001</TableCell>
-            <TableCell>Paid</TableCell>
-            <TableCell>Credit Card</TableCell>
-            <TableCell className="">$250.00</TableCell>
-            </TableRow> */}
+          {data?.data.map((item, index) => (
+            <TableRow key={item._id}>
+            <TableCell className="">{item.opponent}</TableCell>
+            <TableCell>{item.status === 1 ? 'Win' : 'Lose'}</TableCell>
+            <TableCell>{new Date(item.createdAt).toLocaleString()}</TableCell>
+            </TableRow>
+          ))}
+            
         </TableBody>
         </Table>
+
+        
+          {Object.values(data?.data || {}).length !== 0 && (
+            <PaginitionComponent currentPage={currentPage} total={totalpage} onPageChange={handlePageChange }/>
+  
+            )}
 
     </div>
   )

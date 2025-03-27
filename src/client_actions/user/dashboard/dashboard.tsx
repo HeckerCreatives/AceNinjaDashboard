@@ -56,6 +56,15 @@ interface UserDataResponse {
   data: UserCharacter[];
 }
 
+interface CharacterRankResponse {
+  message: string;
+  data: {
+      mmr: number;
+      rankTier: string;
+      icon: string;
+  };
+}
+
 
 
 export const getData = async (characterid: string): Promise<UserCharacter | null> => { 
@@ -76,6 +85,26 @@ export const useUserData = (characterid: string) => {
     refetchOnWindowFocus: false,
   });
   };
+
+export const getRank = async (characterid: string): Promise<CharacterRankResponse> => { 
+    const response = await axiosInstance.get(
+      "/character/getrank",
+      {params:{characterid}}
+     
+    );
+    return response.data
+};
+  
+  
+  export const useGetRank = (characterid: string) => {
+    return useQuery({
+      queryKey: ["rank"],
+      queryFn: () => getRank(characterid),
+      staleTime: 5 * 60 * 1000,
+      refetchOnMount: false, 
+      refetchOnWindowFocus: false,
+    });
+    };
   
 
 

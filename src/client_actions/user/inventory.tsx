@@ -58,7 +58,7 @@ export const getInventory = async (characterid: string, page: number, limit: num
 
 export const useGetInventory = (characterid: string,page: number, limit: number) => {
   return useQuery({
-    queryKey: ["inventory", characterid],
+    queryKey: ["inventory", characterid,page, limit],
     queryFn: () => getInventory(characterid, page, limit),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 

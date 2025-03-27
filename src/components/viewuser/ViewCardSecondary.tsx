@@ -11,6 +11,7 @@ type Props = {
     isLoading: boolean
     bg: string
     border: boolean
+    rankicon?: string
 }
 
 export default function ViewCardSecondary(prop:Props){
@@ -29,7 +30,7 @@ export default function ViewCardSecondary(prop:Props){
         </div>
 
         <div className=' w-fit flex items-center justify-between'>
-          <img src="/manage/Rank-ROOKIE icon.png" alt="rank" width={130} height={130}/>
+          <img src={`${process.env.NEXT_PUBLIC_API_URL}/${prop.rankicon}`} alt="rank" width={130} height={130}/>
         </div>
 
 

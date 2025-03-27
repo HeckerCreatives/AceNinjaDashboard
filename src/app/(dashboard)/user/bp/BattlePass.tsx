@@ -40,7 +40,11 @@ export default function BattlePass() {
         </div>
       ) : (
         <>
-        <ViewCard name={'Current Level'} value={999} isAmount={false} icon={<ArrowUpRight size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
+
+        <div className=' grid grid-cols-4 w-full'>
+        <ViewCard name={'Current Level'} value={0} isAmount={false} icon={<ArrowUpRight size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
+
+        </div>
 
         <button className=' py-2 px-4 bg-yellow-500 text-black text-xs w-fit rounded-r-md flex items-center gap-2'>Season Filter <ChevronDown size={15}/></button>
 

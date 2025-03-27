@@ -6,7 +6,7 @@ import React from 'react'
 import EquipedItems from './EquipedItems'
 import Stats from './Stats'
 import Companion from './Companion'
-import { getData, useUserData } from '@/client_actions/user/dashboard/dashboard'
+import { getData, useGetRank, useUserData } from '@/client_actions/user/dashboard/dashboard'
 import useCharacterStore from '@/hooks/character'
 import Card from '@/components/cards/Card'
 import { PiRanking } from 'react-icons/pi'
@@ -15,7 +15,8 @@ import { useGetCurrentSeason } from '@/client_actions/superadmin/season'
 export default function Dashboard() {
     const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
     const { data, isLoading } = useUserData(characterid)
-      const {data: currentSeason} = useGetCurrentSeason()
+    const {data: currentSeason} = useGetCurrentSeason()
+    const {data: rank} = useGetRank(characterid)
     
 
   return (
@@ -38,7 +39,7 @@ export default function Dashboard() {
             </div>
 
             <div className=' w-full max-w-[365px] shadow-md'>
-                <Card name={"Current Season"} value={currentSeason?.data.title || 'No Data'} isAmount={false} icon={<PiRanking size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true} timeleft={currentSeason?.data.timeleft} />
+                <Card name={"Total Purchased"} value={0} isAmount={false} icon={<PiRanking size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
             {/* <ViewCard name={'Total Purchase'} value={9999} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={''} border={true}/> */}
 
             </div>
@@ -51,7 +52,7 @@ export default function Dashboard() {
             <ViewCard name={'Coins'} value={data?.wallet[0].amount || 0} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
             <ViewCard name={'Crystal'} value={data?.wallet[1].amount || 0} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
             <ViewCard name={'Emerald'} value={data?.wallet[2].amount || 0} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
-            <ViewCardSecondary name={'ROOKIE'} value={data?.mmr || 0} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>
+            <ViewCardSecondary name={rank?.data.rankTier || ''} value={rank?.data.mmr || 0} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true} rankicon={rank?.data.icon}/>
         </div>
 
         <div className=' w-full grid grid-cols-1 md:grid-cols-2 gap-6'>

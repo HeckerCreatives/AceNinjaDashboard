@@ -8,7 +8,6 @@ export default function PvpCards() {
   const {characterid} = useCharacterStore()
   const {data, isLoading} = useGetRankStats(characterid)
 
-  console.log(data)
   return (
     <div className=' w-full h-auto grid xl:grid-cols-[repeat(auto-fill,minmax(350px,1fr))] grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4'>
         <ViewCard name={'Rank'} value={data?.data.rank || 0} isAmount={false} icon={<ArrowUpRight size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true}/>

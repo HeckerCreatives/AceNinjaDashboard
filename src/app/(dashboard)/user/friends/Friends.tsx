@@ -71,7 +71,7 @@ export default function Friends() {
   return (
     <div className=' w-full flex flex-col gap-8 overflow-hidden p-8'>
 
-      <div className='w-full grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6 rounded-md overflow-hidden'>
+      {/* <div className='w-full grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6 rounded-md overflow-hidden'>
         <div className=' flex flex-col w-full h-fit bg-zinc-900'>
           <div className=' relative w-full aspect-video bg-red-200 p-4'>
             <div className=' absolute bottom-0 w-20 translate-y-10 aspect-square rounded-full bg-zinc-800'>
@@ -88,7 +88,6 @@ export default function Friends() {
             <p className=' font-semibold'>Friend Lists</p>
             <Addfriend/>
 
-            {/* <UserRoundPlus size={17} className=' text-green-600'/> */}
           </div>
           <hr className="w-full border-zinc-700 my-2" /> 
           <Tabs defaultValue="friends" className=" w-full h-full relative">
@@ -133,13 +132,10 @@ export default function Friends() {
                     <div key={item.characterId} className=' w-full flex items-center justify-between p-2 bg-zinc-950'>
                       <div className=' flex flex-col'>
                         <p className=' text-xs font-semibold'>{item.username}</p>
-                        {/* <p className=' text-[.6rem] text-zinc-500'>{formatDate(item.)}</p> */}
 
                       </div>
 
                       <div className=' flex items-center justify-center gap-2 '>
-                        {/* <p className=' text-[.7rem]'>{item.level}</p>
-                        <p className=' text-[.5rem] text-zinc-500'>LVL</p> */}
                         <button disabled={isPending} onClick={() => acceptReject(item.characterId, 'rejected')} className=' bg-zinc-800 p-[2px] rounded-sm text-red-600'><X size={15}/></button>
                         <button disabled={isPending} onClick={() => acceptReject(item.characterId, 'accepted')} className=' bg-zinc-800 p-[2px] rounded-sm text-green-600'><Check size={15}/></button>
                       </div>
@@ -158,29 +154,34 @@ export default function Friends() {
           </Tabs>
 
         </div>
-      </div>
+      </div> */}
 
     
 
     
-      {/* <button className=' py-2 px-4 bg-yellow-500 text-black text-xs w-fit rounded-r-md flex items-center gap-2'>All <ChevronDown size={15}/></button>
+      {/* <button className=' py-2 px-4 bg-yellow-500 text-black text-xs w-fit rounded-r-md flex items-center gap-2'>All <ChevronDown size={15}/></button> */}
 
 
       <Table className=' text-xs'>
       <TableCaption></TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="">User Id</TableHead>
+          <TableHead className="">Date</TableHead>
           <TableHead>Username</TableHead>
           <TableHead>Level</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Date Registered</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-      
+        {data?.friends.map((item, index) => (
+            <TableRow key={index}>
+            <TableCell className="font-medium">{new Date(item.friendSince).toDateString()}</TableCell>
+            <TableCell className="font-medium">{item.username}</TableCell>
+            <TableCell>{item.level}</TableCell>
+           
+            </TableRow>
+          ))}
       </TableBody>
-    </Table> */}
+    </Table>
 
     </div>
   )
