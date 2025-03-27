@@ -1,5 +1,4 @@
 "use client"
-
 import { TrendingUp } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 import {
@@ -25,43 +24,56 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { useGetGraph } from "@/client_actions/superadmin/dashboard"
+import { useMemo, useState } from "react"
 
 export const description = "A linear line chart"
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-]
+const transformChartData = (apiResponse: any) => {
+  if (!apiResponse || typeof apiResponse !== "object" || !apiResponse.data) return [];
+
+  const data = apiResponse.data;
+
+  return Object.entries(data).map(([time, value]) => ({
+    time,  // Use the key as time (e.g., "00:00", "Monday", "January", "2025")
+    value: Number(value) || 0, // Ensure the value is a number
+  }));
+};
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  count: {
+    label: "Hourly Data",
     color: "hsl(var(--chart-1))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export default function Linechart() {
+  const [type, setType] = useState('daily')
+  const {data} = useGetGraph(type)
+
+  
+  const chartData = useMemo(() => transformChartData(data), [data]);
+
+  console.log(chartData)
+
   return (
     <Card className=" border-[1px] border-amber-500 overflow-hidden">
       <CardHeader className=" flex justify-between bg-light">
         <div className=" w-full flex justify-between">
           <div className=" flex flex-col gap-1">
-            <CardTitle>Line Chart - Linear</CardTitle>
-            <CardDescription>January - June 2024</CardDescription>
+            <CardTitle>User Registration</CardTitle>
+            {/* <CardDescription>January - June 2024</CardDescription> */}
           </div>
 
-          <Select>
+          <Select value={type} onValueChange={setType}>
           <SelectTrigger className="w-[112px] h-[30px] text-xs">
             <SelectValue placeholder="Filter" />
           </SelectTrigger>
           <SelectContent className="">
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
+            <SelectItem value="daily">Daily</SelectItem>
+            <SelectItem value="weekly">Weekly</SelectItem>
+            <SelectItem value="monthly">Monthly</SelectItem>
+            <SelectItem value="yearly">Yearly</SelectItem>
           </SelectContent>
         </Select>
 
@@ -80,7 +92,7 @@ export default function Linechart() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="time"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -91,7 +103,7 @@ export default function Linechart() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
+              dataKey="value"
               type="linear"
               stroke="#c29709"
               strokeWidth={2}
@@ -101,12 +113,12 @@ export default function Linechart() {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
+        {/* <div className="flex gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
           Showing total visitors for the last 6 months
-        </div>
+        </div> */}
       </CardFooter>
     </Card>
   )

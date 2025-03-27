@@ -29,22 +29,24 @@ export default function EquipedItems() {
             <TableCaption></TableCaption>
             <TableHeader>
                 <TableRow className=' border-collapse '>
-                {/* <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Id</TableHead> */}
                 <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Item Equiped</TableHead>
+                <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Item Name</TableHead>
                 <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Date Equiped</TableHead>
                 <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Type</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
             {data?.inventory
-              .filter((category) => category.items.length > 0) // ✅ Only categories with items
+              .filter((category) => category.items.length > 0)
               .map((category) =>
-                category.items.map((item) => ( // ✅ Map through each item inside the category
+                category.items.map((item) => ( 
                   <TableRow key={item._id}>
                     {/* <TableCell className="font-medium">{item._id}</TableCell> */}
                     <TableCell>{item.isEquipped ? "Yes" : "No"}</TableCell>
+                    <TableCell className="font-medium">{item.details.name}</TableCell>
+
                     <TableCell>{new Date(item.acquiredAt).toLocaleDateString()}</TableCell>
-                    <TableCell>{category.type}</TableCell> {/* ✅ Display category type */}
+                    <TableCell>{category.type}</TableCell> 
                   </TableRow>
                 ))
               )}

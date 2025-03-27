@@ -20,7 +20,7 @@ import { useGetSkills } from '@/client_actions/superadmin/skills'
     'Clan',
     'Deals',
     'Raid',
-    'Path',
+    // 'Path',
    
 ]
 export default function Skills() {

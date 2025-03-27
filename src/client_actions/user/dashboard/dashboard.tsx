@@ -13,6 +13,13 @@ interface InventoryItem {
   isEquipped: boolean;
   _id: string;
   acquiredAt: string;
+  details: {
+    _id: string
+    name: string
+    price:string
+    currency: string
+    type: string
+  }
 }
 
 interface InventoryCategory {
@@ -72,7 +79,7 @@ export const getData = async (characterid: string): Promise<UserCharacter | null
     "/character/getplayerdata",
     {params: {characterid}}
   );
-  return response.data.data.length > 0 ? response.data.data[0] : null;
+  return response.data.data
 };
 
 

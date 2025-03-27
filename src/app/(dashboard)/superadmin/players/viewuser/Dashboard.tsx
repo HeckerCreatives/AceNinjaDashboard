@@ -25,7 +25,6 @@ export default function Dashboard() {
         setUserid(data?.userid || '')
     },[data])
 
-    console.log(rank)
 
   return (
     <div className=' w-full max-w-[1540px] h-auto flex flex-col gap-6 items-center p-4'>
@@ -47,7 +46,7 @@ export default function Dashboard() {
             </div>
 
             <div className=' w-full max-w-[365px] shadow-md'>
-                <Card name={"Current Season"} value={currentSeason?.data.title || 'No Data'} isAmount={false} icon={<PiRanking size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true} timeleft={currentSeason?.data.timeleft} />
+                <Card name={"Total Purchased"} value={0} isAmount={false} icon={<PiRanking size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
         
             </div>
 

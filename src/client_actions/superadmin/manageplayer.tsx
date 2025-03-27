@@ -83,11 +83,9 @@ export const banunbanPlayer = async (userid: string, status: string) => {
             handleApiError(error);
         },
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["usercounts"] });
             queryClient.invalidateQueries({ queryKey: ["userlist"] });
           }
-        
-      
-       
     });
   };
 

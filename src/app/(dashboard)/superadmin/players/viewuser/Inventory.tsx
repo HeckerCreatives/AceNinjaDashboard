@@ -15,6 +15,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLab
 import { ListFilter, Check } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { useGetInventory } from '@/client_actions/superadmin/inventory'
+import ViewInventoryItems from '@/components/cards/Viewinventory'
   
 
 const types = [
@@ -70,7 +71,7 @@ return (
               <div className=' w-full h-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 mt-6'>
       
               {Object.values(data?.data || {}).map((entry) => (
-                  <InventoryItems 
+                  <ViewInventoryItems 
                     key={entry.item?.id} 
                     imgUrl={""} 
                     damage={entry.item?.details.stats.damage || 0} 
@@ -87,23 +88,10 @@ return (
               </div>
               </>
             )}
-
-{/* <InventoryItems 
-            key={index}
-            imgUrl={''} 
-            damage={selectedCategory.item.details.stats.damage} 
-            defense={selectedCategory.item.details.stats.defense} 
-            speed={selectedCategory.item.details.stats.speed} 
-            itemid={selectedCategory.item.id} 
-            itemname={selectedCategory.item.details.name} 
-            itemprice={selectedCategory.item.details.price} 
-            rarity={selectedCategory.item.details.rarity} 
-            description={selectedCategory.item.details.description} 
-          /> */}
       
           {Object.values(data?.data || {}).length === 0 && (
            <div className=' w-full h-[200px] flex items-center justify-center'>
-            <p className=' text-xs text-zinc-400'>No items.</p>
+            <p className=' text-xs text-zinc-400'>No items yet.</p>
           </div>
           )}
       

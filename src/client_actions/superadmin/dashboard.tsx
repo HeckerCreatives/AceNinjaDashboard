@@ -62,6 +62,25 @@ export const getRank = async (characterid: string): Promise<CharacterRankRespons
       refetchOnWindowFocus: false,
     });
     };
+
+export const getGraph = async (charttype: string) => { 
+      const response = await axiosInstance.get(
+        "/user/getregistrationgraph",
+       {params: {charttype}}
+      );
+      return response.data
+  };
+    
+    
+    export const useGetGraph = (charttype: string) => {
+      return useQuery({
+        queryKey: ["graph",charttype],
+        queryFn: () => getGraph(charttype),
+        staleTime: 5 * 60 * 1000,
+        refetchOnMount: false, 
+        refetchOnWindowFocus: false,
+      });
+      };
     
   
 

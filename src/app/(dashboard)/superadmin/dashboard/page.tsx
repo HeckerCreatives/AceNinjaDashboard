@@ -1,5 +1,5 @@
 'use client'
-import { useGetCounts } from "@/client_actions/superadmin/dashboard";
+import { useGetCounts, useGetGraph } from "@/client_actions/superadmin/dashboard";
 import { useGetCurrentSeason } from "@/client_actions/superadmin/season";
 import Card from "@/components/cards/Card";
 import Barchart from "@/components/charts/Barchart";
@@ -43,9 +43,9 @@ export default function Home() {
       </div>
       
 
-      <div className=' w-full grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#330F0D] border-t-2 border-amber-900/50 rounded-md ~p-2/8'>
+      <div className=' w-full grid grid-cols-1 gap-8 bg-[#330F0D] border-t-2 border-amber-900/50 rounded-md ~p-2/8'>
         <Linechart/>
-        <Barchart/>
+        {/* <Barchart/> */}
         
       </div>
       

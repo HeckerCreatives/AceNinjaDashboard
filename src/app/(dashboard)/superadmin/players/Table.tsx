@@ -17,6 +17,7 @@ import { useGetUserList } from '@/client_actions/superadmin/manageplayer'
 import Loader from '@/components/common/Loader'
 import BanUnbanPlayer from '@/components/forms/BanUnbanPlayer'
 import useCharacterStore from '@/hooks/character'
+import { useGetCounts } from '@/client_actions/superadmin/dashboard'
 
 
   
@@ -25,6 +26,7 @@ export default function Playertable() {
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
   const [search, setSearch] = useState('')
+  const {data: counts} = useGetCounts()
   const {data, isLoading} = useGetUserList(currentPage,10,'',search)
   const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
   

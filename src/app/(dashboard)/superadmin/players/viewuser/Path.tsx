@@ -14,9 +14,9 @@ import { useGetPath } from '@/client_actions/superadmin/path'
   
 
 const tabs = [
-  'Attack',
-  'Defense',
-  'Utility',
+  // 'Attack',
+  // 'Defense',
+  // 'Utility',
   'Mage',
   'Samurai',
   'Scholar',
@@ -24,7 +24,7 @@ const tabs = [
   'Dark',
 ]
 export default function Path() {
-  const [tab, setTab] = useState('Attack')
+  const [tab, setTab] = useState('Mage')
   const [currentPage, setCurrentpage] = useState(0)
   const [totalpage, setTotalpage] = useState(0)
   const { characterid } = useCharacterStore();

@@ -34,6 +34,7 @@ export default function Subscribers() {
     const [currentPage, setCurrentPage] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [open, setOpen] = useState(false)
+    const [id, setId] = useState('')
     const {data, isLoading} = useGetNewsletter(currentPage, 10, 'subscriber')
     const {mutate: deleteNewsletter, isPending} = useDeleteNewsletter()
     
@@ -46,7 +47,7 @@ export default function Subscribers() {
     setTotalPage(data?.data.totalpages || 0)
    },[data])
 
-   const deleteNewsletterdata = (id: string) => {
+   const deleteNewsletterdata = () => {
     deleteNewsletter({newsletterid: id}, {
         onSuccess: () => {
         toast.success(`Newsletter deleted successfully`);
@@ -103,7 +104,7 @@ export default function Subscribers() {
                             <TableCell className=' flex items-center justify-center gap-2'>
                             <EditNewsletterForm title={item.title} description={item.description} id={item.newsid} banner={item.banner}/>
                             <Dialog open={open} onOpenChange={setOpen}>
-                            <DialogTrigger className=' flex items-center gap-1 bg-red-600 p-1 rounded-sm text-xs'>
+                            <DialogTrigger onClick={() => setId(item.newsid)} className=' flex items-center gap-1 bg-red-600 p-1 rounded-sm text-xs'>
                                 <Trash size={13}/>
                             </DialogTrigger>
                             <DialogContent className=' max-w-[500px] h-auto p-6'>
@@ -115,7 +116,7 @@ export default function Subscribers() {
                                 </DialogHeader>
 
                                 <div className=' w-full flex items-end justify-end'>
-                                    <Button disabled={isPending} onClick={() => deleteNewsletterdata(item.newsid)} >
+                                    <Button disabled={isPending} onClick={() => deleteNewsletterdata()} >
                                         {isPending && <Loader/>}
                                         Continue</Button>
                                 </div>
