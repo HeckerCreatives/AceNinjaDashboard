@@ -37,18 +37,6 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
   const { charactername, setCharactername} = useCharacterNameStore()
   const {isOpen, openDialog, closeDialog} = useDialogStore()
 
-
-  useEffect(() => {
-    const sessionToken = Cookies.get("sessionToken");
-
-    if (!sessionToken) {
-      toast.error('Unauthorized, to view this page')
-      router.push("/");
-    } else {
-      setIsChecking(false); 
-    }
-  }, []);
-
   //charcter id persist
   useEffect(() => {
     if (data && data.length > 0) {
