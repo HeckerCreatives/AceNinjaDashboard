@@ -1,4 +1,4 @@
-import { Box, Boxes, Gamepad, Gem, Globe, Globe2, Home, LayoutGrid, ShoppingBag, ShoppingBasket, Swords, Ticket, TicketCheck, User, UserRound, Users, UsersRound } from "lucide-react";
+import { Box, Boxes, Gamepad, Gem, Globe, Globe2, Home, LayoutGrid, ShoppingBag, ShoppingBasket, Swords, Ticket, TicketCheck, User, UserRound, Users, UsersRound, Wallet } from "lucide-react";
 import { FaBullhorn, FaMoneyBill } from "react-icons/fa";
 import { GiRank1, GiWhirlpoolShuriken } from "react-icons/gi";
 import { GrVmMaintenance } from "react-icons/gr";
@@ -19,6 +19,8 @@ import { TbSwords } from "react-icons/tb";
 export const superadminRoutes = [
     {route:'/superadmin/dashboard', name: 'Dashboard', icon: <LayoutGrid size={15}/>, subitems: [] },
     {route:'/superadmin/players', name: 'Manage Players', icon: <UsersRound size={15}/>, subitems: [] },
+    {route:'/superadmin/topup', name: 'Topup', icon: <Wallet size={15}/>, subitems: [] },
+
      {route:'/superadmin/', name: 'Newsletter', icon: <FaBullhorn size={15}/>,
      subitems: [
          {route:'/superadmin/newsletter/subscribers', name: 'Subscribers', icon: <FaBullhorn size={15}/>},
@@ -78,5 +80,5 @@ export const userRoutes = [
     {name: 'Battle Pass', path: '/user/bp' , icon: <Ticket size={20}/>},
     {name: 'Friends', path: '/user/friends' , icon: <Users size={20}/>},
     {name: 'Marketplace', path: '/user/purchase' , icon: <ShoppingBag size={20}/>},
-    {name: 'Top Up', path: '/user/topup' , icon: <FaMoneyBill size={20}/>},
+    // {name: 'Top Up', path: '/user/topup' , icon: <FaMoneyBill size={20}/>},
 ]

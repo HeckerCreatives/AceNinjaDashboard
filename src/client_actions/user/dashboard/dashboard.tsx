@@ -72,6 +72,13 @@ interface CharacterRankResponse {
   };
 }
 
+interface PayinResponse {
+  message: string;
+  data: {
+    totalpayin: number;
+  };
+}
+
 
 
 export const getData = async (characterid: string): Promise<UserCharacter | null> => { 
@@ -112,6 +119,23 @@ export const getRank = async (characterid: string): Promise<CharacterRankRespons
       refetchOnWindowFocus: false,
     });
     };
+
+    export const getTotalPayin = async (characterid: string): Promise<PayinResponse> => { 
+      const response = await axiosInstance.get(
+        "/payin/getusertotalpayin",
+        {params:{characterid}}
+       
+      );
+      return response.data
+  };
+    
+    
+    export const useGetTotalPayin = (characterid: string) => {
+      return useQuery({
+        queryKey: ["payin"],
+        queryFn: () => getTotalPayin(characterid),
+      });
+      };
   
 
 

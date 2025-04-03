@@ -41,7 +41,13 @@ export default function Friends() {
     <div className=' w-full flex flex-col gap-8 overflow-hidden p-8'>
 
   <Table className=' text-xs'>
-      <TableCaption></TableCaption>
+       {data?.friends.length === 0 && (
+             <TableCaption className=' text-xs'>No Data</TableCaption>
+              )}
+               {isLoading && (
+               <TableCaption className=' text-xs'><div className=' loader'></div></TableCaption>
+      
+               )}
       <TableHeader>
         <TableRow>
           <TableHead className="">Date</TableHead>

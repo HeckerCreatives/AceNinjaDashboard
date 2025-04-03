@@ -36,22 +36,18 @@ export const editNewsdata = z.object({
   title: z.string().nonempty("Title is empty"),
   description: z.string().nonempty("Description is empty"),
   file: z
-  .custom<File | string | null | undefined>((val) => {
-    if (val === null || val === undefined) return true; // No file change (valid case)
-    if (val instanceof File) return val.type.startsWith("image/"); // Ensure it's an image
-    if (typeof val === "string") {
-      try {
-        new URL(val); // Validate if it's a valid URL
-        return true;
-      } catch {
-        return false;
-      }
-    }
-    return false;
-  }, {
-    message: "Only image files (JPEG, PNG, etc.) or a valid video URL are allowed.",
-  })
-  .optional(),
+    .union([
+      z.instanceof(File).refine(
+        (file) => file.type.startsWith("image/"),
+        {
+          message: "Only image files (JPEG, PNG, etc.) are allowed.",
+        }
+      ),
+      z.string(),
+      z.null(),
+      z.undefined(),
+    ])
+    .optional(),
 });
 
 export const createNewsLetter = z.object({
@@ -123,6 +119,33 @@ export const editTier = z.object({
     .optional(),
 })
 
+
+export const sendCurrencySchema = z.object({
+  username: z
+    .string()
+    .nonempty("Username is required")
+    .min(3, "Username must be at least 3 characters"),
+  
+  currency: z.string().nonempty('Please select a currency'),
+  
+  amount: z
+    .number({
+      required_error: "Amount is required",
+      invalid_type_error: "Amount must be a number",
+    })
+    .positive("Amount must be greater than 0")
+    .int("Amount must be a whole number")
+    .or(
+      z.string()
+        .nonempty("Amount is required")
+        .transform((val) => {
+          const parsed = parseInt(val);
+          if (isNaN(parsed)) throw new Error("Amount must be a number");
+          return parsed;
+        })
+    ),
+});
+
 export type CreateNewsData = z.infer<typeof createNewsData>
 export type EditNewsData = z.infer<typeof editNewsdata>
 export type CreateNewsLetter = z.infer<typeof createNewsLetter>
@@ -133,3 +156,4 @@ export type RegisterUser = z.infer<typeof registerValidations>
 export type CreateSeasonsSchema = z.infer<typeof createSeasonsSchema>
 export type CreateTier = z.infer<typeof createTier>
 export type EditTier = z.infer<typeof editTier>
+export type SendCurrency = z.infer<typeof sendCurrencySchema>

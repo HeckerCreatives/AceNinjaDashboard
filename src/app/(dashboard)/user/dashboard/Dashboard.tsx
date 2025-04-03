@@ -6,7 +6,7 @@ import React from 'react'
 import EquipedItems from './EquipedItems'
 import Stats from './Stats'
 import Companion from './Companion'
-import { getData, useGetRank, useUserData } from '@/client_actions/user/dashboard/dashboard'
+import { getData, useGetRank, useGetTotalPayin, useUserData } from '@/client_actions/user/dashboard/dashboard'
 import useCharacterStore from '@/hooks/character'
 import Card from '@/components/cards/Card'
 import { PiRanking } from 'react-icons/pi'
@@ -17,6 +17,9 @@ export default function Dashboard() {
     const { data, isLoading } = useUserData(characterid)
     const {data: currentSeason} = useGetCurrentSeason()
     const {data: rank} = useGetRank(characterid)
+    const {data: payin} = useGetTotalPayin(characterid)
+
+    console.log(payin)
     
 
   return (
@@ -39,7 +42,7 @@ export default function Dashboard() {
             </div>
 
             <div className=' w-full max-w-[365px] shadow-md'>
-                <Card name={"Total Purchased"} value={0} isAmount={false} icon={<PiRanking size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
+                <Card name={"Total Purchased"} value={payin?.data.totalpayin || 0} isAmount={false} icon={<PiRanking size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
             {/* <ViewCard name={'Total Purchase'} value={9999} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={''} border={true}/> */}
 
             </div>

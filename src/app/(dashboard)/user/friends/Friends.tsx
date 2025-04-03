@@ -163,7 +163,13 @@ export default function Friends() {
 
 
       <Table className=' text-xs'>
-      <TableCaption></TableCaption>
+      {data?.friends.length === 0 && (
+       <TableCaption className=' text-xs'>No Data</TableCaption>
+        )}
+         {isLoading && (
+         <TableCaption className=' text-xs'><div className=' loader'></div></TableCaption>
+
+         )}
       <TableHeader>
         <TableRow>
           <TableHead className="">Date</TableHead>

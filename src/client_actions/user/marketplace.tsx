@@ -38,19 +38,19 @@ type ApiResponse = {
 
 
 
-export const getItems = async (characterid: string, type: string, rarity: string, search: string, page: number, limit: number): Promise<ApiResponse> => { 
+export const getItems = async (characterid: string, type: string, rarity: string, search: string, page: number, limit: number, markettype: string): Promise<ApiResponse> => { 
   const response = await axiosInstance.get(
     "/marketplace/getmarketitems",
-    {params: {characterid, type, rarity, search, page, limit}}
+    {params: {characterid, type, rarity, search, page, limit, markettype}}
   );
   return response.data;
 };
 
 
-export const useGetItems = (characterid: string, type: string, rarity: string, search: string, page: number, limit: number) => {
+export const useGetItems = (characterid: string, type: string, rarity: string, search: string, page: number, limit: number,markettype: string) => {
   return useQuery({
-    queryKey: ["items", characterid, type, rarity,search,page,limit ],
-    queryFn: () => getItems(characterid, type, rarity,search,page,limit),
+    queryKey: ["items", characterid, type, rarity,search,page,limit, markettype ],
+    queryFn: () => getItems(characterid, type, rarity,search,page,limit, markettype),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 
     refetchOnWindowFocus: false,

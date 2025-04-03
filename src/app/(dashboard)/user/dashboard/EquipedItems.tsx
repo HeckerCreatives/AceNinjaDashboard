@@ -31,6 +31,7 @@ export default function EquipedItems() {
             <TableHeader>
                 <TableRow className=' border-collapse '>
                 {/* <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Id</TableHead> */}
+                <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Item Name</TableHead>
                 <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Item Equiped</TableHead>
                 <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Date Equiped</TableHead>
                 <TableHead className=" border-r-2 border-b-2 border-amber-950/80">Type</TableHead>
@@ -43,6 +44,7 @@ export default function EquipedItems() {
                 category.items.map((item) => ( // ✅ Map through each item inside the category
                   <TableRow key={item._id}>
                     {/* <TableCell className="font-medium">{item._id}</TableCell> */}
+                    <TableCell>{item.details.name}</TableCell>
                     <TableCell>{item.isEquipped ? "Yes" : "No"}</TableCell>
                     <TableCell>{new Date(item.acquiredAt).toLocaleDateString()}</TableCell>
                     <TableCell>{category.type}</TableCell> {/* ✅ Display category type */}

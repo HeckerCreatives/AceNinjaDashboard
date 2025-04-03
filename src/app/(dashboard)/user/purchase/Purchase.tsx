@@ -49,7 +49,7 @@ export default function Purchase() {
   const [type, setType] = useState('weapon')
   const [rarity, setRarity] = useState('all')
   const [search, setSearch] = useState('')
-  const {data, isLoading} = useGetItems(characterid, type,`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10)
+  const {data, isLoading} = useGetItems(characterid, type,`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10, 'market')
 
   //paginition
   const handlePageChange = (page: number) => {

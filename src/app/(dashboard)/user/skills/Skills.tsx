@@ -22,7 +22,7 @@ const tabs = [
     'Clan',
     'Deals',
     'Raid',
-    'Path',
+    // 'Path',
    
 ]
 export default function Skills() {
