@@ -67,7 +67,7 @@ export default function StoreItems(data: Items) {
   return (
     <div className=' w-full h-auto flex flex-col'>
         <div className=' relative w-full h-[300px] bg-zinc-800 flex items-center justify-center'
-        style={{backgroundImage: `url('${data.imgUrl}')`, backgroundRepeat:'no-repeat', backgroundSize:'cover'}}
+        // style={{backgroundImage: `url('${data.imgUrl}')`, backgroundRepeat:'no-repeat', backgroundSize:'cover'}}
         >
 
             <img src={data.imgUrl} alt="item" className=' object-cover w-full h-full opacity-70' />
