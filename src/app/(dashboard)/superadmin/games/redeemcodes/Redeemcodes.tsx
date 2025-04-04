@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Table,
     TableBody,
@@ -12,13 +12,26 @@ import {
 import RedeemCards from './RedeemCards'
 import CreateCodesFrom from '@/components/forms/CreateCodesFrom'
 import { useGetRedeemCodes } from '@/client_actions/superadmin/redeemcodes'
+import PaginitionComponent from '@/components/common/Pagination'
+import Loader from '@/components/common/Loader'
+import DeleteRedemCode from '@/components/forms/DeleteRedeemCode'
+import UpdateRedeemCode from '@/components/forms/UpdateRedeemCode'
 
 
 export default function RedeemCodes() {
-    const [tab, setTab] = useState('Daily')
-    const {data} = useGetRedeemCodes()
+     const [currentPage, setCurrentpage] = useState(0)
+    const [totalpage, setTotalpage] = useState(0)
+    const {data, isLoading} = useGetRedeemCodes('active',currentPage, 10)
 
-    console.log(data)
+     const handlePageChange = (page: number) => {
+        setCurrentpage(page)
+      }
+    
+       useEffect(() => {
+          setTotalpage(data?.totalpages || 0)
+        },[data])
+    
+
     
   return (
     <div className=' w-full ~p-2/8'>
@@ -37,25 +50,50 @@ export default function RedeemCodes() {
                 <CreateCodesFrom/>
 
                 <Table className=' text-xs'>
-                <TableCaption></TableCaption>
+                 {data?.data.length === 0 && (
+                    <TableCaption>No data.</TableCaption>
+                    )}
+
+                    {isLoading && (
+                    <TableCaption>
+                        <Loader/>
+                    </TableCaption>
+                    )}
                 <TableHeader>
                     <TableRow>
-                    <TableHead>Code Id</TableHead>
                     <TableHead>Code</TableHead>
                     <TableHead className="">Reward</TableHead>
                     <TableHead className="">Expiration</TableHead>
+                    <TableHead className="">Status</TableHead>
                     <TableHead className="">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {/* <TableRow>
-                    <TableCell className="font-medium">INV001</TableCell>
-                    <TableCell>Paid</TableCell>
-                    <TableCell>Credit Card</TableCell>
-                    <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow> */}
+                    {data?.data.map((item, index) => (
+                        <TableRow>
+                        <TableCell className="font-medium">{item.code}</TableCell>
+                        <TableCell>
+                            <p>Coins: {item.rewards.coins}</p>
+                            <p>Emerald: {item.rewards.emerald}</p>
+                            <p>Crystal: {item.rewards.crystal}</p>
+                            
+                        </TableCell>
+                        <TableCell>{new Date(item.expiration).toLocaleString()}</TableCell>
+                        <TableCell className="font-medium">{item.status}</TableCell>
+
+                        <TableCell className="text-right flex items-center gap-2">
+                            <DeleteRedemCode id={item.id}/>
+                            <UpdateRedeemCode code={item.code} emerald={item.rewards.emerald} coins={item.rewards.coins} crystal={item.rewards.crystal} expiration={item.expiration} id={item.id}/>
+                        </TableCell>
+                        </TableRow>
+                    ))}
+                    
                 </TableBody>
                 </Table>
+
+                 {data?.data.length !== 0 && (
+                    <PaginitionComponent currentPage={currentPage} total={totalpage} onPageChange={handlePageChange }/>
+                )}
 
 
             

@@ -14,6 +14,9 @@ import { useBuyItem } from '@/client_actions/user/marketplace'
 import useCharacterStore from '@/hooks/character'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
+import DeleteStoreItems from '../forms/DeleteStoreItems'
+import { useDeleteStoreItem } from '@/client_actions/superadmin/store'
+import UpdateStoreItems from '../forms/UpdateStoreItem'
   
 
 type Items = {
@@ -26,11 +29,15 @@ itemname: string
 itemprice: number
 rarity: string
 description: string
+currency: string
+gender: string
+type: string
 }
-export default function MarketItems(data: Items) {
+export default function StoreItems(data: Items) {
     const [open, setOpen] = useState(false)
     const { characterid} = useCharacterStore()
     const { mutate: buyItem, error, isSuccess, isPending } = useBuyItem();
+    const {mutate: deleteStoreItem} = useDeleteStoreItem()
 
     const rarityColor = (data: string) => {
         if(data === 'basic'){
@@ -45,22 +52,26 @@ export default function MarketItems(data: Items) {
         }
       }
 
-      const purchaseItem = () => {
-        buyItem({ characterid: characterid, itemid: data.itemid },
-            {  onSuccess: () => {
-                toast.success('Successfully purchased.');
-                setOpen(false)
-              },})
-      }
+    //   const deleteItem = () => {
+    //     deleteStoreItem({ itemId: prop},
+    //         {  onSuccess: () => {
+    //             toast.success('Successfully purchased.');
+    //             setOpen(false)
+    //           },})
+    //   }
+
+
 
 
 
   return (
     <div className=' w-full h-auto flex flex-col'>
-        <div className=' relative w-full h-[300px] bg-zinc-800'>
-            <img src={data.imgUrl} alt="item" className=' object-cover w-full h-full opacity-70' />
+        <div className=' relative w-full h-[300px] bg-zinc-800 flex items-center justify-center'
+        style={{backgroundImage: `url('${data.imgUrl}')`, backgroundRepeat:'no-repeat', backgroundSize:'cover'}}
+        >
 
-            <div className=' flex flex-col gap-1 top-2 left-2 absolute p-4'>
+            <img src={data.imgUrl} alt="item" className=' object-cover w-full h-full opacity-70' />
+            <div className=' flex flex-col gap-1 absolute left-2 top-2 p-4'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>
                     <p className='text-[.7rem] flex items-center gap-1'>
@@ -99,7 +110,7 @@ export default function MarketItems(data: Items) {
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
                     <p className=' text-sm font-semibold'>{data.itemprice.toLocaleString()}</p>
                 </div>
-                <Dialog open={open} onOpenChange={setOpen}>
+                {/* <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger className=' text-[.7rem] font-semibold px-3 py-2 rounded-sm h-fit bg-yellow-500 text-amber-950 w-[100px]'>
                     Buy now
                 </DialogTrigger>
@@ -127,7 +138,14 @@ export default function MarketItems(data: Items) {
 
                     </div>
                 </DialogContent>
-                </Dialog>
+                </Dialog> */}
+
+                <div className=' flex items-center gap-2'>
+                <DeleteStoreItems id={data.itemid}/>
+                <UpdateStoreItems imgUrl={data.imgUrl} damage={data.damage} defense={data.defense} speed={data.speed} itemid={data.itemid} itemname={data.itemname} itemprice={data.itemprice} rarity={data.rarity} description={data.description} gender={data.gender} currency={data.currency} type={data.type}/>
+                </div>
+
+               
 
             </div>
         

@@ -1,6 +1,32 @@
 import axiosInstance from "@/lib/axiosInstance";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
+type PassiveEffects = {
+  health: number;
+  energy: number;
+  poisonimmunity: number;
+};
+
+type ActiveEffects = {
+  maxhealthreduce: number;
+  stun: number;
+};
+
+type Companion = {
+  _id: string;
+  companionname: string;
+  levelrequirement: number;
+  price: number;
+  currency: string;
+  activedescription: string;
+  passivedescription: string;
+  passiveeffects: PassiveEffects;
+  activeeffects: ActiveEffects;
+  __v: number;
+  isEquipped: boolean
+  createdAt: string;  // ISO Date string
+  updatedAt: string;  // ISO Date string
+};
 
 interface WalletItem {
   type: string;
@@ -26,6 +52,7 @@ interface InventoryCategory {
   type: string;
   items: InventoryItem[]; // Can be empty or contain multiple items
 }
+
 interface Stats {
   health: number,
   energy: number,
@@ -56,6 +83,7 @@ interface UserCharacter {
   inventory: InventoryCategory[];
   stats: Stats
   experience: number
+  companions: Companion[];
 }
 
 interface UserDataResponse {

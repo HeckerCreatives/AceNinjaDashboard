@@ -94,15 +94,15 @@ return (
               {Object.values(data?.data || {}).map((entry) => (
                   <InventoryItems 
                     key={entry.item?.id} 
-                    imgUrl={""} 
-                    damage={entry.item?.details.stats.damage || 0} 
-                    defense={entry.item?.details.stats.defense || 0} 
-                    speed={entry.item?.details.stats.speed || 0} 
+                    imgUrl={entry.item?.details?.imageUrl || ''} 
+                    damage={entry.item?.details?.stats.damage || 0} 
+                    defense={entry.item?.details?.stats.defense || 0} 
+                    speed={entry.item?.details?.stats.speed || 0} 
                     itemid={entry.item?.id || ''} 
-                    itemname={entry.item?.details.name || ''} 
-                    itemprice={entry.item?.details.price || 0} 
-                    rarity={entry.item?.details.rarity || ''} 
-                    description={entry.item?.details.description || ''} 
+                    itemname={entry.item?.details?.name || ''} 
+                    itemprice={entry.item?.details?.price || 0} 
+                    rarity={entry.item?.details?.rarity || ''} 
+                    description={entry.item?.details?.description || ''} 
                   />
                 ))}
 

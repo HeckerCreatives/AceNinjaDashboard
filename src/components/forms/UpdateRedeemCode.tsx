@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { ImageUp, Plus} from 'lucide-react'
+import { ImageUp, Pen, Plus} from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createCode, CreateCode } from '@/validation/schema'
-import { useAddRedeemCode } from '@/client_actions/superadmin/redeemcodes'
+import { useAddRedeemCode, useUpdateRedeemCode } from '@/client_actions/superadmin/redeemcodes'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
 
@@ -24,11 +24,20 @@ const tabs = [
   'Video',
 ]
 
-export default function CreateQuestForm() {
+type Props ={
+    code: string
+    emerald: number
+    coins: number
+    crystal: number
+    expiration: string
+    id: string
+}
+
+export default function UpdateRedeemCode( prop: Props) {
     const [image, setImage] = useState('')
     const [open, setOpen] = useState(false)
     const [tab, setTab] = useState('Image')
-    const {mutate: addRedeemCode, isPending} = useAddRedeemCode()
+    const {mutate: updateRedeemCode, isPending} = useUpdateRedeemCode()
     const [coins, setCoins] = useState(0)
     const [emerald, setEmerald] = useState(0)
     const [crystal, setCrystal] = useState(0)
@@ -43,13 +52,17 @@ export default function CreateQuestForm() {
       formState: { errors },
     } = useForm<CreateCode>({
       resolver: zodResolver(createCode),
+      defaultValues:({
+        code: prop.code,
+        expiration: prop.expiration.split('T')[0]
+      })
     });
 
     //create news
     const createRedeemcodes = async ( data: CreateCode) => {
-      addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, emerald: emerald, crystal: crystal}},{
+        updateRedeemCode({id: prop.id, code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, emerald: emerald, crystal: crystal}},{
         onSuccess: () => {
-          toast.success(`Redeem code created successfully.`);
+          toast.success(`Redeem code updated successfully.`);
         },
       })
      
@@ -59,16 +72,24 @@ export default function CreateQuestForm() {
     useEffect(() => {
         reset()
     },[open])
+
+    useEffect(() => {
+        setCoins(prop.coins)
+        setEmerald(prop.emerald)
+        setCrystal(prop.crystal)
+    },[])
+
+    console.log(prop,prop.expiration.split('T')[0])
   
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-    <DialogTrigger className=' bg-yellow-500 text-black px-6 py-2 rounded-md flex items-center w-fit text-xs font-semibold'>
-    <Plus size={15}/>Create
+    <DialogTrigger className=' bg-yellow-500 text-black p-2 rounded-md flex items-center h-fit w-fit text-xs font-semibold'>
+    <Pen size={15}/>
     </DialogTrigger>
     <DialogContent className=' max-w-[800px] h-auto border-amber-500/80 border-[1px]'>
       <DialogHeader className=' w-full bg-light p-3'>
-        <DialogTitle className=' text-sm'>Create Codes</DialogTitle>
+        <DialogTitle className=' text-sm'>Update Code</DialogTitle>
         <DialogDescription>
          
         </DialogDescription>

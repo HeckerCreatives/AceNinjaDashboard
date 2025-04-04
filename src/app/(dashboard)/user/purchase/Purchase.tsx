@@ -49,7 +49,7 @@ export default function Purchase() {
   const [type, setType] = useState('weapon')
   const [rarity, setRarity] = useState('all')
   const [search, setSearch] = useState('')
-  const {data, isLoading} = useGetItems(characterid, type,`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10, 'market')
+  const {data, isLoading} = useGetItems(characterid, type,`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10, 'shop')
 
   //paginition
   const handlePageChange = (page: number) => {
@@ -122,7 +122,7 @@ export default function Purchase() {
         <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6'>
 
             {Object.values(data?.data || {}).map((item, index) => (
-              <MarketItems key={item.itemId} imgUrl={item.imageUrl} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description}/>
+              <MarketItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description}/>
         
               // <div className=' w-full h-auto flex flex-col'>
               //   <div className=' relative w-full h-[300px] bg-zinc-800'>

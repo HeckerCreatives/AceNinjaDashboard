@@ -5,47 +5,47 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { link } from "fs";
 
 interface InventoryItem {
-  id: string;          // Unique ID of the item
-  quantity: number;    // Number of items owned
-  isEquipped: boolean; // Whether the item is equipped
-  acquiredAt: string;  // Timestamp when the item was acquired
-  details: ItemDetails; // Nested item details
+  id: string;          
+  quantity: number;    
+  isEquipped: boolean; 
+  acquiredAt: string; 
+  details: ItemDetails; 
 }
 
 interface ItemDetails {
-  name: string;         // Item name
-  description: string;  // Description of item effects
-  rarity: "basic" | "common" | "rare" | "legendary"; // Rarity types
-  stats: ItemStats;     // Item stats (damage, defense, etc.)
-  price: number;        // Cost of the item
+  name: string;        
+  description: string;  
+  rarity: "basic" | "common" | "rare" | "legendary"; 
+  stats: ItemStats;     
+  price: number;        
+  imageUrl: string
 }
 
 interface ItemStats {
-  level: number;    // Item level
-  damage: number;   // Attack power
-  defense: number;  // Defense power
-  speed: number;    // Speed boost
+  level: number;  
+  damage: number;   
+  defense: number;  
+  speed: number;    
 }
 
 interface InventoryCategory {
-  id: string;          // Category ID (e.g., "67bc1e100296ce60393aeedd")
-  type: string;        // Item type (e.g., "weapon", "outfit", "hair", etc.)
-  item: InventoryItem | null; // The item inside the category (or null if empty)
+  id: string;          
+  type: string;        
+  item: InventoryItem | null; 
 }
 
 interface InventoryResponse {
-  message: string;             // Success message
-  data: Record<string, InventoryCategory>; // Data object with numeric keys
-  pagination: PaginationInfo;  // Pagination details
+  message: string;            
+  data: Record<string, InventoryCategory>; 
+  pagination: PaginationInfo; 
 }
 
 interface PaginationInfo {
-  total: number; // Total items
-  page: number;  // Current page
-  limit: number; // Items per page
-  pages: number; // Total pages
+  total: number; 
+  page: number;  
+  limit: number; 
+  pages: number; 
 }
-
 
 export const getInventory = async (characterid: string, page: number, limit: number): Promise<InventoryResponse> => { 
   const response = await axiosInstance.get(

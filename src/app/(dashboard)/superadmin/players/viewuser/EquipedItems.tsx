@@ -43,7 +43,7 @@ export default function EquipedItems() {
                   <TableRow key={item._id}>
                     {/* <TableCell className="font-medium">{item._id}</TableCell> */}
                     <TableCell>{item.isEquipped ? "Yes" : "No"}</TableCell>
-                    <TableCell className="font-medium">{item.details.name}</TableCell>
+                    <TableCell className="font-medium">{item.details?.name}</TableCell>
 
                     <TableCell>{new Date(item.acquiredAt).toLocaleDateString()}</TableCell>
                     <TableCell>{category.type}</TableCell> 

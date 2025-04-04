@@ -39,12 +39,11 @@ export default function EquipedItems() {
             </TableHeader>
             <TableBody>
             {data?.inventory
-              .filter((category) => category.items.length > 0) // ✅ Only categories with items
+              .filter((category) => category.items.length > 0)
               .map((category) =>
-                category.items.map((item) => ( // ✅ Map through each item inside the category
+                category.items.map((item) => ( 
                   <TableRow key={item._id}>
-                    {/* <TableCell className="font-medium">{item._id}</TableCell> */}
-                    <TableCell>{item.details.name}</TableCell>
+                    <TableCell>{item.details?.name}</TableCell>
                     <TableCell>{item.isEquipped ? "Yes" : "No"}</TableCell>
                     <TableCell>{new Date(item.acquiredAt).toLocaleDateString()}</TableCell>
                     <TableCell>{category.type}</TableCell> {/* ✅ Display category type */}

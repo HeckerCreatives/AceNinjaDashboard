@@ -14,8 +14,10 @@ import { useBuyItem } from '@/client_actions/user/marketplace'
 import useCharacterStore from '@/hooks/character'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
-import SellItems from '@/app/(dashboard)/user/inventory/SellItem'
-import EquipItems from '@/app/(dashboard)/user/inventory/EquipItems'
+import DeleteStoreItems from '../forms/DeleteStoreItems'
+import { useDeleteStoreItem } from '@/client_actions/superadmin/store'
+import UpdateStoreItems from '../forms/UpdateStoreItem'
+  
 
 type Items = {
 imgUrl: string
@@ -27,14 +29,15 @@ itemname: string
 itemprice: number
 rarity: string
 description: string
-
+currency: string
+gender: string
+type: string
 }
-
-
-export default function ViewInventoryItems(data: Items) {
+export default function GrantCard(data: Items) {
     const [open, setOpen] = useState(false)
     const { characterid} = useCharacterStore()
     const { mutate: buyItem, error, isSuccess, isPending } = useBuyItem();
+    const {mutate: deleteStoreItem} = useDeleteStoreItem()
 
     const rarityColor = (data: string) => {
         if(data === 'basic'){
@@ -49,21 +52,26 @@ export default function ViewInventoryItems(data: Items) {
         }
       }
 
-      const purchaseItem = () => {
-        buyItem({ characterid: characterid, itemid: data.itemid },
-            {  onSuccess: () => {
-                toast.success('Successfully purchased.');
-                setOpen(false)
-              },})
-      }
+    //   const deleteItem = () => {
+    //     deleteStoreItem({ itemId: prop},
+    //         {  onSuccess: () => {
+    //             toast.success('Successfully purchased.');
+    //             setOpen(false)
+    //           },})
+    //   }
+
+
 
 
 
   return (
-    <div className=' w-full h-auto flex flex-col'>
-        <div className=' relative w-full h-[300px] bg-zinc-800'>
-        <img src={`${process.env.NEXT_PUBLIC_API_URL}/${data.imgUrl}`} alt="item" className=' object-cover w-full h-full opacity-70' />
-            <div className=' flex flex-col gap-1 absolute p-4 top-2 left-2'>
+    <div className=' w-full h-auto flex flex-col cursor-pointer'>
+        <div className=' relative w-full h-[300px] bg-zinc-800 flex items-center justify-center'
+        style={{backgroundImage: `url('${data.imgUrl}')`, backgroundRepeat:'no-repeat', backgroundSize:'cover'}}
+        >
+
+            <img src={data.imgUrl} alt="item" className=' object-cover w-full h-full opacity-70' />
+            <div className=' flex flex-col gap-1 absolute left-2 top-2 p-4'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>
                     <p className='text-[.7rem] flex items-center gap-1'>
@@ -97,14 +105,16 @@ export default function ViewInventoryItems(data: Items) {
         </div>
 
         <div className=' w-full flex flex-col gap-1 py-2'>
-            <div className=' flex gap-2'>
+            <div className=' flex '>
                 <div className=' flex flex-col w-full gap-1'>
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
                     <p className=' text-sm font-semibold'>{data.itemprice.toLocaleString()}</p>
                 </div>
-                {/* <SellItems itemid={data.itemid}/>
-                <EquipItems itemid={data.itemid}/> */}
-                
+              
+
+             
+               
+
             </div>
         
         </div>

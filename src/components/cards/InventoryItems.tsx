@@ -62,7 +62,8 @@ export default function InventoryItems(data: Items) {
   return (
     <div className=' w-full h-auto flex flex-col'>
         <div className=' relative w-full h-[300px] bg-zinc-800'>
-            <div className=' flex flex-col gap-1 absolute p-4'>
+        <img src={`${process.env.NEXT_PUBLIC_API_URL}/${data.imgUrl}`} alt="item" className=' object-cover w-full h-full opacity-70' />
+            <div className=' flex flex-col gap-1 absolute top-2 left-2 p-4'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>
                     <p className='text-[.7rem] flex items-center gap-1'>
@@ -101,38 +102,9 @@ export default function InventoryItems(data: Items) {
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
                     <p className=' text-sm font-semibold'>{data.itemprice.toLocaleString()}</p>
                 </div>
-                <SellItems itemid={data.itemid}/>
-                <EquipItems itemid={data.itemid}/>
-                {/* <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger className=' text-[.7rem] font-semibold px-3 py-2 rounded-sm h-fit bg-yellow-500 text-amber-950 w-[100px]'>
-                    Buy now
-                </DialogTrigger>
-                <DialogContent className=' max-h-[500px] h-fit max-w-[700px] p-6'>
-                    <DialogHeader>
-                    <DialogTitle>Are you absolutely sure, you want to buy? <span className=' text-yellow-500'>{data.itemname}</span></DialogTitle>
-                    <DialogDescription>
-                       
-                    </DialogDescription>
-                    </DialogHeader>
-
-                    <div className=' flex flex-col gap-2 text-sm'>
-                        <p>Name: {data.itemname}</p>
-                        <p>Price: {data.itemprice.toLocaleString()}</p>
-                        <p>Rarity: <span className={`${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
-                    </div>
-
-                    <div className=' flex items-end justify-end w-full gap-2'>
-                        <Button onClick={() => setOpen(!open)} variant={'outline'} className=' text-xs'>Cancel</Button>
-                        <Button onClick={purchaseItem}>
-                            {isPending && (
-                                <Loader/>
-                            )}
-                            Buy</Button>
-
-                    </div>
-                </DialogContent>
-                </Dialog> */}
-
+                {/* <SellItems itemid={data.itemid}/>
+                <EquipItems itemid={data.itemid}/> */}
+               
             </div>
         
         </div>

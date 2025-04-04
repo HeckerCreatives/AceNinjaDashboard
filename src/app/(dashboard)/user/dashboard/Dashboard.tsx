@@ -19,7 +19,6 @@ export default function Dashboard() {
     const {data: rank} = useGetRank(characterid)
     const {data: payin} = useGetTotalPayin(characterid)
 
-    console.log(payin)
     
 
   return (

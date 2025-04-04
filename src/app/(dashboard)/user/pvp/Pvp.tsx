@@ -13,6 +13,7 @@ import PvpCards from './PvpCards'
 import { useGetPvpHistory } from '@/client_actions/user/pvp'
 import PaginitionComponent from '@/components/common/Pagination'
 import useCharacterStore from '@/hooks/character'
+import { RefreshCcw } from 'lucide-react'
   
 
 export default function Pvp() {
@@ -36,7 +37,10 @@ export default function Pvp() {
     <div className=' w-full flex flex-col gap-8 p-8'>
         <PvpCards/>
 
-        <input value={date} onChange={(e) => setDate(e.target.value)} type="date" name="date" className=' w-fit bg-yellow-500 text-xs text-black p-2 rounded-r-lg' />
+        <div className=' flex items-center gap-4'>
+          <input value={date} onChange={(e) => setDate(e.target.value)} type="date" name="date" className=' w-fit bg-yellow-500 text-xs text-black p-2 rounded-r-lg' />
+          <button onClick={() => setDate('')} className=' bg-yellow-500 text-black p-2 rounded-sm'><RefreshCcw size={15}/></button>
+        </div>
 
         <Table className=' text-xs'>
          {data?.data.length === 0 && (
