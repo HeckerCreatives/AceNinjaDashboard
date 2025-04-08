@@ -52,17 +52,6 @@ export default function GrantCard(data: Items) {
         }
       }
 
-    //   const deleteItem = () => {
-    //     deleteStoreItem({ itemId: prop},
-    //         {  onSuccess: () => {
-    //             toast.success('Successfully purchased.');
-    //             setOpen(false)
-    //           },})
-    //   }
-
-
-
-
 
   return (
     <div className=' w-full h-auto flex flex-col cursor-pointer'>
@@ -110,11 +99,7 @@ export default function GrantCard(data: Items) {
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
                     <p className=' text-sm font-semibold'>{data.itemprice.toLocaleString()}</p>
                 </div>
-              
-
-             
-               
-
+            
             </div>
         
         </div>

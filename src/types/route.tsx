@@ -7,15 +7,7 @@ import { RiGamepadFill } from "react-icons/ri";
 import { TbSwords } from "react-icons/tb";
 
 
-
-// export const userRoutes = [
-//     {route:'/user/dashboard', name: 'Dashboard', icon: <Home size={15}/> },
-//     {route:'/user/inventory', name: 'Inventory', icon: <ShoppingBasket size={15}/> },
-//     {route:'/user/pvp', name: 'Pvp', icon: <Swords size={15}/> },
-//     {route:'/user/purchase', name: 'Purchase', icon: <ShoppingBag size={15}/> },
-//     {route:'/user/topup', name: 'Top up', icon: <Gem size={15}/> },
-// ]
-
+// SUPERADMIN
 export const superadminRoutes = [
     {route:'/superadmin/dashboard', name: 'Dashboard', icon: <LayoutGrid size={15}/>, subitems: [] },
     {route:'/superadmin/players', name: 'Manage Players', icon: <UsersRound size={15}/>, subitems: [] },
@@ -55,22 +47,9 @@ export const superadminRoutes = [
       ] },
      {route:'/superadmin/seasons', name: 'Seasons', icon: <PiRanking size={15}/>, subitems: [] },
 
-
-      
-
-
-
 ]
 
-
-export const userViewRoutes = [
-    {route:'/superadmin/players/viewuser/dashboard', name: 'Dashboard', icon: <Home size={15}/> },
-    {route:'/superadmin/players/viewuser/inventory', name: 'Inventory', icon: <ShoppingBasket size={15}/> },
-    {route:'/superadmin/players/viewuser/pvp', name: 'Pvp', icon: <Swords size={15}/> },
-    {route:'/superadmin/players/viewuser/bp', name: 'Battle Pass', icon: <TicketCheck size={15}/> },
-    
-]
-
+//USER
 export const userRoutes = [
     {name: 'Dashboard', path: '/user/dashboard' , icon: <GiWhirlpoolShuriken size={20}/>},
     {name: 'Inventory', path: '/user/inventory' , icon: <Boxes size={20}/>},

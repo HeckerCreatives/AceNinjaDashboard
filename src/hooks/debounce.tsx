@@ -5,10 +5,10 @@ export function useDebounce<T>(value: T, delay: number = 500): T {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedValue(value); // ✅ Only update after delay
+      setDebouncedValue(value);
     }, delay);
 
-    return () => clearTimeout(handler); // ✅ Clears timeout on value change
+    return () => clearTimeout(handler);
   }, [value, delay]);
 
   return debouncedValue;

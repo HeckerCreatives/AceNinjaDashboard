@@ -1,19 +1,7 @@
 'use client'
 import { MoveUp } from 'lucide-react'
 import React, { useState } from 'react'
-import { Button } from '../ui/button'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
-import { useBuyItem } from '@/client_actions/user/marketplace'
-import useCharacterStore from '@/hooks/character'
 import toast from 'react-hot-toast'
-import Loader from '../common/Loader'
 import SellItems from '@/app/(dashboard)/user/inventory/SellItem'
 import EquipItems from '@/app/(dashboard)/user/inventory/EquipItems'
 
@@ -32,9 +20,6 @@ description: string
 
 
 export default function ViewInventoryItems(data: Items) {
-    const [open, setOpen] = useState(false)
-    const { characterid} = useCharacterStore()
-    const { mutate: buyItem, error, isSuccess, isPending } = useBuyItem();
 
     const rarityColor = (data: string) => {
         if(data === 'basic'){
@@ -48,15 +33,6 @@ export default function ViewInventoryItems(data: Items) {
     
         }
       }
-
-      const purchaseItem = () => {
-        buyItem({ characterid: characterid, itemid: data.itemid },
-            {  onSuccess: () => {
-                toast.success('Successfully purchased.');
-                setOpen(false)
-              },})
-      }
-
 
 
   return (

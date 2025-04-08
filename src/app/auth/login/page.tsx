@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import router from "next/router";
 import toast from "react-hot-toast";
+import { EyeOff, Eye } from "lucide-react";
 
 interface Login {
   username: string
@@ -18,6 +19,11 @@ export default function page() {
   const [password, setPassword] = useState('') 
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => setShowPassword((prev) => !prev);
+
+  
 
   const authLogin = async ( data: Login) => {
     setLoading(true)
@@ -71,9 +77,18 @@ export default function page() {
             <label htmlFor="" className=" text-zinc-400">Username</label>
             <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Username" className=" p-3 bg-zinc-200 text-black rounded-sm" />
 
-
             <label htmlFor="" className=" text-zinc-400 mt-4">Password</label>
-            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Username" className=" p-3 bg-zinc-200 text-black rounded-sm" />
+            <div className="relative">
+            <input value={password} onChange={(e) => setPassword(e.target.value)}  type={showPassword ? "text" : "password"} placeholder="Password" className=" w-full p-3 bg-zinc-200 text-black rounded-sm" />
+
+                      
+              <p
+                onClick={toggleShowPassword}
+                className="absolute right-3 top-3 text-gray-500 cursor-pointer"
+              >
+                {showPassword ? <Eye size={18} />  :  <EyeOff size={18} />}
+              </p>
+            </div>
 
             <div className=" w-full flex items-center justify-center">
               <button onClick={() => authLogin({username, password})}  className=" relative w-fit rounded-md mt-10 font-semibold flex items-center gap-2 justify-center">

@@ -11,13 +11,11 @@ import {
   } from "@/components/ui/table"
 import { Search } from 'lucide-react'
 import PaginitionComponent from '@/components/common/Pagination'
-import SelectStatus, { StatusDot } from '@/components/common/SelectStatus'
 import Viewuser from './Viewuser'
 import { useGetUserList } from '@/client_actions/superadmin/manageplayer'
 import Loader from '@/components/common/Loader'
 import BanUnbanPlayer from '@/components/forms/BanUnbanPlayer'
-import useCharacterStore from '@/hooks/character'
-import { useGetCounts } from '@/client_actions/superadmin/dashboard'
+import ChangePasswordUserAdmin from '@/components/forms/ChangePAsswordUserAdmin'
 
 
   
@@ -26,9 +24,7 @@ export default function Playertable() {
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
   const [search, setSearch] = useState('')
-  const {data: counts} = useGetCounts()
   const {data, isLoading} = useGetUserList(currentPage,10,'',search)
-  const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
   
 
   //paginition
@@ -83,6 +79,7 @@ export default function Playertable() {
           <TableCell className="">{character.level || 0}</TableCell>
           <TableCell className={` ${user.status === 'active' ? 'text-green-200' : 'text-red-500'}`}>{user.status}</TableCell>
           <TableCell className="flex items-center gap-2">
+            <ChangePasswordUserAdmin userid={user.id} name={user.username}/>
             <Viewuser userid={user.id} characterid={character.id} />
             <BanUnbanPlayer userid={user.id}/>
           </TableCell>

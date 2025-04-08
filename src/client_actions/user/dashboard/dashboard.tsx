@@ -75,6 +75,7 @@ interface UserCharacter {
   userid: string
   username: string;
   title: number;
+  badge: number
   level: number;
   user: string;
   status: string;

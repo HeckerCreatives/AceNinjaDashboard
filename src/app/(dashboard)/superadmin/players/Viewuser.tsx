@@ -39,7 +39,6 @@ const viewnavigation = [
     {name: 'Skills', path: 'skills' , icon: <GiWhirlpoolShuriken size={20}/>},
     {name: 'Battle Pass', path: 'bp' , icon: <Ticket size={20}/>},
     {name: 'Friends', path: 'friends' , icon: <Users size={20}/>},
-    // {name: 'Purchase', path: 'purchase' , icon: <ShoppingBag size={20}/>},
 ]
 
 type Props = {

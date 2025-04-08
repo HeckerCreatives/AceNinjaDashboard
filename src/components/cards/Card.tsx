@@ -36,10 +36,10 @@ export default function Card(prop:Props){
 
           )}
 
-          {prop.timeleft !== undefined ? ( // Ensure prop.timeleft exists before rendering Countdown
+          {prop.timeleft !== undefined ? ( 
             <Countdown
               className="mt-2"
-              date={Date.now() + prop.timeleft} // Convert to milliseconds
+              date={Date.now() + prop.timeleft}
               renderer={({ days, hours, minutes, seconds, completed }) =>
                 completed ? (
                   <span className="text-xs w-fit bg-green-950 px-4 py-1 text-green-500 rounded-sm">

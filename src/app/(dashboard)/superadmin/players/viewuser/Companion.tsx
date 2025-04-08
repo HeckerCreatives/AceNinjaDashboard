@@ -1,6 +1,7 @@
 'use client'
 import { useUserData } from '@/client_actions/user/dashboard/dashboard';
 import useCharacterStore from '@/hooks/character';
+import { companionImg } from '@/utils/findAsset';
 import React from 'react'
 
 export default function Companion() {
@@ -54,7 +55,9 @@ export default function Companion() {
                     </div>
                 </div>
 
-                <div className='w-[300px] h-[320px] bg-dark'>
+                <div className='w-[300px] h-[320px] flex items-center justify-center'>
+                    {companionImg(findCompanion?.companionname || '')}
+                    
                     {/* Placeholder for companion image or other information */}
                 </div>
             </div>

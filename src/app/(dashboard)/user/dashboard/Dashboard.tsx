@@ -11,6 +11,7 @@ import useCharacterStore from '@/hooks/character'
 import Card from '@/components/cards/Card'
 import { PiRanking } from 'react-icons/pi'
 import { useGetCurrentSeason } from '@/client_actions/superadmin/season'
+import { badgeImg, titleAssets } from '@/utils/findAsset'
 
 export default function Dashboard() {
     const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
@@ -18,6 +19,10 @@ export default function Dashboard() {
     const {data: currentSeason} = useGetCurrentSeason()
     const {data: rank} = useGetRank(characterid)
     const {data: payin} = useGetTotalPayin(characterid)
+
+
+  
+
 
     
 
@@ -31,14 +36,26 @@ export default function Dashboard() {
 
             </div>
 
-            <div className=' flex flex-col items-center gap-2'>
-                <p className=' text-lg font-semibold'>User Title Here</p>
+            <div className=' flex items-center gap-4'>
+                <div className=' flex flex-col items-center gap-2'>
+                    <p className=' text-sm font-semibold'>User Title</p>
 
-                <div className=' w-[200px] h-[80px] bg-zinc-800'>
+                    <div className=' flex items-center justify-center'>
+                        {titleAssets(data?.title || 0)}
+                    </div>
 
                 </div>
 
+                <div className=' flex flex-col items-center gap-2'>
+                    <p className=' text-sm font-semibold'>Badge</p>
+
+                    <div className=' flex items-center justify-center'>
+                        {badgeImg(data?.badge || 0)}
+                    </div>
+
+                </div>
             </div>
+
 
             <div className=' w-full max-w-[365px] shadow-md'>
                 <Card name={"Total Purchased"} value={payin?.data.totalpayin || 0} isAmount={false} icon={<PiRanking size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>

@@ -45,7 +45,6 @@ export default function Pvp() {
           }
       },[data])
 
-      console.log(data)
 
   return (
     <div className=' w-full ~p-2/8'>
@@ -66,7 +65,7 @@ export default function Pvp() {
                         <SelectValue placeholder="Select Season" />
                     </SelectTrigger>
                     <SelectContent>
-                        {season?.data.map((item,index) => (
+                        {season?.data?.map((item,index) => (
                         <SelectItem key={item.id} value={item.id}>{item.title}</SelectItem>
 
                         ))}

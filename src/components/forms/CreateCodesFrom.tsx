@@ -45,7 +45,6 @@ export default function CreateQuestForm() {
       resolver: zodResolver(createCode),
     });
 
-    //create news
     const createRedeemcodes = async ( data: CreateCode) => {
       addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, emerald: emerald, crystal: crystal}},{
         onSuccess: () => {

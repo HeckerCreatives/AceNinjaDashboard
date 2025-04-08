@@ -4,8 +4,8 @@ import {z} from 'zod'
 export const registerValidations = z.object({
     username: z
         .string()
-        .min(6, 'Username must be at least 6 characters')
-        .max(20, 'Username must be at most 20 characters')
+        .min(4, 'Username must be at least 4 characters')
+        .max(15, 'Username must be at most 15 characters')
         .regex(/^[a-zA-Z0-9]+$/, 'Username must only contain alphanumeric characters')
         .nonempty('Username is empty'),
     email: z.string().email('Invalid email').nonempty('Email is empty'),
@@ -20,7 +20,7 @@ export const registerValidations = z.object({
     path: ['confirmPassword'],
 });
 
-//superadmin
+//SUPERADMIN
 export const createNewsData = z.object({
   title: z.string().nonempty("Title is empty"),
   description: z.string().nonempty("Description is empty"),
@@ -78,8 +78,23 @@ export const changePassword = z
     newPassword: z
       .string()
       .min(6, "New password must be at least 6 characters")
-      .max(20, "New password must be at most 20 characters")
-      .regex(/^[a-zA-Z0-9]+$/, "New password must be alphanumeric"), // Alphanumeric check
+      .max(15, "New password must be at most 15 characters")
+      .regex(/^[a-zA-Z0-9@#\[\]]+$/, "New Password may only include letters, numbers, and @, #, [, ]"), // Alphanumeric check
+    confirmPassword: z.string().nonempty("Please confirm your password"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"], // Error will appear under confirm password field
+  });
+
+
+  export const changePasswordUser = z
+  .object({
+    newPassword: z
+      .string()
+      .min(6, "New password must be at least 6 characters")
+      .max(15, "New password must be at most 15 characters")
+      .regex(/^[a-zA-Z0-9@#\[\]]+$/, "New Password may only include letters, numbers, and @, #, [, ]"), // Alphanumeric check
     confirmPassword: z.string().nonempty("Please confirm your password"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -186,9 +201,8 @@ export const updateItemSchema = z.object({
   currency: z.string().min(1, "Currency is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   imageUrl: z
-    .union([z.instanceof(File), z.null(), z.undefined()])  // Allow File, null, or undefined
+    .union([z.instanceof(File), z.null(), z.undefined()]) 
     .refine((file) => {
-      // If the file is not null or undefined, check it's an image
       if (file === null || file === undefined) return true;
       return file instanceof File && file.type.startsWith("image/");
     }, {
@@ -202,6 +216,7 @@ export type CreateNewsLetter = z.infer<typeof createNewsLetter>
 export type CreateAnnouncement = z.infer<typeof createAnnouncement>
 export type CreateCode = z.infer<typeof createCode>
 export type ChangePassword = z.infer<typeof changePassword>
+export type ChangePasswordUserSchema = z.infer<typeof changePasswordUser>
 export type RegisterUser = z.infer<typeof registerValidations>
 export type CreateSeasonsSchema = z.infer<typeof createSeasonsSchema>
 export type CreateTier = z.infer<typeof createTier>

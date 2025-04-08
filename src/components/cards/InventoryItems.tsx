@@ -1,19 +1,9 @@
 'use client'
 import { MoveUp } from 'lucide-react'
 import React, { useState } from 'react'
-import { Button } from '../ui/button'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
 import { useBuyItem } from '@/client_actions/user/marketplace'
 import useCharacterStore from '@/hooks/character'
 import toast from 'react-hot-toast'
-import Loader from '../common/Loader'
 import SellItems from '@/app/(dashboard)/user/inventory/SellItem'
 import EquipItems from '@/app/(dashboard)/user/inventory/EquipItems'
 

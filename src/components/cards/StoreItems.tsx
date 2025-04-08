@@ -1,21 +1,7 @@
 'use client'
 import { MoveUp } from 'lucide-react'
 import React, { useState } from 'react'
-import { Button } from '../ui/button'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
-import { useBuyItem } from '@/client_actions/user/marketplace'
-import useCharacterStore from '@/hooks/character'
-import toast from 'react-hot-toast'
-import Loader from '../common/Loader'
 import DeleteStoreItems from '../forms/DeleteStoreItems'
-import { useDeleteStoreItem } from '@/client_actions/superadmin/store'
 import UpdateStoreItems from '../forms/UpdateStoreItem'
   
 
@@ -34,10 +20,6 @@ gender: string
 type: string
 }
 export default function StoreItems(data: Items) {
-    const [open, setOpen] = useState(false)
-    const { characterid} = useCharacterStore()
-    const { mutate: buyItem, error, isSuccess, isPending } = useBuyItem();
-    const {mutate: deleteStoreItem} = useDeleteStoreItem()
 
     const rarityColor = (data: string) => {
         if(data === 'basic'){
@@ -51,17 +33,6 @@ export default function StoreItems(data: Items) {
     
         }
       }
-
-    //   const deleteItem = () => {
-    //     deleteStoreItem({ itemId: prop},
-    //         {  onSuccess: () => {
-    //             toast.success('Successfully purchased.');
-    //             setOpen(false)
-    //           },})
-    //   }
-
-
-
 
 
   return (
@@ -110,36 +81,7 @@ export default function StoreItems(data: Items) {
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
                     <p className=' text-sm font-semibold'>{data.itemprice.toLocaleString()}</p>
                 </div>
-                {/* <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger className=' text-[.7rem] font-semibold px-3 py-2 rounded-sm h-fit bg-yellow-500 text-amber-950 w-[100px]'>
-                    Buy now
-                </DialogTrigger>
-                <DialogContent className=' max-h-[500px] h-fit max-w-[700px] p-6'>
-                    <DialogHeader>
-                    <DialogTitle>Are you absolutely sure, you want to buy? <span className=' text-yellow-500'>{data.itemname}</span></DialogTitle>
-                    <DialogDescription>
-                       
-                    </DialogDescription>
-                    </DialogHeader>
-
-                    <div className=' flex flex-col gap-2 text-sm'>
-                        <p>Name: {data.itemname}</p>
-                        <p>Price: {data.itemprice.toLocaleString()}</p>
-                        <p>Rarity: <span className={`${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
-                    </div>
-
-                    <div className=' flex items-end justify-end w-full gap-2'>
-                        <Button onClick={() => setOpen(!open)} variant={'outline'} className=' text-xs'>Cancel</Button>
-                        <Button onClick={purchaseItem}>
-                            {isPending && (
-                                <Loader/>
-                            )}
-                            Buy</Button>
-
-                    </div>
-                </DialogContent>
-                </Dialog> */}
-
+            
                 <div className=' flex items-center gap-2'>
                 <DeleteStoreItems id={data.itemid}/>
                 <UpdateStoreItems imgUrl={data.imgUrl} damage={data.damage} defense={data.defense} speed={data.speed} itemid={data.itemid} itemname={data.itemname} itemprice={data.itemprice} rarity={data.rarity} description={data.description} gender={data.gender} currency={data.currency} type={data.type}/>
