@@ -73,9 +73,9 @@ export default function Playertable() {
         <TableRow key={`${user.id}-${charIndex}`}>
           <TableCell>{user.username}</TableCell>
           <TableCell>{character.username || "No Character"}</TableCell>
-          <TableCell>{character.wallet[0]?.ammount || 0}</TableCell>
-          <TableCell>{character.wallet[1]?.ammount || 0}</TableCell>
-          <TableCell>{character.wallet[2]?.ammount || 0}</TableCell>
+          <TableCell>{character.wallet[0]?.ammount.toLocaleString() || 0}</TableCell>
+          <TableCell>{character.wallet[1]?.ammount.toLocaleString() || 0}</TableCell>
+          <TableCell>{character.wallet[2]?.ammount.toLocaleString() || 0}</TableCell>
           <TableCell className="">{character.level || 0}</TableCell>
           <TableCell className={` ${user.status === 'active' ? 'text-green-200' : 'text-red-500'}`}>{user.status}</TableCell>
           <TableCell className="flex items-center gap-2">
