@@ -14,6 +14,7 @@ import { useBuyItem } from '@/client_actions/user/marketplace'
 import useCharacterStore from '@/hooks/character'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
+import { currencyImg } from '@/utils/findAsset'
   
 
 type Items = {
@@ -26,6 +27,7 @@ itemname: string
 itemprice: number
 rarity: string
 description: string
+currency: string
 }
 export default function MarketItems(data: Items) {
     const [open, setOpen] = useState(false)
@@ -97,7 +99,7 @@ export default function MarketItems(data: Items) {
             <div className=' flex '>
                 <div className=' flex flex-col w-full gap-1'>
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
-                    <p className=' text-sm font-semibold'>{data.itemprice.toLocaleString()}</p>
+                    <p className=' text-sm font-semibold flex items-center gap-2'>{currencyImg(data.currency)}{data.itemprice.toLocaleString()}</p>
                 </div>
                 <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger className=' text-[.7rem] font-semibold px-3 py-2 rounded-sm h-fit bg-yellow-500 text-amber-950 w-[100px]'>

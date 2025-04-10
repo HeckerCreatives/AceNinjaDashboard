@@ -25,6 +25,7 @@ import { useDeleteRankTier, useGetTierlist } from '@/client_actions/superadmin/r
 import { Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import EditRankTier from '@/components/forms/EditrankTier'
+import { tierImg } from '@/utils/findAsset'
 
   
 
@@ -85,7 +86,7 @@ export default function Tierlist() {
                     {data?.data.map((item, index) => (
                         <TableRow key={item._id}>
                             <TableCell className="">
-                                <img src={`${process.env.NEXT_PUBLIC_API_URL}/${item.icon}`} alt="banner" className=' h-[80px]' />
+                                {tierImg(item.name)}
                             </TableCell>
                             <TableCell>{item.name}</TableCell>
                             <TableCell>{item.requiredmmr}</TableCell>

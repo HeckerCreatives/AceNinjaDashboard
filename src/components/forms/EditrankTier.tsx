@@ -17,6 +17,13 @@ import Loader from "../common/Loader"
 import { useGetSocialMedia } from "@/client_actions/superadmin/socialmedia"
 import { useEditRankTier } from "@/client_actions/superadmin/ranktier"
 import { editTier, type EditTier } from "@/validation/schema"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 
 type Props = {
   id: string
@@ -45,36 +52,36 @@ export default function EditRankTier(prop: Props) {
     defaultValues: {
       name: prop.name,
       requiredmmr: Number(prop.mmr),
-      icon: prop.icon || undefined,
+      // icon: prop.icon || undefined,
     },
   })
 
-  const iconValue = watch("icon")
+  // const iconValue = watch("icon")
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] ?? null
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0] ?? null
 
-    setValue("icon", file, { shouldValidate: true })
+  //   setValue("icon", file, { shouldValidate: true })
 
-    setPreview(file ? URL.createObjectURL(file) : null)
-  }
+  //   setPreview(file ? URL.createObjectURL(file) : null)
+  // }
 
   const createRankTierData = async (data: EditTier) => {
     let iconToSubmit: File | string | null = null
 
-    if (data.icon instanceof File) {
-      iconToSubmit = data.icon
-    } else if (data.icon === undefined && originalIcon) {
-      iconToSubmit = originalIcon
-    } else if (typeof data.icon === "string" && data.icon) {
-      iconToSubmit = data.icon
-    }
+    // if (data.icon instanceof File) {
+    //   iconToSubmit = data.icon
+    // } else if (data.icon === undefined && originalIcon) {
+    //   iconToSubmit = originalIcon
+    // } else if (typeof data.icon === "string" && data.icon) {
+    //   iconToSubmit = data.icon
+    // }
 
     editRankTier(
       {
         name: data.name,
         requiredmmr: data.requiredmmr,
-        icon: iconToSubmit || "",
+        // icon: iconToSubmit || "",
         id: prop.id,
       },
       {
@@ -97,7 +104,7 @@ export default function EditRankTier(prop: Props) {
       reset({
         name: prop.name,
         requiredmmr: Number(prop.mmr),
-        icon: prop.icon || undefined,
+        // icon: prop.icon || undefined,
       })
     }
   }, [prop, reset])
@@ -115,13 +122,26 @@ export default function EditRankTier(prop: Props) {
         <form onSubmit={handleSubmit(createRankTierData)} className="text-xs flex flex-col p-4">
           <div className="flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px]">
             <label htmlFor="name">Name</label>
-            <input
+            {/* <input
               type="text"
               id="name"
               placeholder="Title"
               className={`input ${errors.name && "border-[1px] focus:outline-none border-red-500"}`}
               {...register("name")}
-            />
+            /> */}
+             <Select defaultValue={prop.name} onValueChange={(value) => setValue("name", value, { shouldValidate: true })}>
+                <SelectTrigger className="bg-zinc-950 border-none">
+                    <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="Rookie">Rookie</SelectItem>
+                    <SelectItem value="Shogun">Shogun</SelectItem>
+                    <SelectItem value="Veteran">Veteran</SelectItem>
+                    <SelectItem value="Ronin">Ronin</SelectItem>
+                    <SelectItem value="Elder">Elder</SelectItem>
+                    <SelectItem value="Ace">Ace</SelectItem>
+                </SelectContent>
+                </Select>
             {errors.name && <p className="text-[.6em] text-red-500">{errors.name.message}</p>}
           </div>
 
@@ -139,7 +159,7 @@ export default function EditRankTier(prop: Props) {
             {errors.requiredmmr && <p className="text-[.6em] text-red-500">{errors.requiredmmr.message}</p>}
           </div>
 
-          <div className="w-full p-4 bg-light border-amber-800 border-[1px] rounded-md overflow-hidden mt-2">
+          {/* <div className="w-full p-4 bg-light border-amber-800 border-[1px] rounded-md overflow-hidden mt-2">
             <label htmlFor="icon-upload">Icon</label>
 
             <div className="w-full aspect-square bg-zinc-900 flex items-center justify-center mt-2 border-2 border-dashed border-zinc-700 rounded-md">
@@ -167,7 +187,7 @@ export default function EditRankTier(prop: Props) {
             </div>
 
             {errors.icon && <p className="text-[.6em] text-red-500">{errors.icon.message}</p>}
-          </div>
+          </div> */}
 
           <div className="w-full flex items-end justify-end gap-4 mt-6 text-white">
             <button

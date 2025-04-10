@@ -41,19 +41,19 @@ type ApiResponse = {
 
 
 
-export const getItemsAdmin = async ( type: string, rarity: string, search: string, page: number, limit: number, markettype: string): Promise<ApiResponse> => { 
+export const getItemsAdmin = async ( type: string, rarity: string, search: string, page: number, limit: number): Promise<ApiResponse> => { 
   const response = await axiosInstance.get(
     "/marketplace/getmarketitemsadmin",
-    {params: {type, rarity, search, page, limit, markettype}}
+    {params: {type, rarity, search, page, limit}}
   );
   return response.data;
 };
 
 
-export const useGetItemsAdmin = ( type: string, rarity: string, search: string, page: number, limit: number,markettype: string) => {
+export const useGetItemsAdmin = ( type: string, rarity: string, search: string, page: number, limit: number) => {
   return useQuery({
-    queryKey: ["store", type, rarity,search,page,limit, markettype ],
-    queryFn: () => getItemsAdmin( type, rarity,search,page,limit, markettype),
+    queryKey: ["store", type, rarity,search,page,limit ],
+    queryFn: () => getItemsAdmin( type, rarity,search,page,limit),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 
     refetchOnWindowFocus: false,
@@ -121,6 +121,70 @@ export const useUpdateStoreItem = () => {
     });
 };
 
+
+///skins
+export const createSkinsItem = async ( name: string, price: number, currency: string, description: string, rarity: string, imageUrl: File, itemtype: string) => { 
+    const response = await axiosInstanceFormData.post("/marketplace/createskinsitems", {  name, price, currency, description,rarity,imageUrl, itemtype});
+    return response.data;
+};
+ 
+export const useCreateSkinsItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: ({   name, price, currency, description,rarity,imageUrl,itemtype }: { name: string, price: number, currency: string, description: string, rarity: string, imageUrl: File,itemtype: string}) =>
+        createSkinsItem(  name, price, currency, description,rarity,imageUrl,itemtype),
+        onError: (error) => {
+            handleApiError(error);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["store"] });
+        }
+    });
+};
+
+
+
+//skills
+export const createSkillsItem = async ( name: string, price: number, currency: string, description: string, rarity: string, imageUrl: File, itemtype: string) => { 
+    const response = await axiosInstanceFormData.post("/marketplace/createskillsitems", {  name, price, currency, description,rarity,imageUrl, itemtype});
+    return response.data;
+};
+ 
+export const useCreateSkillsItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: ({   name, price, currency, description,rarity,imageUrl,itemtype }: { name: string, price: number, currency: string, description: string, rarity: string, imageUrl: File,itemtype: string}) =>
+        createSkillsItem(  name, price, currency, description,rarity,imageUrl,itemtype),
+        onError: (error) => {
+            handleApiError(error);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["store"] });
+        }
+    });
+};
+
+
+//crystal & gold packs
+
+export const createPacksItem = async ( name: string, price: number, currency: string, description: string, imageUrl: File, itemtype: string) => { 
+    const response = await axiosInstanceFormData.post("/marketplace/createpacksitems", {  name, price, currency, description,imageUrl, itemtype});
+    return response.data;
+};
+ 
+export const useCreatePacksItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: ({   name, price, currency, description,imageUrl,itemtype }: { name: string, price: number, currency: string, description: string, imageUrl: File,itemtype: string}) =>
+        createPacksItem(  name, price, currency, description,imageUrl,itemtype),
+        onError: (error) => {
+            handleApiError(error);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["store"] });
+        }
+    });
+};
 
 
 

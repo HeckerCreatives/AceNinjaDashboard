@@ -3,6 +3,7 @@ import { MoveUp } from 'lucide-react'
 import React, { useState } from 'react'
 import DeleteStoreItems from '../forms/DeleteStoreItems'
 import UpdateStoreItems from '../forms/UpdateStoreItem'
+import { currencyImg } from '@/utils/findAsset'
   
 
 type Items = {
@@ -18,6 +19,7 @@ description: string
 currency: string
 gender: string
 type: string
+tab: string
 }
 export default function StoreItems(data: Items) {
 
@@ -79,12 +81,12 @@ export default function StoreItems(data: Items) {
             <div className=' flex '>
                 <div className=' flex flex-col w-full gap-1'>
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
-                    <p className=' text-sm font-semibold'>{data.itemprice.toLocaleString()}</p>
+                    <p className=' text-sm font-semibold flex items-center gap-2'>{currencyImg(data.currency)}{data.itemprice.toLocaleString()}</p>
                 </div>
             
                 <div className=' flex items-center gap-2'>
                 <DeleteStoreItems id={data.itemid}/>
-                <UpdateStoreItems imgUrl={data.imgUrl} damage={data.damage} defense={data.defense} speed={data.speed} itemid={data.itemid} itemname={data.itemname} itemprice={data.itemprice} rarity={data.rarity} description={data.description} gender={data.gender} currency={data.currency} type={data.type}/>
+                <UpdateStoreItems imgUrl={data.imgUrl} damage={data.damage} defense={data.defense} speed={data.speed} itemid={data.itemid} itemname={data.itemname} itemprice={data.itemprice} rarity={data.rarity} description={data.description} gender={data.gender} currency={data.currency} type={data.type} tab={data.tab}/>
                 </div>
 
                

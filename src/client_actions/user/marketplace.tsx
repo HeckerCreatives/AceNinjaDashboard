@@ -19,6 +19,7 @@ type Item = {
     description: string;
     stats: ItemStats;
     imageUrl: string;
+    currency: string
 };
 
 type ItemsData = Record<string, Item>;
@@ -38,19 +39,19 @@ type ApiResponse = {
 
 
 
-export const getItems = async (characterid: string, type: string, rarity: string, search: string, page: number, limit: number, markettype: string): Promise<ApiResponse> => { 
+export const getItems = async (characterid: string, type: string, rarity: string, search: string, page: number, limit: number): Promise<ApiResponse> => { 
   const response = await axiosInstance.get(
     "/marketplace/getmarketitems",
-    {params: {characterid, type, rarity, search, page, limit, markettype}}
+    {params: {characterid, type, rarity, search, page, limit}}
   );
   return response.data;
 };
 
 
-export const useGetItems = (characterid: string, type: string, rarity: string, search: string, page: number, limit: number,markettype: string) => {
+export const useGetItems = (characterid: string, type: string, rarity: string, search: string, page: number, limit: number) => {
   return useQuery({
-    queryKey: ["items", characterid, type, rarity,search,page,limit, markettype ],
-    queryFn: () => getItems(characterid, type, rarity,search,page,limit, markettype),
+    queryKey: ["items", characterid, type, rarity,search,page,limit ],
+    queryFn: () => getItems(characterid, type, rarity,search,page,limit),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 
     refetchOnWindowFocus: false,
@@ -63,12 +64,16 @@ export const buyItem = async (characterid: string, itemid: string): Promise<ApiR
   };
   
   export const useBuyItem = () => {
+    const queryClient = useQueryClient();
+
     return useMutation({
       mutationFn: ({ characterid, itemid }: { characterid: string; itemid: string }) =>
         buyItem(characterid, itemid),
         onError: (error) => {
             handleApiError(error);
-        },
+        },onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["inventory"] });
+        }
       
        
     });

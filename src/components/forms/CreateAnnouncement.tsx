@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateNews } from '@/client_actions/superadmin/website'
-import { createNewsData, CreateNewsData } from '@/validation/schema'
+import { CreateAnnouncementData, createAnnouncementDataSchema, createNewsData, CreateNewsData } from '@/validation/schema'
 import toast from 'react-hot-toast'
 import { Input } from '../ui/input'
 import { useCreateAnnouncement } from '@/client_actions/superadmin/announcement'
@@ -34,15 +34,39 @@ export default function CreateAnnoucement(prop: Props) {
     const [tab, setTab] = useState('Image')
     const {mutate: createAnnouncement, isPending} = useCreateAnnouncement()
 
-     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-          setValue("file", file); // Update React Hook Form value
-          setPreview(URL.createObjectURL(file)); // Show image preview
-        }
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+    
+      if (!file) return;
+    
+      const img = new Image();
+      const reader = new FileReader();
+    
+      reader.onload = (e) => {
+        if (!e.target?.result) return;
+    
+        img.src = e.target.result as string;
+    
+        img.onload = () => {
+          const { width, height } = img;
+          const is16By9 = Math.abs(width / height - 16 / 9) < 0.01; // small margin for float errors
+          const isHD = width >= 1280 && height >= 720;
+    
+          if (!isHD || !is16By9) {
+            toast.error("Image must be at least HD (1280x720) and in 16:9 aspect ratio");
+            return;
+          }
+    
+          setPreview(URL.createObjectURL(file));
+          setValue("file", file);
+          trigger("file");
+        };
       };
+    
+      reader.readAsDataURL(file);
+    };
+    
 
-    //create news validation
     const {
       register,
       handleSubmit,
@@ -50,12 +74,12 @@ export default function CreateAnnoucement(prop: Props) {
       reset,
       trigger,
       formState: { errors },
-    } = useForm<CreateNewsData>({
-      resolver: zodResolver(createNewsData),
+    } = useForm<CreateAnnouncementData>({
+      resolver: zodResolver(createAnnouncementDataSchema),
     });
 
     //create news
-    const createAnnouncementData = async ( data: CreateNewsData) => {
+    const createAnnouncementData = async ( data: CreateAnnouncementData) => {
       createAnnouncement({title: data.title, content: data.description, contentType: tab.toLowerCase(), url: data.file ?? '', announcementtype: prop.type},{
         onSuccess: () => {
           toast.success(`Announcement created successfully`);

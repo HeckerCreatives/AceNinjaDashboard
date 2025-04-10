@@ -46,7 +46,7 @@ export default function Inventory() {
 
   useEffect(() => {
     setTab(data?.data[0]?.type || '')
-    setTotalpage(data?.pagination.pages || 0)
+    setTotalpage(data?.pagination?.pages || 0)
   },[data])
 
 
@@ -68,36 +68,42 @@ return (
       
             ):(
               <>
-              <div className=' w-full h-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 mt-6'>
+               {String(data?.data) ? (
+                <div className=' w-full h-[200px] flex items-center justify-center'>
+                  <p className=' text-xs text-zinc-400'>No items yet.</p>
+                </div>
+                ) : (
+                  <div className=' w-full h-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 mt-6'>
       
-              {Object.values(data?.data || {}).map((entry) => (
-                  <ViewInventoryItems 
-                    key={entry.item?.id} 
-                    imgUrl={entry.item?.details?.imageUrl || ''} 
-                    damage={entry.item?.details?.stats?.damage || 0} 
-                    defense={entry.item?.details?.stats?.defense || 0} 
-                    speed={entry.item?.details?.stats?.speed || 0} 
-                    itemid={entry.item?.id || ''} 
-                    itemname={entry.item?.details?.name || ''} 
-                    itemprice={entry.item?.details?.price || 0} 
-                    rarity={entry.item?.details?.rarity || ''} 
-                    description={entry.item?.details?.description || ''} 
-                  />
-                ))}
-
-              </div>
+                  {Object.values(data?.data || {}).map((entry) => (
+                      <ViewInventoryItems 
+                        key={entry.item?.id} 
+                        imgUrl={entry.item?.details?.imageUrl || ''} 
+                        damage={entry.item?.details?.stats?.damage || 0} 
+                        defense={entry.item?.details?.stats?.defense || 0} 
+                        speed={entry.item?.details?.stats?.speed || 0} 
+                        itemid={entry.item?.id || ''} 
+                        itemname={entry.item?.details?.name || ''} 
+                        itemprice={entry.item?.details?.price || 0} 
+                        rarity={entry.item?.details?.rarity || ''} 
+                        description={entry.item?.details?.description || ''} 
+                      />
+                    ))}
+    
+                  </div>
+                )}
+      
+             
               </>
             )}
-      
+
           {Object.values(data?.data || {}).length === 0 && (
-           <div className=' w-full h-[200px] flex items-center justify-center'>
-            <p className=' text-xs text-zinc-400'>No items yet.</p>
-          </div>
-          )}
+              <div className=' w-full h-[200px] flex items-center justify-center'>
+              <p className=' text-xs text-zinc-400'>No items yet.</p>
+            </div>
+            )}
       
-          
-      
-          {Object.values(data?.data || {}).length !== 0 && (
+          {(Object.values(data?.data || {}).length !== 0 && !String(data?.data)) && (
             <PaginitionComponent currentPage={currentPage} total={totalpage} onPageChange={handlePageChange }/>
           )}
 

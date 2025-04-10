@@ -6,6 +6,7 @@ import useCharacterStore from '@/hooks/character'
 import toast from 'react-hot-toast'
 import SellItems from '@/app/(dashboard)/user/inventory/SellItem'
 import EquipItems from '@/app/(dashboard)/user/inventory/EquipItems'
+import { currencyImg } from '@/utils/findAsset'
 
 type Items = {
 imgUrl: string
@@ -17,6 +18,7 @@ itemname: string
 itemprice: number
 rarity: string
 description: string
+currency: string
 
 }
 
@@ -90,7 +92,7 @@ export default function InventoryItems(data: Items) {
             <div className=' flex gap-2'>
                 <div className=' flex flex-col w-full gap-1'>
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
-                    <p className=' text-sm font-semibold'>{data.itemprice.toLocaleString()}</p>
+                    <p className=' text-sm font-semibold flex items-center gap-2'>{currencyImg(data.currency)}{data.itemprice.toLocaleString()}</p>
                 </div>
                 {/* <SellItems itemid={data.itemid}/>
                 <EquipItems itemid={data.itemid}/> */}

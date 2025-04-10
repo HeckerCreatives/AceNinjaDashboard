@@ -19,6 +19,7 @@ interface ItemDetails {
   stats: ItemStats;     
   price: number;        
   imageUrl: string
+  currency: string
 }
 
 interface ItemStats {

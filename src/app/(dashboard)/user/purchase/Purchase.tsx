@@ -33,9 +33,14 @@ import {
 import { table } from 'console'
 import MarketItems from '@/components/cards/MarketItems'
 
+// const types = [
+//   'weapon', 'outfit', 'hair', 'face', 'eyes'
+// ]
+
 const types = [
-  'weapon', 'outfit', 'hair', 'face', 'eyes'
+  'skins', 'skills', 'chests', 'freebie', 'crystal packs', 'gold packs'
 ]
+
 
 const rarities = [
   'all','basic', 'common', 'rare', 'legendary'
@@ -46,10 +51,10 @@ export default function Purchase() {
   const { characterid} = useCharacterStore()
   const [currentPage, setCurrentpage] = useState(0)
   const [totalpage, setTotalpage] = useState(0)
-  const [type, setType] = useState('weapon')
+  const [type, setType] = useState('skins')
   const [rarity, setRarity] = useState('all')
   const [search, setSearch] = useState('')
-  const {data, isLoading} = useGetItems(characterid, type,`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10, 'shop')
+  const {data, isLoading} = useGetItems(characterid, type.replace(/\s+/g, ''),`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10)
 
   //paginition
   const handlePageChange = (page: number) => {
@@ -92,16 +97,20 @@ export default function Purchase() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'><ListFilter size={15}/>Rarity: {rarity}</DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel className=' text-xs'>Rarity</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {rarities.map((item, index) => (
-              <DropdownMenuItem onClick={() => setRarity(item)} key={index} className=' text-[.7rem] cursor-pointer'>{item === rarity && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {(type === 'skins' || type === 'skills' || type === 'chests') && (
+             <DropdownMenu>
+              <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'><ListFilter size={15}/>Rarity: {rarity}</DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel className=' text-xs'>Rarity</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {rarities.map((item, index) => (
+                <DropdownMenuItem onClick={() => setRarity(item)} key={index} className=' text-[.7rem] cursor-pointer'>{item === rarity && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+
+         
 
         </div>
         <div className=''>
@@ -122,7 +131,7 @@ export default function Purchase() {
         <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6'>
 
             {Object.values(data?.data || {}).map((item, index) => (
-              <MarketItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description}/>
+              <MarketItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description} currency={item.currency}/>
         
               // <div className=' w-full h-auto flex flex-col'>
               //   <div className=' relative w-full h-[300px] bg-zinc-800'>

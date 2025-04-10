@@ -42,8 +42,9 @@ import toast from 'react-hot-toast'
 import Loader from '@/components/common/Loader'
 
 const types = [
-  'weapon', 'outfit', 'hair', 'face', 'eyes'
+  'skins', 'skills', 'chests', 'freebie'
 ]
+
 
 const rarities = [
   'all', 'basic', 'common', 'rare', 'legendary'
@@ -52,14 +53,14 @@ const rarities = [
 export default function Grant() {
   const [currentPage, setCurrentpage] = useState(0)
   const [totalpage, setTotalpage] = useState(0)
-  const [type, setType] = useState('weapon')
+  const [type, setType] = useState('skins')
   const [rarity, setRarity] = useState('all')
   const [search, setSearch] = useState('')
   const {mutate: grantItem, isPending} = useGrantItem()
   const [selectedItems, setSelectedItems] = useState<{ itemId: string; itemname: string }[]>([]);
   const [username, setUsername] = useState('')
 
-  const {data, isLoading} = useGetItemsAdmin(type, `${rarity !== 'all' ? rarity : ''}`, search, currentPage, 10, 'shop')
+  const {data, isLoading} = useGetItemsAdmin(type.replace(/\s+/g, ''), `${rarity !== 'all' ? rarity : ''}`, search, currentPage, 10)
 
   // Pagination
   const handlePageChange = (page: number) => {
@@ -150,20 +151,19 @@ export default function Grant() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger className='text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'>
-              <ListFilter size={15} /> Rarity: {rarity}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel className='text-xs'>Rarity</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {rarities.map((item, index) => (
-                <DropdownMenuItem onClick={() => setRarity(item)} key={index} className='text-[.7rem] cursor-pointer'>
-                  {item === rarity && <Check size={10} className='text-green-500' />} {item}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+           {(type === 'skins' || type === 'skills' || type === 'chests') && (
+                       <DropdownMenu>
+                        <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'><ListFilter size={15}/>Rarity: {rarity}</DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuLabel className=' text-xs'>Rarity</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          {rarities.map((item, index) => (
+                          <DropdownMenuItem onClick={() => setRarity(item)} key={index} className=' text-[.7rem] cursor-pointer'>{item === rarity && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+  
 
         </div>
         <div className=''>

@@ -21,6 +21,13 @@ import { useGetSocialMedia } from '@/client_actions/superadmin/socialmedia'
 import { Item } from '@radix-ui/react-dropdown-menu'
 import { useCreateRanktier } from '@/client_actions/superadmin/ranktier'
 import { number } from 'zod'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 
 
 export default function CreateRankTier() {
@@ -38,13 +45,13 @@ export default function CreateRankTier() {
     
     
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-          setValue("file", file); // Update React Hook Form value
-          setPreview(URL.createObjectURL(file)); // Show image preview
-        }
-      };
+    // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = event.target.files?.[0];
+    //     if (file) {
+    //       setValue("file", file); 
+    //       setPreview(URL.createObjectURL(file)); 
+    //     }
+    //   };
 
 
 
@@ -66,7 +73,7 @@ export default function CreateRankTier() {
           {
             name: data.name,
             requiredmmr: data.requiredmmr,
-            icon: data.file,
+            // icon: data.file,
           },
           {
             onSuccess: async (response) => {
@@ -105,7 +112,21 @@ export default function CreateRankTier() {
 
         <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
           <label htmlFor="">Name</label>
-          <input type="text" placeholder='Title' className={` input ${errors.name && 'border-[1px] focus:outline-none border-red-500'} `} {...register('name')} />
+          {/* <input type="text" placeholder='Title' className={` input ${errors.name && 'border-[1px] focus:outline-none border-red-500'} `} {...register('name')} /> */}
+          <Select onValueChange={(value) => setValue("name", value, { shouldValidate: true })}>
+            <SelectTrigger className="bg-zinc-950 border-none">
+                <SelectValue placeholder="Select" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="Rookie">Rookie</SelectItem>
+                <SelectItem value="Shogun">Shogun</SelectItem>
+                <SelectItem value="Veteran">Veteran</SelectItem>
+                <SelectItem value="Ronin">Ronin</SelectItem>
+                <SelectItem value="Elder">Elder</SelectItem>
+                <SelectItem value="Ace">Ace</SelectItem>
+            </SelectContent>
+            </Select>
+          
           {errors.name && <p className=' text-[.6em] text-red-500'>{errors.name.message}</p>}
         </div>
 
@@ -124,7 +145,7 @@ export default function CreateRankTier() {
 
 
       
-          <div className=' w-full p-4 bg-light border-amber-800 border-[1px] rounded-md overflow-hidden mt-2'>
+          {/* <div className=' w-full p-4 bg-light border-amber-800 border-[1px] rounded-md overflow-hidden mt-2'>
             <label htmlFor="" className=''>Icon</label>
 
             <div className=' w-full aspect-square bg-zinc-900 flex items-center justify-center mt-2 border-2 border-dashed border-zinc-700 rounded-md '>
@@ -156,7 +177,7 @@ export default function CreateRankTier() {
 
           {errors.file && <p className=' text-[.6em] text-red-500'>{errors.file.message}</p>}
 
-          </div>
+          </div> */}
      
 
           <div className=' w-full flex items-end justify-end gap-4 mt-6 text-white'>

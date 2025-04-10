@@ -7,7 +7,7 @@ type Props = {
     // icon: ReactElement
     value: number
     isAmount: boolean
-    icon: React.ReactElement
+    icon: any
     isLoading: boolean
     bg: string
     border: boolean
@@ -20,7 +20,7 @@ export default function ViewCard(prop:Props){
     <div className={` w-full flex flex-col gap-4 rounded-md p-4 ${prop.bg} shadow ${prop.border && 'border-[1px] border-amber-900'}`}>
         <div className=' w-full flex items-center justify-between'>
             <p className=' text-sm'>{prop.name}</p>
-            <p className=' p-2 rounded-full'>{prop.icon}</p>
+            {prop.icon}
         </div>
 
         <div className=' w-full flex flex-col gap-2'>

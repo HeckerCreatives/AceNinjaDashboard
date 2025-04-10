@@ -50,6 +50,18 @@ export const editNewsdata = z.object({
     .optional(),
 });
 
+
+export const createAnnouncementDataSchema = z.object({
+  title: z.string().nonempty("Title is empty"),
+  description: z.string().nonempty("Description is empty"),
+  file: z.union([
+    z.instanceof(File).refine((file) => file.type.startsWith("image/"), {
+      message: "Only image files are allowed (JPEG, PNG, etc.).",
+    }),
+    z.string().url("Invalid video URL. Please provide a valid URL."),
+  ]).optional(), 
+});
+
 export const createNewsLetter = z.object({
   title: z.string().nonempty('Title is empty'),
   description: z.string().nonempty('Description is empty'),
@@ -111,24 +123,24 @@ export const changePassword = z
 export const createTier = z.object({
   name: z.string().nonempty("Title is empty"),
   requiredmmr: z.number().min(1, "Required MMR is required"),
-  file: z
-    .instanceof(File)
-    .refine((file) => file.type.startsWith("image/"), {
-      message: "Only image files are allowed (JPEG, PNG, etc.).",
-    })
+  // file: z
+  //   .instanceof(File)
+  //   .refine((file) => file.type.startsWith("image/"), {
+  //     message: "Only image files are allowed (JPEG, PNG, etc.).",
+  //   })
 });
 
 export const editTier = z.object({
   name: z.string().nonempty("Title is empty"),
   requiredmmr: z.number().min(1, "Required MMR is required"),
-  icon: z
-    .custom<File | null | undefined | string>((val) => {
-      if (val instanceof File) return true
-      if (val === null || val === undefined) return true
-      if (typeof val === "string") return true
-      return false
-    }, "Only image files are allowed (JPEG, PNG, etc.).")
-    .optional(),
+  // icon: z
+  //   .custom<File | null | undefined | string>((val) => {
+  //     if (val instanceof File) return true
+  //     if (val === null || val === undefined) return true
+  //     if (typeof val === "string") return true
+  //     return false
+  //   }, "Only image files are allowed (JPEG, PNG, etc.).")
+  //   .optional(),
 })
 
 
@@ -193,10 +205,40 @@ export const storeItemSchema = z.object({
 
 
 export const updateItemSchema = z.object({
+  name: z.string().min(1, "Name is required").optional(),
+  type: z.string().min(1, "Type is required").optional(),
+  rarity: z.string().min(1, "Rarity is required").optional(),
+  gender: z.string().min(1, "Gender is required").optional(),
+  price: z.number().min(1, "Price must be at least 1.optional()"),
+  currency: z.string().min(1, "Currency is required").optional(),
+  description: z.string().min(10, "Description must be at least 10 characters").optional(),
+  imageUrl: z
+    .union([z.instanceof(File), z.null(), z.undefined()]) 
+    .refine((file) => {
+      if (file === null || file === undefined) return true;
+      return file instanceof File && file.type.startsWith("image/");
+    }, {
+      message: "Only image files are allowed (JPEG, PNG, etc.).",
+    })
+})
+
+
+export const storeSkinsSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  type: z.string().min(1, "Type is required"),
   rarity: z.string().min(1, "Rarity is required"),
-  gender: z.string().min(1, "Gender is required"),
+  price: z.number().min(1, "Price must be at least 1"),
+  currency: z.string().min(1, "Currency is required"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  imageUrl: z
+  .instanceof(File)
+  .refine((file) => file.type.startsWith("image/"), {
+    message: "Only image files are allowed (JPEG, PNG, etc.).",
+  })
+});
+
+export const updateSkinsSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  rarity: z.string().min(1, "Rarity is required"),
   price: z.number().min(1, "Price must be at least 1"),
   currency: z.string().min(1, "Currency is required"),
   description: z.string().min(10, "Description must be at least 10 characters"),
@@ -210,7 +252,21 @@ export const updateItemSchema = z.object({
     })
 })
 
+
+export const storePacksSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  price: z.number().min(1, "Price must be at least 1"),
+  currency: z.string().min(1, "Currency is required"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  imageUrl: z
+  .instanceof(File)
+  .refine((file) => file.type.startsWith("image/"), {
+    message: "Only image files are allowed (JPEG, PNG, etc.).",
+  })
+});
+
 export type CreateNewsData = z.infer<typeof createNewsData>
+export type CreateAnnouncementData = z.infer<typeof createAnnouncementDataSchema>
 export type EditNewsData = z.infer<typeof editNewsdata>
 export type CreateNewsLetter = z.infer<typeof createNewsLetter>
 export type CreateAnnouncement = z.infer<typeof createAnnouncement>
@@ -224,3 +280,6 @@ export type EditTier = z.infer<typeof editTier>
 export type SendCurrency = z.infer<typeof sendCurrencySchema>
 export type StoreSchema = z.infer<typeof storeItemSchema>
 export type UpdateStoreSchema = z.infer<typeof updateItemSchema>
+export type CreateSkinsItems = z.infer<typeof storeSkinsSchema>
+export type UpdateSkinsItems = z.infer<typeof updateSkinsSchema>
+export type StorePacksItems = z.infer<typeof storePacksSchema>

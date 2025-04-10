@@ -37,16 +37,16 @@ export const useGetTierlist = () => {
   });
 };
 
- export const createRanktier = async ( name: string, requiredmmr: number, icon: File) => { 
-     const response = await axiosInstanceFormData.post("/ranktier/createranktier", {  name, requiredmmr, icon});
+ export const createRanktier = async ( name: string, requiredmmr: number) => { 
+     const response = await axiosInstanceFormData.post("/ranktier/createranktier", {  name, requiredmmr});
      return response.data;
  };
   
 export const useCreateRanktier = () => {
      const queryClient = useQueryClient();
      return useMutation({
-       mutationFn: ({  name, requiredmmr, icon}: { name: string, requiredmmr: number, icon: File}) =>
-        createRanktier(  name, requiredmmr, icon),
+       mutationFn: ({  name, requiredmmr}: { name: string, requiredmmr: number}) =>
+        createRanktier(  name, requiredmmr),
          onError: (error) => {
              handleApiError(error);
          },
@@ -77,16 +77,16 @@ export const useDeleteRankTier = () => {
 };
 
 
-export const editRankTier = async ( name: string, requiredmmr: number, icon: File | any, id: string) => { 
-  const response = await axiosInstanceFormData.post("/ranktier/updateranktier", {  name, requiredmmr, icon,id});
+export const editRankTier = async ( name: string, requiredmmr: number, id: string) => { 
+  const response = await axiosInstanceFormData.post("/ranktier/updateranktier", {  name, requiredmmr,id});
   return response.data;
 };
 
 export const useEditRankTier = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({name, requiredmmr, icon,id}: {  name: string, requiredmmr: number, icon: File | any, id: string}) =>
-        editRankTier(name, requiredmmr, icon,id),
+    mutationFn: ({name, requiredmmr,id}: {  name: string, requiredmmr: number, id: string}) =>
+        editRankTier(name, requiredmmr,id),
       onError: (error) => {
           handleApiError(error);
       },

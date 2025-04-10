@@ -67,7 +67,7 @@ export default function Inventory() {
 
   useEffect(() => {
     setTab(data?.data[0]?.type || '')
-    setTotalpage(data?.pagination.pages || 0)
+    setTotalpage(data?.pagination?.pages || 0)
   },[data])
 
 
@@ -82,58 +82,44 @@ return (
 
       
 
-       {isLoading ? (
-              <div className=' w-full h-[300px] flex items-center justify-center'>
-                <div className='loader'></div>
-              </div>
-      
-            ):(
-              <>
-              <div className=' w-full h-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 mt-6'>
-      
-              {Object.values(data?.data || {}).map((entry) => (
-                  <InventoryItems 
-                    key={entry.item?.id} 
-                    imgUrl={entry.item?.details?.imageUrl || ''} 
-                    damage={entry.item?.details?.stats.damage || 0} 
-                    defense={entry.item?.details?.stats.defense || 0} 
-                    speed={entry.item?.details?.stats.speed || 0} 
-                    itemid={entry.item?.id || ''} 
-                    itemname={entry.item?.details?.name || ''} 
-                    itemprice={entry.item?.details?.price || 0} 
-                    rarity={entry.item?.details?.rarity || ''} 
-                    description={entry.item?.details?.description || ''} 
-                  />
-                ))}
-
-              </div>
-              </>
-            )}
-
-{/* <InventoryItems 
-            key={index}
-            imgUrl={''} 
-            damage={selectedCategory.item.details.stats.damage} 
-            defense={selectedCategory.item.details.stats.defense} 
-            speed={selectedCategory.item.details.stats.speed} 
-            itemid={selectedCategory.item.id} 
-            itemname={selectedCategory.item.details.name} 
-            itemprice={selectedCategory.item.details.price} 
-            rarity={selectedCategory.item.details.rarity} 
-            description={selectedCategory.item.details.description} 
-          /> */}
-      
-          {Object.values(data?.data || {}).length === 0 && (
-           <div className=' w-full h-[200px] flex items-center justify-center'>
-            <p className=' text-xs text-zinc-400'>No items.</p>
+    {isLoading ? (
+      <div className='w-full h-[300px] flex items-center justify-center'>
+        <div className='loader'></div>
+      </div>
+    ) : (
+      <>
+        {Object.keys(data?.data || {}).length === 0 ? (
+          <div className='w-full h-[200px] flex items-center justify-center'>
+            <p className='text-xs text-zinc-400'>No items yet.</p>
           </div>
-          )}
-      
-          
-      
-          {Object.values(data?.data || {}).length !== 0 && (
-            <PaginitionComponent currentPage={currentPage} total={totalpage} onPageChange={handlePageChange }/>
-          )}
+        ) : (
+          <>
+            <div className='w-full h-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 mt-6'>
+              {Object.values(data?.data || {}).map((entry) => (
+                <InventoryItems 
+                  key={entry.item?.id}
+                  imgUrl={entry.item?.details?.imageUrl || ''}
+                  damage={entry.item?.details?.stats.damage || 0}
+                  defense={entry.item?.details?.stats.defense || 0}
+                  speed={entry.item?.details?.stats.speed || 0}
+                  itemid={entry.item?.id || ''}
+                  itemname={entry.item?.details?.name || ''}
+                  itemprice={entry.item?.details?.price || 0}
+                  rarity={entry.item?.details?.rarity || ''}
+                  description={entry.item?.details?.description || ''} currency={entry.item?.details.currency || ''}                />
+              ))}
+            </div>
+
+            <PaginitionComponent
+              currentPage={currentPage}
+              total={totalpage}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+      </>
+    )}
+
 
    
   </div>
