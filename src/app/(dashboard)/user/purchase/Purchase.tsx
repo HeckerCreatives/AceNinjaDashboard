@@ -78,6 +78,10 @@ export default function Purchase() {
     }
   }
 
+   useEffect(() => {
+      setCurrentpage(0)
+    },[type])
+
 
   return (
     <div className=' w-full flex flex-col gap-8 overflow-hidden p-8'>
@@ -87,24 +91,24 @@ export default function Purchase() {
       <div className=' w-full flex items-center justify-between'>
         <div className=' flex items-center gap-2'>
           <DropdownMenu>
-            <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'><ListFilter size={15}/>Type: {type}</DropdownMenuTrigger>
+            <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm uppercase'><ListFilter size={15}/>Type: {type}</DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel className=' text-xs'>Type</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {types.map((item, index) => (
-              <DropdownMenuItem onClick={() => setType(item)} key={index} className=' text-[.7rem] cursor-pointer'>{item === type && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setType(item)} key={index} className=' text-[.7rem] cursor-pointer uppercase'>{item === type && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
           {(type === 'skins' || type === 'skills' || type === 'chests') && (
              <DropdownMenu>
-              <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'><ListFilter size={15}/>Rarity: {rarity}</DropdownMenuTrigger>
+              <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm uppercase'><ListFilter size={15}/>Rarity: {rarity}</DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel className=' text-xs'>Rarity</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {rarities.map((item, index) => (
-                <DropdownMenuItem onClick={() => setRarity(item)} key={index} className=' text-[.7rem] cursor-pointer'>{item === rarity && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setRarity(item)} key={index} className=' text-[.7rem] cursor-pointer uppercase'>{item === rarity && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>

@@ -189,12 +189,13 @@ const statsSchema = z.object({
 
 export const storeItemSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  type: z.string().min(1, "Type is required"),
-  rarity: z.string().min(1, "Rarity is required"),
-  gender: z.string().min(1, "Gender is required"),
+  type: z.string().min(1, "Type is required").optional(),
+  rarity: z.string().min(1, "Rarity is required").optional(),
+  gender: z.string().min(1, "Gender is required").optional(),
   price: z.number().min(1, "Price must be at least 1"),
+  skill:z.string().min(1, "Skill is required").optional(),
   currency: z.string().min(1, "Currency is required"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
+  description: z.string().min(1, "Description must be at least 10 characters"),
   imageUrl: z
   .instanceof(File)
   .refine((file) => file.type.startsWith("image/"), {
@@ -207,11 +208,11 @@ export const storeItemSchema = z.object({
 export const updateItemSchema = z.object({
   name: z.string().min(1, "Name is required").optional(),
   type: z.string().min(1, "Type is required").optional(),
-  rarity: z.string().min(1, "Rarity is required").optional(),
-  gender: z.string().min(1, "Gender is required").optional(),
-  price: z.number().min(1, "Price must be at least 1.optional()"),
+  gender: z.string().optional().or(z.literal('')),
+  rarity: z.string().optional().or(z.literal('')),
+  price: z.number().min(1, "Price must be at least 1"),
   currency: z.string().min(1, "Currency is required").optional(),
-  description: z.string().min(10, "Description must be at least 10 characters").optional(),
+  description: z.string().min(1, "Description must be at least 10 characters").optional(),
   imageUrl: z
     .union([z.instanceof(File), z.null(), z.undefined()]) 
     .refine((file) => {

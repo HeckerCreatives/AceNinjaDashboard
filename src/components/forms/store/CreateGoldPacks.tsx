@@ -29,36 +29,41 @@ import Loader from '@/components/common/Loader'
 
 
 export default function CreateGoldPacksItemsForm() {
-    const [preview, setPreview] = useState<string | null>(null);
-    const [open, setOpen] = useState(false)
-    const {mutate: createPacksItem, isPending} = useCreatePacksItem()
-    const [dmg, setDmg] = useState(0)
-    const [def, setDef] = useState(0)
-    const [spd, setSpd] = useState(0)
+  const [preview, setPreview] = useState<string | null>(null);
+  const [open, setOpen] = useState(false)
+  const {mutate: createitems, isPending} = useCreateStoreItem()
+  const [dmg, setDmg] = useState(0)
+  const [def, setDef] = useState(0)
+  const [spd, setSpd] = useState(0)
 
-    
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    trigger,
+    formState: { errors },
+  } = useForm<StoreSchema>({
+    resolver: zodResolver(storeItemSchema),
+  });
 
-    const {
-      register,
-      handleSubmit,
-      setValue,
-      reset,
-      trigger,
-      formState: { errors },
-    } = useForm<StorePacksItems>({
-      resolver: zodResolver(storePacksSchema),
-    });
-
-    const createItem = async ( data: StorePacksItems) => {
-        createPacksItem({
-            name: data.name, price: data.price, currency: data.currency, imageUrl: data.imageUrl, description: data.description, itemtype: 'goldpacks'
-        },{
-         onSuccess: () => {
-           toast.success(`Item created successfully.`);
-           setOpen(false)
-         },
-       })
-     
+  const createItem = async ( data: StoreSchema) => {
+    createitems({
+      name: data.name, price: data.price, currency: data.currency, imageUrl: data.imageUrl, description: data.description, rarity: data.rarity || '', inventorytype: 'goldpacks',
+      type: 'goldpacks',
+      gender: '',
+      stats: {
+        damage: 0,
+        defense: 0,
+        speed: 0
+      },
+      skill: ''
+    },{
+       onSuccess: () => {
+         toast.success(`Item created successfully.`);
+         setOpen(false)
+       },
+     })
     }
 
     useEffect(() => {

@@ -64,7 +64,6 @@ export default function Store() {
   const [tab, setTab] = useState('skins')
   const [currentPage, setCurrentpage] = useState(0)
   const [totalpage, setTotalpage] = useState(0)
-  const [type, setType] = useState('weapon')
   const [rarity, setRarity] = useState('all')
   const [search, setSearch] = useState('')
   const {data, isLoading} = useGetItemsAdmin( tab,`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10)
@@ -91,6 +90,10 @@ export default function Store() {
 
     }
   }
+
+  useEffect(() => {
+    setCurrentpage(0)
+  },[tab])
 
 
   return (

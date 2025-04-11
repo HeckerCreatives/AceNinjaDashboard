@@ -61,16 +61,16 @@ export const useGetItemsAdmin = ( type: string, rarity: string, search: string, 
 };
 
 
-export const createStoreItem = async ( name: string, price: number, currency: string, type: string, gender: string, description: string, rarity: string, stats: {damage: number, defense: number,speed: number}, imageUrl: File) => { 
-    const response = await axiosInstanceFormData.post("/marketplace/createitems", {  name, price, currency, type, gender, description,rarity,stats,imageUrl});
+export const createStoreItem = async ( name: string, price: number, currency: string, type: string, gender: string, description: string, rarity: string, stats: {damage: number, defense: number,speed: number}, imageUrl: File, inventorytype: string, skill: string) => { 
+    const response = await axiosInstanceFormData.post("/marketplace/createitems", {  name, price, currency, type, gender, description,rarity,stats,imageUrl, inventorytype, skill});
     return response.data;
 };
  
 export const useCreateStoreItem = () => {
     const queryClient = useQueryClient();
     return useMutation({
-      mutationFn: ({   name, price, currency, type, gender, description,rarity,stats,imageUrl }: { name: string, price: number, currency: string, type: string, gender: string, description: string, rarity: string, stats: {damage: number, defense: number,speed: number}, imageUrl: File}) =>
-        createStoreItem(  name, price, currency, type, gender, description,rarity,stats,imageUrl),
+      mutationFn: ({   name, price, currency, type, gender, description,rarity,stats,imageUrl, inventorytype, skill }: { name: string, price: number, currency: string, type: string, gender: string, description: string, rarity: string, stats: {damage: number, defense: number,speed: number}, imageUrl: File, inventorytype: string, skill:string}) =>
+        createStoreItem(  name, price, currency, type, gender, description,rarity,stats,imageUrl, inventorytype, skill),
         onError: (error) => {
             handleApiError(error);
         },

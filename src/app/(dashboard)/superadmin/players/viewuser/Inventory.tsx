@@ -97,11 +97,11 @@ return (
               </>
             )}
 
-          {Object.values(data?.data || {}).length === 0 && (
+          {/* {Object.values(data?.data || {}).length === 0 && (
               <div className=' w-full h-[200px] flex items-center justify-center'>
               <p className=' text-xs text-zinc-400'>No items yet.</p>
             </div>
-            )}
+            )} */}
       
           {(Object.values(data?.data || {}).length !== 0 && !String(data?.data)) && (
             <PaginitionComponent currentPage={currentPage} total={totalpage} onPageChange={handlePageChange }/>

@@ -53,8 +53,9 @@ export default function CreateStoreItems() {
     //create news
     const createItem = async ( data: StoreSchema) => {
         createStoreItem({
-            name: data.name, price: data.price, currency: data.currency, gender: data.gender, rarity: data.rarity, imageUrl: data.imageUrl, description: data.description, stats: { damage: dmg, defense: def, speed: spd },
-            type: data.type
+          name: data.name, price: data.price, currency: data.currency, gender: data.gender || '', rarity: data.rarity || '', imageUrl: data.imageUrl, description: data.description, stats: { damage: dmg, defense: def, speed: spd },
+          type: data.type || '', inventorytype: data.type || '',
+          skill: ''
         },{
          onSuccess: () => {
            toast.success(`Item created successfully.`);
@@ -101,7 +102,7 @@ export default function CreateStoreItems() {
 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Type</label>
-            <Select onValueChange={(value) => setValue("type", value, { shouldValidate: true })}>
+            {/* <Select onValueChange={(value) => setValue("type", value, { shouldValidate: true })}>
             <SelectTrigger className="bg-zinc-950 border-none">
                 <SelectValue placeholder="Type" />
             </SelectTrigger>
@@ -112,7 +113,22 @@ export default function CreateStoreItems() {
                 <SelectItem value="face">Face</SelectItem>
                 <SelectItem value="eyes">Eyes</SelectItem>
             </SelectContent>
+            </Select> */}
+            <Select onValueChange={(value) => setValue("type", value, { shouldValidate: true })}>
+              <SelectTrigger className="bg-zinc-950 border-none">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="skins">Skins</SelectItem>
+                <SelectItem value="skills">Skills</SelectItem>
+                <SelectItem value="goldpacks">Goldpacks</SelectItem>
+                <SelectItem value="crystalpacks">Crystalpacks</SelectItem>
+                <SelectItem value="chests">Chests</SelectItem>
+                <SelectItem value="freebie">Freebie</SelectItem>
+                <SelectItem value="weapon">Weapon</SelectItem>
+              </SelectContent>
             </Select>
+
 
             {errors.type && <p className=' text-[.6em] text-red-500'>{errors.type.message}</p>}
             </div>
@@ -136,7 +152,7 @@ export default function CreateStoreItems() {
 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Price</label>
-            <input type="number" placeholder='Title' className={` input ${errors.price && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('price', {valueAsNumber: true})} />
+            <input type="number" placeholder='Price' className={` input ${errors.price && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('price', {valueAsNumber: true})} />
             {errors.price && <p className=' text-[.6em] text-red-500'>{errors.price.message}</p>}
             </div>
 

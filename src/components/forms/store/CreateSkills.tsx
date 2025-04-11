@@ -31,12 +31,11 @@ import Loader from '@/components/common/Loader'
 export default function CreateSkillsItemsForm() {
     const [preview, setPreview] = useState<string | null>(null);
     const [open, setOpen] = useState(false)
-    const {mutate: createSkillsItem, isPending} = useCreateSkillsItem()
+    const {mutate: createitems, isPending} = useCreateStoreItem()
     const [dmg, setDmg] = useState(0)
     const [def, setDef] = useState(0)
     const [spd, setSpd] = useState(0)
 
-    //create news validation
     const {
       register,
       handleSubmit,
@@ -44,15 +43,22 @@ export default function CreateSkillsItemsForm() {
       reset,
       trigger,
       formState: { errors },
-    } = useForm<CreateSkinsItems>({
-      resolver: zodResolver(storeSkinsSchema),
+    } = useForm<StoreSchema>({
+      resolver: zodResolver(storeItemSchema),
     });
 
-    //create news
-    const createItem = async ( data: CreateSkinsItems) => {
-        createSkillsItem({
-            name: data.name, price: data.price, currency: data.currency, imageUrl: data.imageUrl, description: data.description, rarity: data.rarity, itemtype: 'skills'
-        },{
+    const createItem = async ( data: StoreSchema) => {
+      createitems({
+        name: data.name, price: data.price, currency: data.currency, imageUrl: data.imageUrl, description: data.description, rarity: data.rarity || '', inventorytype: 'skills',
+        type: 'skills',
+        gender: '',
+        stats: {
+          damage: 0,
+          defense: 0,
+          speed: 0
+        },
+        skill: 'Deals'
+      },{
          onSuccess: () => {
            toast.success(`Item created successfully.`);
            setOpen(false)
@@ -61,7 +67,6 @@ export default function CreateSkillsItemsForm() {
      
     }
 
-    //reset form value
     useEffect(() => {
         reset()
     },[open])
@@ -115,7 +120,7 @@ export default function CreateSkillsItemsForm() {
 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Price</label>
-            <input type="number" placeholder='Title' className={` input ${errors.price && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('price', {valueAsNumber: true})} />
+            <input type="number" placeholder='Price' className={` input ${errors.price && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('price', {valueAsNumber: true})} />
             {errors.price && <p className=' text-[.6em] text-red-500'>{errors.price.message}</p>}
             </div>
 
@@ -127,7 +132,7 @@ export default function CreateSkillsItemsForm() {
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="coins">Coins</SelectItem>
-                <SelectItem value="emerald">Emerald</SelectItem>
+                <SelectItem value="crystal">Crystal</SelectItem>
                 {/* <SelectItem value="crystal">Crystal</SelectItem> */}
             </SelectContent>
             </Select>

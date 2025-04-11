@@ -69,9 +69,9 @@ export default function UpdateStoreItems( prop: Items) {
       defaultValues:({
         name: prop.itemname,
         type: prop.type,
-        rarity: prop.rarity,
+        rarity: prop.rarity || '',
         currency: prop.currency,
-        gender: prop.gender,
+        gender: prop.gender || '',
         description: prop.description,
         price: prop.itemprice,
         imageUrl: null
@@ -110,6 +110,8 @@ export default function UpdateStoreItems( prop: Items) {
      setDef(prop.defense)
      setSpd(prop.speed)
      },[])
+
+     console.log(errors)
   
 
   return (

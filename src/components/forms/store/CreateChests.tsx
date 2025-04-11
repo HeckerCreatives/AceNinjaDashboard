@@ -29,41 +29,44 @@ import Loader from '@/components/common/Loader'
 
 
 export default function CreateChestsItemsForm() {
-    const [preview, setPreview] = useState<string | null>(null);
-    const [open, setOpen] = useState(false)
-    const {mutate: createSkinsItem, isPending} = useCreateSkinsItem()
-    const [dmg, setDmg] = useState(0)
-    const [def, setDef] = useState(0)
-    const [spd, setSpd] = useState(0)
+  const [preview, setPreview] = useState<string | null>(null);
+  const [open, setOpen] = useState(false)
+  const {mutate: createitems, isPending} = useCreateStoreItem()
+  const [dmg, setDmg] = useState(0)
+  const [def, setDef] = useState(0)
+  const [spd, setSpd] = useState(0)
 
-    
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    trigger,
+    formState: { errors },
+  } = useForm<StoreSchema>({
+    resolver: zodResolver(storeItemSchema),
+  });
 
-    //create news validation
-    const {
-      register,
-      handleSubmit,
-      setValue,
-      reset,
-      trigger,
-      formState: { errors },
-    } = useForm<CreateSkinsItems>({
-      resolver: zodResolver(storeSkinsSchema),
-    });
+  const createItem = async ( data: StoreSchema) => {
+    createitems({
+      name: data.name, price: data.price, currency: data.currency, imageUrl: data.imageUrl, description: data.description, rarity: data.rarity || '', inventorytype: 'chests',
+      type: 'chests',
+      gender: '',
+      stats: {
+        damage: 0,
+        defense: 0,
+        speed: 0
+      },
+      skill: ''
+    },{
+       onSuccess: () => {
+         toast.success(`Item created successfully.`);
+         setOpen(false)
+       },
+     })
+   
+  }
 
-    //create news
-    const createItem = async ( data: CreateSkinsItems) => {
-        createSkinsItem({
-            name: data.name, price: data.price, currency: data.currency, imageUrl: data.imageUrl, description: data.description, rarity: data.rarity, itemtype: 'chests'
-        },{
-         onSuccess: () => {
-           toast.success(`Item created successfully.`);
-           setOpen(false)
-         },
-       })
-     
-    }
-
-    //reset form value
     useEffect(() => {
         reset()
     },[open])
@@ -129,7 +132,7 @@ export default function CreateChestsItemsForm() {
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="coins">Coins</SelectItem>
-                <SelectItem value="emerald">Emerald</SelectItem>
+                <SelectItem value="crystal">Crystal</SelectItem>
                 {/* <SelectItem value="crystal">Crystal</SelectItem> */}
             </SelectContent>
             </Select>
