@@ -11,7 +11,7 @@ import { TbSwords } from "react-icons/tb";
 export const superadminRoutes = [
     {route:'/superadmin/dashboard', name: 'Dashboard', icon: <LayoutGrid size={15}/>, subitems: [] },
     {route:'/superadmin/players', name: 'Manage Players', icon: <UsersRound size={15}/>, subitems: [] },
-    {route:'/superadmin/topup', name: 'Topup', icon: <Wallet size={15}/>, subitems: [] },
+    {route:'/superadmin/grantcurrency', name: 'Grant Currency', icon: <Wallet size={15}/>, subitems: [] },
 
      {route:'/superadmin/', name: 'Newsletter', icon: <FaBullhorn size={15}/>,
      subitems: [

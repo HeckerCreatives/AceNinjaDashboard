@@ -80,6 +80,24 @@ export const tierImg = (data: string) => {
         return <img src="/manage/Rank-ELDER icon.png" alt="tier" width={60}/>
     } else if (data === 'Ace'){
         return <img src="/manage/Rank-ACE icon.png" alt="tier" width={60}/>
+    } 
+}
+
+export const rankImg = (data: string) => {
+    if(data === 'Rookie'){
+        return <img src="/manage/Rank-ROOKIE icon.png" alt="tier" width={80}/>
+    } else if (data === 'Veteran'){
+        return <img src="/manage/Rank-VETERAN icon.png" alt="tier" width={80}/>
+    } else if (data === 'Shogun'){
+        return <img src="/manage/Rank-SHOGUN icon.png" alt="tier" width={80}/>
+    } else if (data === 'Ronin'){
+        return <img src="/manage/Rank-RONIN icon.png" alt="tier" width={80}/>
+    } else if (data === 'Elder'){
+        return <img src="/manage/Rank-ELDER icon.png" alt="tier" width={80}/>
+    } else if (data === 'Ace'){
+        return <img src="/manage/Rank-ACE icon.png" alt="tier" width={80}/>
+    } else if (data === 'Unranked') {
+       return <img src="/manage/Rank-ROOKIE icon.png" alt="tier" width={80} className=" filter grayscale opacity-50"/>
     }
 }
 

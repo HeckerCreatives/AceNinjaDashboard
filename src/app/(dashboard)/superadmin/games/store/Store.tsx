@@ -93,7 +93,7 @@ export default function Store() {
 
   useEffect(() => {
     setCurrentpage(0)
-  },[tab])
+  },[tab, rarity])
 
 
   return (

@@ -13,6 +13,7 @@ import Card from '@/components/cards/Card'
 import { PiRanking } from 'react-icons/pi'
 import { useGetRank } from '@/client_actions/superadmin/dashboard'
 import { badgeImg, currencyCardImg, currencyImg, titleAssets } from '@/utils/findAsset'
+import usePlayerNameStore from '@/hooks/player'
 
 export default function Dashboard() {
     const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
@@ -73,7 +74,7 @@ export default function Dashboard() {
             <ViewCard name={'Coins'} value={data?.wallet[0].amount || 0} isAmount={false} icon={currencyCardImg('coins')} isLoading={true} bg={'bg-[#531414]'} border={true}/>
             <ViewCard name={'Crystal'} value={data?.wallet[1].amount || 0} isAmount={false} icon={currencyCardImg('crystal')} isLoading={true} bg={'bg-[#531414]'} border={true}/>
             <ViewCard name={'Credits'} value={data?.wallet[2].amount || 0} isAmount={false} icon={currencyCardImg('topupcredit')} isLoading={true} bg={'bg-[#531414]'} border={true}/>
-            <ViewCardSecondary name={rank?.data.rankTier || ''} value={rank?.data.mmr || 0} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={'bg-[#531414]'} border={true} rankicon={rank?.data.icon}/>
+            <ViewCardSecondary name={rank?.data.rankTier || ''} value={rank?.data.mmr || 0} isAmount={false} icon={<ShoppingBag size={20} />} isLoading={true} bg={'bg-[#531414]'} border={true} rankicon={rank?.data.icon} rankname={rank?.data.rankTier || ''}/>
         </div>
 
         <div className=' w-full grid grid-cols-1 md:grid-cols-2 gap-6'>

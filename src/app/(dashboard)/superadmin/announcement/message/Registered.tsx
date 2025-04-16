@@ -101,19 +101,24 @@ export default function Message() {
                     {data?.data.map((item, index) => (
                         <TableRow key={item.id}>
                         <TableCell>
-                            {item.type === 'image' ? (
+                            {item.url !== '' && (
+                                <>
+                                {item.type === 'image' ? (
                                 <img src={`${process.env.NEXT_PUBLIC_API_URL}/${item.url}`} alt="img" width={200}/>
-                            ): (
-                                <a href={item.url} target='_blank'>
-                                    <img 
-                                        src={`https://img.youtube.com/vi/${extractVideoId(item.url)}/hqdefault.jpg`} 
-                                        alt="video thumbnail" 
-                                        width={200}
+                                    ): (
+                                        <a href={item.url} target='_blank'>
+                                            <img 
+                                                src={`https://img.youtube.com/vi/${extractVideoId(item.url)}/hqdefault.jpg`} 
+                                                alt="video thumbnail" 
+                                                width={200}
+                                                
+                                            />
+                                        </a>
                                         
-                                    />
-                                </a>
-                                
+                                    )}
+                                </>
                             )}
+                            
                         </TableCell>
                         <TableCell>{item.title}</TableCell>
                         <TableCell>{item.content}</TableCell>

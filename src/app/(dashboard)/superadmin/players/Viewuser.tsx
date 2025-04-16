@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Boxes, Eye, Menu, Navigation, ShoppingBag, Ticket, Users } from 'lucide-react'
+import { Boxes, Check, Eye, Menu, Navigation, ShoppingBag, Ticket, Users } from 'lucide-react'
 import { GiWhirlpoolShuriken } from "react-icons/gi";
 import { TbSwords } from "react-icons/tb";
 import { PiPath } from "react-icons/pi";
@@ -29,6 +29,8 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 import useCharacterStore from '@/hooks/character';
+import { useGetCharacters } from '@/client_actions/superadmin/dashboard';
+import useCharacterNameStore from '@/hooks/characterUsername';
   
 
 const viewnavigation = [
@@ -41,15 +43,34 @@ const viewnavigation = [
     {name: 'Friends', path: 'friends' , icon: <Users size={20}/>},
 ]
 
+type Characters = {
+    username: string, 
+    id: string
+}
+
 type Props = {
     userid: string
     characterid: string
+    characters: Characters[]
+    name: string
 }
 
 export default function Viewuser( data: Props) {
+    const {data: characters,isLoading} = useGetCharacters(data.userid)
     const [tab, setTab] = useState('dashboard')
     const [open, setOpen] = useState(false);
     const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
+    const { charactername, setCharactername} = useCharacterNameStore()
+    
+
+    useEffect(() => {
+        if (characters && characters.length > 0) {
+          setCharacterid(characters[0].id);
+          setCharactername(characters[0].username)
+        }
+    }, [data, setCharacterid]); 
+
+    console.log(characters)
 
 
   return (
@@ -74,7 +95,39 @@ export default function Viewuser( data: Props) {
                     </p>
                     </React.Fragment>
                 ))}
+
+                    <DropdownMenu>
+                    <DropdownMenuTrigger className=" bg-white px-2 rounded-md">
+                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col items-end text-amber-950">
+                            <p className="text-sm font-bold">{data.name}</p>
+                            <p className="text-xs">Player</p>
+                        </div>
+                        <img src="/dashboard/small LOGO.png" alt="user" width={60} height={60} />
+                        </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className=" min-w-[170px]">
+                    
+                        <DropdownMenuLabel className="text-xs font-medium">Characters</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {data.characters?.map((item, index) => (
+                        <DropdownMenuItem key={item.id} onClick={() => setCharacterid(item.id)} className="text-xs cursor-pointer">
+                            {characterid === item.id ? (
+                            <Check size={5} className=" text-green-400"/>
+                            ): (
+                            <>
+                            <div className=" w-4"></div></>
+                            )}
+                        {item.username}
+                        </DropdownMenuItem>
+                        ))}
+                    
+                    
+                    </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
+
+               
 
                 <button onClick={() => setOpen(!open)} className=''>
                 <IoClose size={30} className=' text-yellow-500'/>
@@ -97,6 +150,36 @@ export default function Viewuser( data: Props) {
                    
                 </DropdownMenuContent>
                 </DropdownMenu>
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger className=" bg-white px-2 rounded-md">
+                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col items-end text-amber-950">
+                            <p className="text-sm font-bold">{data.name}</p>
+                            <p className="text-xs">Player</p>
+                        </div>
+                        <img src="/dashboard/small LOGO.png" alt="user" width={60} height={60} />
+                        </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className=" min-w-[170px]">
+                    
+                        <DropdownMenuLabel className="text-xs font-medium">Characters</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {data.characters?.map((item, index) => (
+                        <DropdownMenuItem key={item.id} onClick={() => setCharacterid(item.id)} className="text-xs cursor-pointer">
+                            {characterid === item.id ? (
+                            <Check size={5} className=" text-green-400"/>
+                            ): (
+                            <>
+                            <div className=" w-4"></div></>
+                            )}
+                        {item.username}
+                        </DropdownMenuItem>
+                        ))}
+                    
+                    
+                    </DropdownMenuContent>
+                    </DropdownMenu>
 
                 </div>
 
@@ -139,7 +222,11 @@ export default function Viewuser( data: Props) {
                 {tab === 'purchase' && (
                     <Purchase/>
                 )}
+
+               
             </div>
+
+           
 
           </DialogContent>
         </Dialog>

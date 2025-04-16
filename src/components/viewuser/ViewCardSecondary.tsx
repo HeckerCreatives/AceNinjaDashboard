@@ -1,3 +1,4 @@
+import { rankImg, tierImg } from '@/utils/findAsset'
 import React from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -12,6 +13,7 @@ type Props = {
     bg: string
     border: boolean
     rankicon?: string
+    rankname: string
 }
 
 export default function ViewCardSecondary(prop:Props){
@@ -30,7 +32,7 @@ export default function ViewCardSecondary(prop:Props){
         </div>
 
         <div className=' w-fit flex items-center justify-between'>
-          <img src={`${process.env.NEXT_PUBLIC_API_URL}/${prop.rankicon}`} alt="rank" width={130} height={130}/>
+          {rankImg(prop.rankname)}
         </div>
 
 

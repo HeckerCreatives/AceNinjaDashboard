@@ -56,7 +56,7 @@ export default function Playertable() {
         </TableCaption>
       )}
     <TableHeader>
-        <TableRow>
+        {/* <TableRow>
         <TableHead className="">Owner</TableHead>
         <TableHead>Character Name</TableHead>
         <TableHead>Coins</TableHead>
@@ -65,10 +65,16 @@ export default function Playertable() {
         <TableHead>Current level</TableHead>
         <TableHead className="">Status</TableHead>
         <TableHead className="">Action</TableHead>
+        </TableRow> */}
+
+        <TableRow>
+          <TableHead className="">Player Name</TableHead>
+          <TableHead className="">Status</TableHead>
+          <TableHead className="">Action</TableHead>
         </TableRow>
     </TableHeader>
     <TableBody>
-    {data?.data.playerListData.map((user, userIndex) => (
+    {/* {data?.data.playerListData.map((user, userIndex) => (
       user.character.map((character, charIndex) => (
         <TableRow key={`${user.id}-${charIndex}`}>
           <TableCell>{user.username}</TableCell>
@@ -85,7 +91,24 @@ export default function Playertable() {
           </TableCell>
         </TableRow>
       ))
-    ))}
+    ))} */}
+
+    {data?.data.playerListData.map((user, userIndex) => (
+          <TableRow key={`${user.id}-${userIndex}`}>
+            <TableCell>{user.username}</TableCell>
+            {/* <TableCell>{character.username || "No Character"}</TableCell>
+            <TableCell>{character.wallet[0]?.ammount.toLocaleString() || 0}</TableCell>
+            <TableCell>{character.wallet[1]?.ammount.toLocaleString() || 0}</TableCell>
+            <TableCell>{character.wallet[2]?.ammount.toLocaleString() || 0}</TableCell>
+            <TableCell className="">{character.level || 0}</TableCell> */}
+            <TableCell className={` ${user.status === 'active' ? 'text-green-200' : 'text-red-500'}`}>{user.status}</TableCell>
+            <TableCell className="flex items-center gap-2">
+              <ChangePasswordUserAdmin userid={user.id} name={user.username}/>
+              <Viewuser userid={user.id} characterid={user.character[0].id} characters={user.character} name={user.username} />
+              <BanUnbanPlayer userid={user.id}/>
+            </TableCell>
+          </TableRow>
+      ))}
 
        
     </TableBody>

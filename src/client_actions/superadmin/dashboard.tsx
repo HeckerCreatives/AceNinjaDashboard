@@ -21,6 +21,32 @@ interface CharacterRankResponse {
     };
 }
 
+interface Character {
+  id: string;
+  username: string;
+}
+
+interface GetCharactersResponse {
+  message: string;
+  data: Character[];
+}
+
+const getCharacters = async (id: string): Promise<Character[]> => {
+  const response = await axiosInstance.get<GetCharactersResponse>("/character/getplayercharactersadmin",
+    {params: {id}}
+  );
+  return response.data.data; 
+};
+
+export const useGetCharacters = (id: string) => {
+  return useQuery<Character[], Error>({
+    queryKey: ["characters"],
+    queryFn: () => getCharacters(id),
+    staleTime: 60000, 
+  });
+};
+
+
   
 
 

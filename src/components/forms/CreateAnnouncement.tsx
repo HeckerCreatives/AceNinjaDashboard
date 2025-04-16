@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {useForm} from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateNews } from '@/client_actions/superadmin/website'
-import { CreateAnnouncementData, createAnnouncementDataSchema, createNewsData, CreateNewsData } from '@/validation/schema'
+import { CreateAnnouncementData, createAnnouncementDataSchema, createNewsData, CreateNewsData, editNewsdata, EditNewsData } from '@/validation/schema'
 import toast from 'react-hot-toast'
 import { Input } from '../ui/input'
 import { useCreateAnnouncement } from '@/client_actions/superadmin/announcement'
@@ -74,12 +74,12 @@ export default function CreateAnnoucement(prop: Props) {
       reset,
       trigger,
       formState: { errors },
-    } = useForm<CreateAnnouncementData>({
-      resolver: zodResolver(createAnnouncementDataSchema),
+    } = useForm<EditNewsData>({
+      resolver: zodResolver(editNewsdata),
     });
 
     //create news
-    const createAnnouncementData = async ( data: CreateAnnouncementData) => {
+    const createAnnouncementData = async ( data: EditNewsData) => {
       createAnnouncement({title: data.title, content: data.description, contentType: tab.toLowerCase(), url: data.file ?? '', announcementtype: prop.type},{
         onSuccess: () => {
           toast.success(`Announcement created successfully`);

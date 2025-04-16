@@ -25,6 +25,7 @@ import toast from "react-hot-toast";
 import useCharacterNameStore from "@/hooks/characterUsername";
 import useDialogStore from "@/hooks/globals";
 import ChangePasswordUser from "../forms/ChangePassword";
+import usePlayerNameStore from "@/hooks/player";
 
 
 export default function Userlayout({ children }: { children: React.ReactNode }) {
@@ -32,10 +33,11 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
   const params = useSearchParams();
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(true); 
-  const {data , isLoading} = useGetCharacters()
+  const {data,isLoading} = useGetCharacters()
   const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
   const { charactername, setCharactername} = useCharacterNameStore()
   const {isOpen, openDialog, closeDialog} = useDialogStore()
+  const {playername} = usePlayerNameStore()
 
   //charcter id persist
   useEffect(() => {
@@ -64,8 +66,8 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
               <DropdownMenuTrigger className="lg:block hidden">
                 <div className="flex items-center gap-2">
                   <div className="flex flex-col items-end text-amber-950">
-                    <p className="text-sm font-bold">Name</p>
-                    <p className="text-xs">User</p>
+                    <p className="text-sm font-bold">{playername}</p>
+                    <p className="text-xs">Player</p>
                   </div>
                   <img src="/dashboard/small LOGO.png" alt="user" width={60} height={60} />
                 </div>

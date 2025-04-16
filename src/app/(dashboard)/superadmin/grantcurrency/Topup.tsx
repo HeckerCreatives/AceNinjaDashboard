@@ -69,7 +69,7 @@ export default function Topup() {
                     <SelectContent>
                         <SelectItem value="coins">Coins</SelectItem>
                         <SelectItem value="crystal">Crystal</SelectItem>
-                        <SelectItem value="emerald">Emerald</SelectItem>
+                        {/* <SelectItem value="emerald">Emerald</SelectItem> */}
                     </SelectContent>
                 </Select>
                 {errors.currency && <p className="text-red-500 text-xs">{errors.currency.message}</p>}
