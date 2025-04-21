@@ -83,9 +83,9 @@ export const getRank = async (characterid: string): Promise<CharacterRankRespons
     return useQuery({
       queryKey: ["rank"],
       queryFn: () => getRank(characterid),
-      staleTime: 5 * 60 * 1000,
-      refetchOnMount: false, 
-      refetchOnWindowFocus: false,
+      // staleTime: 5 * 60 * 1000,
+      // refetchOnMount: false, 
+      // refetchOnWindowFocus: false,
     });
     };
 

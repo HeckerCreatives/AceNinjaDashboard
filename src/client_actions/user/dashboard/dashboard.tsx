@@ -123,11 +123,31 @@ export const useUserData = (characterid: string) => {
   return useQuery({
     queryKey: ["userdata", characterid],
     queryFn: () => getData(characterid),
-    staleTime: 5 * 60 * 1000,
-    refetchOnMount: false, 
-    refetchOnWindowFocus: false,
+    // staleTime: 5 * 60 * 1000,
+    // refetchOnMount: false, 
+    // refetchOnWindowFocus: false,
   });
   };
+
+
+  export const getStats = async (characterid: string): Promise<Stats | null> => { 
+    const response = await axiosInstance.get(
+      "/character/getcharacterstatssa",
+      {params: {characterid}}
+    );
+    return response.data.data
+  };
+  
+  
+  export const useUserStats = (characterid: string) => {
+    return useQuery({
+      queryKey: ["stats", characterid],
+      queryFn: () => getStats(characterid),
+      // staleTime: 5 * 60 * 1000,
+      // refetchOnMount: false, 
+      // refetchOnWindowFocus: false,
+    });
+    };
 
 export const getRank = async (characterid: string): Promise<CharacterRankResponse> => { 
     const response = await axiosInstance.get(
@@ -143,9 +163,9 @@ export const getRank = async (characterid: string): Promise<CharacterRankRespons
     return useQuery({
       queryKey: ["rank"],
       queryFn: () => getRank(characterid),
-      staleTime: 5 * 60 * 1000,
-      refetchOnMount: false, 
-      refetchOnWindowFocus: false,
+      // staleTime: 5 * 60 * 1000,
+      // refetchOnMount: false, 
+      // refetchOnWindowFocus: false,
     });
     };
 

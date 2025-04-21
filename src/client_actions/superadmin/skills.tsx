@@ -50,9 +50,9 @@ export const useGetSkills = (characterid: string, category: string, page: number
   return useQuery({
     queryKey: ["userdata", characterid, category, page, limit],
     queryFn: () => getSkills(characterid, category, page, limit),
-    staleTime: 5 * 60 * 1000,
-    refetchOnMount: false, 
-    refetchOnWindowFocus: false,
+    // staleTime: 5 * 60 * 1000,
+    // refetchOnMount: false, 
+    // refetchOnWindowFocus: false,
   });
 };
   
