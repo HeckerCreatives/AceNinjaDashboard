@@ -78,7 +78,7 @@ export default function Tierlist() {
                     <TableRow>
                     <TableHead className=" w-[300px]">Icon</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead>Required MMMR</TableHead>
+                    <TableHead>Required MMR</TableHead>
                     <TableHead>Action</TableHead>
                     </TableRow>
                 </TableHeader>

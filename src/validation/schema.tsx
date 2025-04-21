@@ -122,7 +122,7 @@ export const changePassword = z
 
 export const createTier = z.object({
   name: z.string().nonempty("Title is empty"),
-  requiredmmr: z.number().min(1, "Required MMR is required"),
+  requiredmmr: z.number().min(0, "Required MMR is required"),
   // file: z
   //   .instanceof(File)
   //   .refine((file) => file.type.startsWith("image/"), {
@@ -132,7 +132,7 @@ export const createTier = z.object({
 
 export const editTier = z.object({
   name: z.string().nonempty("Title is empty"),
-  requiredmmr: z.number().min(1, "Required MMR is required"),
+  requiredmmr: z.number().min(0, "Required MMR is required"),
   // icon: z
   //   .custom<File | null | undefined | string>((val) => {
   //     if (val instanceof File) return true
