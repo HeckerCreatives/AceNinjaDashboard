@@ -1,4 +1,4 @@
-import { Box, Boxes, Gamepad, Gem, Globe, Globe2, Home, LayoutGrid, ShoppingBag, ShoppingBasket, Swords, Ticket, TicketCheck, User, UserRound, Users, UsersRound, Wallet } from "lucide-react";
+import { Box, Boxes, Coins, Gamepad, Gem, Globe, Globe2, Home, LayoutGrid, ShoppingBag, ShoppingBasket, Swords, Ticket, TicketCheck, User, UserRound, Users, UsersRound, Wallet } from "lucide-react";
 import { FaBullhorn, FaMoneyBill } from "react-icons/fa";
 import { GiRank1, GiWhirlpoolShuriken } from "react-icons/gi";
 import { GrVmMaintenance } from "react-icons/gr";
@@ -34,6 +34,15 @@ export const superadminRoutes = [
           {route:'/superadmin/games/quest', name: 'Quest', icon: null},
           {route:'/superadmin/games/store', name: 'Store', icon: null},
           {route:'/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null},
+ 
+      ] },
+
+      {route:'/superadmin/', name: 'Rewards', icon: <Coins size={15}/>,
+      subitems: [
+          {route:'/superadmin/rewards/dailyspin', name: 'Daily Spin', icon: null},
+          {route:'/superadmin/rewards/weeklylogin', name: 'Weekly Login', icon: null},
+          {route:'/superadmin/rewards/dailyexpspin', name: 'Daily Exp Spin', icon: null},
+          {route:'/superadmin/rewards/monthlylogin', name: 'Monthly Login', icon: null},
  
       ] },
      {route:'/superadmin/grant', name: 'Grant', icon: <Box size={15}/>, subitems: [] },

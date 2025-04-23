@@ -22,6 +22,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+import { rankImg } from '@/utils/findAsset'
   
   
 
@@ -107,7 +108,7 @@ export default function Pvp() {
                             <TableCell>{item.username}</TableCell>
                             <TableCell>{item.mmr}</TableCell>
                             <TableCell className=' text-green-500'>
-                                <img src={`${process.env.NEXT_PUBLIC_API_URL}/${item.icon}`} alt="icon" width={50} />
+                                {rankImg(item.rankname)}
                             </TableCell>
                         </TableRow>
                     ))}

@@ -20,7 +20,7 @@ interface LeaderboardEntry {
     rank: number;
     username: string;
     mmr: number;
-    rankName: string;
+    rankname: string;
     icon: string
 }
 

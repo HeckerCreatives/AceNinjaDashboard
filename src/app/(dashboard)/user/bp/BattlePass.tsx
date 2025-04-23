@@ -24,17 +24,16 @@ import useCharacterStore from '@/hooks/character'
   
 
 export default function BattlePass() {
-  const { characterid} = useCharacterStore()
-  const {data, isLoading} = useGetBattlepass(characterid)
+  // const { characterid} = useCharacterStore()
+  // const {data, isLoading} = useGetBattlepass(characterid)
 
-  console.log(data)
   return (
     <div className=' w-full flex flex-col gap-8 overflow-hidden p-8'>
 
-      <div className=' w-full max-w-[365px]'>
-
+      <div className=' w-full h-[300px] flex items-center justify-center'>
+        <p className=' text-sm text-zinc-400'>Coming Soon!</p>
       </div>
-      {!data ? (
+      {/* {!data ? (
         <div className=' w-full h-[300px] flex items-center justify-center'>
           <p className=' text-sm text-zinc-400'>No battle pass active.</p>
         </div>
@@ -59,19 +58,16 @@ export default function BattlePass() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {/* <TableRow>
+          <TableRow>
             <TableCell className="font-medium">INV001</TableCell>
             <TableCell>Paid</TableCell>
             <TableCell>Credit Card</TableCell>
             <TableCell className="text-right">$250.00</TableCell>
-          </TableRow> */}
+          </TableRow>
         </TableBody>
       </Table>
         </>
-      )}
-
-     
-
+      )} */}
     </div>
   )
 }
