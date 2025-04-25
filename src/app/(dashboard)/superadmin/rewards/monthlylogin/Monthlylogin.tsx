@@ -1,39 +1,8 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
-import { useDeleteNewsletter, useGetNewsletter } from '@/client_actions/superadmin/newsletter'
-import Loader from '@/components/common/Loader'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import toast from 'react-hot-toast'
-import CreateRankTier from '@/components/forms/CreateRankTier'
-import { useDeleteRankTier, useGetTierlist } from '@/client_actions/superadmin/ranktier'
-import { Trash } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import EditRankTier from '@/components/forms/EditrankTier'
-import { tierImg } from '@/utils/findAsset'
-import { Input } from '@/components/ui/input'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
+import { useDailySpin, useGetMonthlylogin, useGetWeeklylogin } from '@/client_actions/superadmin/rewards'
+import Weeklylogincard from '@/components/common/Weeklylogin'
+import Monthlylogincard from '@/components/common/Monthlylogincard'
 
   
 
@@ -41,24 +10,14 @@ export default function Monthlylogin() {
     const [currentPage, setCurrentPage] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [open, setOpen] = useState(false)
-    const {data, isLoading} = useGetTierlist()
-    const {mutate: deleteRankTier, isPending} = useDeleteRankTier()
+    const {data} = useGetMonthlylogin()
     
   //paginition
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
 
-
-   const deleteData = (id: string) => {
-    deleteRankTier({id: id}, {
-        onSuccess: () => {
-        toast.success(`Rank tier deleted successfully`);
-          setOpen(false)
-        },
-    })
-   }
-
+  console.log(data)
 
   return (
     <div className=' w-full ~p-2/8'>
@@ -70,44 +29,11 @@ export default function Monthlylogin() {
                 <p className=' text-lg font-semibold'>Rewards / Monthly Login</p>
             </div>
 
-          
-            <div className=' w-full -full grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] p-6 gap-4'>
-              {Array.from({ length: 28 }).map((_, index) => (
-               <div className=' flex flex-col bg-amber-900 h-auto'>
-                <div className=' p-2 bg-amber-950 w-full'>
-                  <p className=' ~text-xs/sm'>Day {index + 1}</p>
-                </div>
-
-                <div className=' w-full p-2 flex flex-col'>
-                 <p className=' text-[.6rem] text-zinc-300 mt-2'>Reward</p>
-                  <Select >
-                  <SelectTrigger className="bg-zinc-950 border-none">
-                      <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                      <SelectItem value="coins">Coins</SelectItem>
-                      <SelectItem value="exp">Exp</SelectItem>
-                      <SelectItem value="crystal">Crystals</SelectItem>
-                  </SelectContent>
-                  </Select>
-
-                 <p className=' text-[.6rem] text-zinc-300 mt-4'>Amount</p>
-                 <Input placeholder='Amount' type='number' className=' placeholder:text-xs'/>
-
-                </div>
-
+            <div className=' w-full -full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] p-6 gap-4'>
+                {data?.data.map((item, index) => (
+                <Monthlylogincard amount={item.amount} type={item.type} day={index + 1} daytype={item.day} />
+                ))}
                 
-               </div>
-              ))}
-                
-            </div>
-
-          
-
-            
-
-            <div className=' w-full flex items-end justify-end mt-2 p-6'>
-                <Button>Save</Button>
             </div>
 
       

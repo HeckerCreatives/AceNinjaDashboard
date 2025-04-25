@@ -27,6 +27,15 @@ import { Button } from '@/components/ui/button'
 import EditRankTier from '@/components/forms/EditrankTier'
 import { tierImg } from '@/utils/findAsset'
 import { Input } from '@/components/ui/input'
+import { useDailySpin } from '@/client_actions/superadmin/rewards'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import DailySpincard from '@/components/common/DailySpincard'
 
   
 
@@ -34,24 +43,14 @@ export default function Dailyspin() {
     const [currentPage, setCurrentPage] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [open, setOpen] = useState(false)
-    const {data, isLoading} = useGetTierlist()
-    const {mutate: deleteRankTier, isPending} = useDeleteRankTier()
+    const {data} = useDailySpin()
     
   //paginition
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
 
-
-   const deleteData = (id: string) => {
-    deleteRankTier({id: id}, {
-        onSuccess: () => {
-        toast.success(`Rank tier deleted successfully`);
-          setOpen(false)
-        },
-    })
-   }
-
+  console.log(data)
 
   return (
     <div className=' w-full ~p-2/8'>
@@ -64,17 +63,10 @@ export default function Dailyspin() {
             </div>
 
             <div className=' w-full -full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] p-6 gap-4'>
-                {Array.from({ length: 16 }).map((_, index) => (
-                <div key={index} className="flex flex-col gap-1 w-full">
-                    <p className="text-[.7rem] text-zinc-300">Amount {index + 1}</p>
-                    <Input placeholder="Amount" className="bg-amber-900 text-white" />
-                </div>
+                {data?.data.map((item, index) => (
+                <DailySpincard amount={item.amount} type={item.type} slot={item.slot} chance={item.chance}/>
                 ))}
                 
-            </div>
-
-            <div className=' w-full flex items-end justify-end mt-2 p-6'>
-                <Button>Save</Button>
             </div>
 
       
