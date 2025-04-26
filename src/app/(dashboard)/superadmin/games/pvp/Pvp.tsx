@@ -61,7 +61,7 @@ export default function Pvp() {
 
                 <div className=' w-full flex flex-wrap gap-4 items-center justify-between'>
                     {/* <button className=' py-2 px-4 bg-yellow-500 text-black text-xs w-fit rounded-r-md flex items-center gap-2'>Season Filter <ChevronDown size={15}/></button> */}
-                    <Select value={filter} onValueChange={setFilter} >
+                    {/* <Select value={filter} onValueChange={setFilter} >
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select Season" />
                     </SelectTrigger>
@@ -71,7 +71,9 @@ export default function Pvp() {
 
                         ))}
                     </SelectContent>
-                    </Select>
+                    </Select> */}
+
+                    <div></div>
 
 
                     <div className=' relative flex items-center'>

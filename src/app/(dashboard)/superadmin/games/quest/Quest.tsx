@@ -44,19 +44,12 @@ export default function Quest() {
 
                 <CreateQuestForm/>
 
-               <div className=' flex items-center bg-zinc-800 p-2'>
-                <div className='  flex flex-col w-full'>
-                   <QuestItems/>
-                </div>
+               <div className=' flex items-center justify-center h-[200px] p-2'>
+                <p className=' text-xs'>No Data</p>
 
                </div>
 
-               <div className=' flex items-center bg-zinc-800 p-2'>
-                <div className='  flex flex-col w-full'>
-                   <QuestItems/>
-                </div>
-
-               </div>
+           
 
              
             </div>

@@ -128,7 +128,8 @@ export default function CreateQuestForm() {
               </SelectTrigger>
               <SelectContent>
                   <SelectItem value="xp">XP</SelectItem>
-                  <SelectItem value="currency">Currency</SelectItem>
+                  <SelectItem value="coin">Coins</SelectItem>
+                  <SelectItem value="crystal">Crystal</SelectItem>
                   
               </SelectContent>
               </Select>
@@ -139,11 +140,11 @@ export default function CreateQuestForm() {
         </div>
 
         <div className=' w-full flex items-center gap-4'>
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            {/* <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Select Currency Type</label>
             <input type="text" placeholder='Select' className={` input ${errors.title && 'border-[1px] focus:outline-none border-red-500'} `} {...register('title')} />
             {errors.title && <p className=' text-[.6em] text-red-500'>{errors.title.message}</p>}
-            </div>
+            </div> */}
 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Reward Amount</label>
