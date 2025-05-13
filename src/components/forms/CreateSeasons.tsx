@@ -76,7 +76,7 @@ export default function CreateSeasons() {
 
      
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-            <label htmlFor="">Duration</label>
+            <label htmlFor="">Season Duration (days)</label>
             <input type="number" placeholder='Duration' className={` input ${errors.duration && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('duration',{valueAsNumber: true})} />
             {errors.duration && <p className=' text-[.6em] text-red-500'>{errors.duration.message}</p>}
             </div>

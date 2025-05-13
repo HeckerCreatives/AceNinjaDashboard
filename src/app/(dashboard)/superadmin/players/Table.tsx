@@ -36,6 +36,10 @@ export default function Playertable() {
   setTotalPage(data?.data.totalPages || 0)
  },[data])
 
+ useEffect(() => {
+  setCurrentPage(0)
+ },[search])
+
   return (
     <div className=' flex flex-col gap-6 bg-zinc-950 w-full h-auto border-amber-500 border-[1px] rounded-md overflow-hidden'>
       <div className=' w-full flex flex-col gap-2 md:flex-row items-center justify-between text-sm bg-light p-3'>
