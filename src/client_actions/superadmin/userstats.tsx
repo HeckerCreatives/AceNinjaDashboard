@@ -109,30 +109,9 @@ interface PayinResponse {
 }
 
 
-
-export const getData = async (characterid: string): Promise<UserCharacter | null> => { 
-  const response = await axiosInstance.get(
-    "/character/getplayerdata",
-    {params: {characterid}}
-  );
-  return response.data.data
-};
-
-
-export const useUserData = (characterid: string) => {
-  return useQuery({
-    queryKey: ["userdata", characterid],
-    queryFn: () => getData(characterid),
-    // staleTime: 5 * 60 * 1000,
-    // refetchOnMount: false, 
-    // refetchOnWindowFocus: false,
-  });
-  };
-
-
   export const getStats = async (characterid: string): Promise<Stats | null> => { 
     const response = await axiosInstance.get(
-      "/character/getcharacterstats",
+      "/character/getcharacterstatssa",
       {params: {characterid}}
     );
     return response.data.data
@@ -149,43 +128,6 @@ export const useUserData = (characterid: string) => {
     });
     };
 
-export const getRank = async (characterid: string): Promise<CharacterRankResponse> => { 
-    const response = await axiosInstance.get(
-      "/character/getrank",
-      {params:{characterid}}
-     
-    );
-    return response.data
-};
-  
-  
-  export const useGetRank = (characterid: string) => {
-    return useQuery({
-      queryKey: ["rank"],
-      queryFn: () => getRank(characterid),
-      // staleTime: 5 * 60 * 1000,
-      // refetchOnMount: false, 
-      // refetchOnWindowFocus: false,
-    });
-    };
-
-    export const getTotalPayin = async (characterid: string): Promise<PayinResponse> => { 
-      const response = await axiosInstance.get(
-        "/payin/getusertotalpayin",
-        {params:{characterid}}
-       
-      );
-      return response.data
-  };
-    
-    
-    export const useGetTotalPayin = (characterid: string) => {
-      return useQuery({
-        queryKey: ["payin"],
-        queryFn: () => getTotalPayin(characterid),
-      });
-      };
-  
 
 
 

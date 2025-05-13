@@ -1,4 +1,4 @@
-import StatsPanel from '@/components/viewuser/stats/stats-panel'
+import StatsPanel from '@/components/viewuser/statsuser/stats-panel'
 import React from 'react'
 
 export default function Stats() {
