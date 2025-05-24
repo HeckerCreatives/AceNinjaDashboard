@@ -69,6 +69,7 @@ export default function Topup() {
                     <SelectContent>
                         <SelectItem value="coins">Coins</SelectItem>
                         <SelectItem value="crystal">Crystal</SelectItem>
+                        <SelectItem value="topupcredit">Crystal</SelectItem>
                         {/* <SelectItem value="emerald">Emerald</SelectItem> */}
                     </SelectContent>
                 </Select>
