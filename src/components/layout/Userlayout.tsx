@@ -40,12 +40,15 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
   const {playername} = usePlayerNameStore()
 
   //charcter id persist
-  useEffect(() => {
-    if (data && data.length > 0) {
+ useEffect(() => {
+  if (data && data.length > 0) {
+    if (!characterid) {
       setCharacterid(data[0].id);
-      setCharactername(data[0].username)
     }
-  }, [data, setCharacterid]); 
+    setCharactername(data[0].username);
+  }
+}, [data, characterid, setCharacterid, setCharactername]);
+
 
 
   return (
