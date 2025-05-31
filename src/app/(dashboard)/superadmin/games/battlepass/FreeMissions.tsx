@@ -42,16 +42,21 @@ export default function BpFreemission({ freeMission, title, onSave, id }: BpFree
     setEditForm({ ...mission })
   }
 
-  const handleSave = () => {
-    if (editForm && editingId) {
-      const updatedMissions = missions.map((mission) => (mission._id === editingId ? editForm : mission))
-      setMissions(updatedMissions)
-      setEditingId(null)
-      setEditForm(null)
-      onSave?.(updatedMissions)
-      updateMissionsBp()
-    }
+const handleSave = () => {
+  if (editForm && editingId) {
+    const updatedMissions = missions.map((mission) =>
+      mission._id === editingId ? editForm : mission
+    );
+    setMissions(updatedMissions);
+    setEditingId(null);
+    setEditForm(null);
+    onSave?.(updatedMissions);
+
+    // Call update with the fresh updatedMissions directly
+    updateMissionsBp(updatedMissions);
   }
+};
+
 
   const handleCancel = () => {
     setEditingId(null)
@@ -111,10 +116,10 @@ export default function BpFreemission({ freeMission, title, onSave, id }: BpFree
   const freeMissions = isFree ? editForm : undefined;
   const premiumMissions = !isFree ? editForm : undefined;
 
-const updateMissionsBp = async () => {
+const updateMissionsBp = async (updatedMissions: Mission[]) => {
   const isFree = title.includes("Free");
-  const freeMissions = isFree ? missions : undefined;
-  const premiumMissions = !isFree ? missions : undefined;
+  const freeMissions = isFree ? updatedMissions : undefined;
+  const premiumMissions = !isFree ? updatedMissions : undefined;
 
   updateBpMission({
     bpid: id,
@@ -126,6 +131,7 @@ const updateMissionsBp = async () => {
     }
   });
 };
+
 
   return (
     <div className="f-fit bg-gradient-to-br from-amber-950 via-amber-700 to-yellow-600 p-6 overflow-y-auto">
