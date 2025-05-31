@@ -60,9 +60,11 @@ export default function UpdateRedeemCode( prop: Props) {
 
     //create news
     const createRedeemcodes = async ( data: CreateCode) => {
-        updateRedeemCode({id: prop.id, code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, emerald: emerald, crystal: crystal}},{
+        updateRedeemCode({id: prop.id, code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: emerald, crystal: crystal}},{
         onSuccess: () => {
           toast.success(`Redeem code updated successfully.`);
+          setOpen(false)
+
         },
       })
      
@@ -108,7 +110,7 @@ export default function UpdateRedeemCode( prop: Props) {
             <label htmlFor="" className=''>Coins</label>
               <input value={coins} onChange={(e) => setCoins(e.target.valueAsNumber)} type="number" placeholder='Coins' className={` input  text-xs `}  />
 
-              <label htmlFor="" className=''>Emerald</label>
+              <label htmlFor="" className=''>Exp</label>
               <input value={emerald} onChange={(e) => setEmerald(e.target.valueAsNumber)} type="number" placeholder='Emerald' className={` input text-xs `} />
 
               <label htmlFor="" className=''>Crystal</label>

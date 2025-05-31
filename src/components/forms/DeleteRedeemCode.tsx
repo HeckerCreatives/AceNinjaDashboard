@@ -32,7 +32,7 @@ export default function DeleteRedemCode(prop: Props) {
           },})
   }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger className=' bg-red-600 w-fit h-fit p-2 rounded-md flex items-center text-xs font-semibold text-white'><Trash size={15}/></DialogTrigger>
     <DialogContent className=' h-auto max-w-[500px] p-6'>
       <DialogHeader>

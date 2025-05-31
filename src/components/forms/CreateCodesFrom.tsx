@@ -30,7 +30,7 @@ export default function CreateQuestForm() {
     const [tab, setTab] = useState('Image')
     const {mutate: addRedeemCode, isPending} = useAddRedeemCode()
     const [coins, setCoins] = useState(0)
-    const [emerald, setEmerald] = useState(0)
+    const [exp, setExp] = useState(0)
     const [crystal, setCrystal] = useState(0)
 
     //create news validation
@@ -46,9 +46,10 @@ export default function CreateQuestForm() {
     });
 
     const createRedeemcodes = async ( data: CreateCode) => {
-      addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, emerald: emerald, crystal: crystal}},{
+      addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: exp, crystal: crystal}},{
         onSuccess: () => {
-          toast.success(`Redeem code created successfully.`);
+          toast.success(`Code created successfully.`);
+          setOpen(false)
         },
       })
      
@@ -86,8 +87,8 @@ export default function CreateQuestForm() {
             <label htmlFor="" className=''>Coins</label>
               <input value={coins} onChange={(e) => setCoins(e.target.valueAsNumber)} type="number" placeholder='Coins' className={` input  text-xs `}  />
 
-              <label htmlFor="" className=''>Emerald</label>
-              <input value={emerald} onChange={(e) => setEmerald(e.target.valueAsNumber)} type="number" placeholder='Emerald' className={` input text-xs `} />
+              <label htmlFor="" className=''>Experience</label>
+              <input value={exp} onChange={(e) => setExp(e.target.valueAsNumber)} type="number" placeholder='Exp' className={` input text-xs `} />
 
               <label htmlFor="" className=''>Crystal</label>
               <input value={crystal} onChange={(e) => setCrystal(e.target.valueAsNumber)} type="number" placeholder='Crystal' className={` input  text-xs `}  />

@@ -11,26 +11,17 @@ import {
   } from "@/components/ui/table"
 import RedeemCards from './RedeemCards'
 import CreateCodesFrom from '@/components/forms/CreateCodesFrom'
-import { useGetRedeemCodes } from '@/client_actions/superadmin/redeemcodes'
+import { useGetRedeemCodes, useGetRedeemCodesHistory } from '@/client_actions/superadmin/redeemcodes'
 import PaginitionComponent from '@/components/common/Pagination'
 import Loader from '@/components/common/Loader'
 import DeleteRedemCode from '@/components/forms/DeleteRedeemCode'
 import UpdateRedeemCode from '@/components/forms/UpdateRedeemCode'
-import RedeemCodesHistory from './RedeemCodesHistory'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
 
-export default function RedeemCodes() {
+export default function RedeemCodesHistory() {
      const [currentPage, setCurrentpage] = useState(0)
     const [totalpage, setTotalpage] = useState(0)
-    const [status, setStatus] = useState('')
-    const {data, isLoading} = useGetRedeemCodes(status,currentPage, 10)
+    const {data, isLoading} = useGetRedeemCodesHistory(currentPage, 10)
 
      const handlePageChange = (page: number) => {
         setCurrentpage(page)
@@ -43,33 +34,18 @@ export default function RedeemCodes() {
 
     
   return (
-    <div className=' w-full ~p-2/8'>
+    <div className=' w-full'>
 
-        <div className=' bg-dark border-t-2 border-amber-900/50 px-2 py-6 rounded-md'>
+        <div className=' bg-dark border-t-2 border-amber-900/50 rounded-md'>
 
         <div className=' w-full flex flex-col border-[1px] border-amber-900 bg-zinc-950 rounded-md'>
             <div className=' w-full bg-light p-3'>
-                <p className=' text-lg font-semibold'>Redeem Codes</p>
+                <p className=' text-lg font-semibold'>Redeem Code History</p>
             </div>
 
             <div className=' flex flex-col gap-8 ~p-2/8'>
 
-                <RedeemCards/>
-
-                <div className=' flex items-center gap-4'>
-                    <CreateCodesFrom/>
-                    <Select value={status} onValueChange={setStatus}>
-                    <SelectTrigger className="w-fit">
-                        <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="active">Active</SelectItem>
-                        <SelectItem value="redeemed">Reedemed</SelectItem>
-                        {/* <SelectItem value="unredeemed">Unredeemed</SelectItem> */}
-                    </SelectContent>
-                    </Select>
-                </div>
-
+          
 
                 <Table className=' text-xs'>
                  {data?.data.length === 0 && (
@@ -87,7 +63,6 @@ export default function RedeemCodes() {
                     <TableHead className="">Reward</TableHead>
                     <TableHead className="">Expiration</TableHead>
                     <TableHead className="">Status</TableHead>
-                    <TableHead className="">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -96,17 +71,14 @@ export default function RedeemCodes() {
                         <TableCell className="font-medium">{item.code}</TableCell>
                         <TableCell>
                             <p>Coins: {item.rewards.coins}</p>
-                            <p>Exp: {item.rewards.exp}</p>
+                            <p>Emerald: {item.rewards.exp}</p>
                             <p>Crystal: {item.rewards.crystal}</p>
                             
                         </TableCell>
                         <TableCell>{new Date(item.expiration).toLocaleString()}</TableCell>
                         <TableCell className="font-medium">{item.status}</TableCell>
 
-                        <TableCell className="text-right flex items-center gap-2">
-                            <DeleteRedemCode id={item.id}/>
-                            <UpdateRedeemCode code={item.code} emerald={item.rewards.exp} coins={item.rewards.coins} crystal={item.rewards.crystal} expiration={item.expiration} id={item.id}/>
-                        </TableCell>
+                       
                         </TableRow>
                     ))}
                     
@@ -125,8 +97,6 @@ export default function RedeemCodes() {
         </div>
             
         </div>
-
-        <RedeemCodesHistory/>
 
     
 
