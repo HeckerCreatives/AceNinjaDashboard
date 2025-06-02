@@ -35,6 +35,7 @@ import {
 import BpFreemission from './FreeMissions'
 import { Eye } from 'lucide-react'
 import BattlePassTiers from './BpTiers'
+import UpdateBattlePass from '@/components/forms/UpdateBattlepass'
 
 
 export default function Battlepass() {
@@ -141,7 +142,9 @@ export default function Battlepass() {
                         </TableCell>
                       
                         <TableCell className="font-medium">{item.status}</TableCell>
-                        <TableCell className="font-medium"></TableCell>
+                        <TableCell className="font-medium">
+                            <UpdateBattlePass seasonname={item.seasonName} start={item.startDate} end={item.startDate} status={item.status} tiercount={item.tierCount} premcost={item.tierCount} grandreward={item.grandreward.name} id={item.id} />
+                        </TableCell>
 
 
                         {/* <TableCell className="text-right flex items-center gap-2">

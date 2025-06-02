@@ -18,6 +18,13 @@ interface BattlepassSeason {
   status: "active" | "inactive" | string;
   tierCount: number;
   premiumCost: number;
+  grandreward: {
+    name: string
+    type: string
+    rarity: string
+    description: string
+    id: string
+  },
   createdAt: string;
   updatedAt: string;
   freeMissions: Mission[];
@@ -100,6 +107,35 @@ export const useUpdateBpTiers = () => {
   return useMutation({
     mutationFn: ({ bpid, tierid, tier }: { bpid: string, tierid: string | undefined, tier: Tier | null}) =>
       updateBpTiers(bpid, tierid, tier),
+      onError: (error) => {
+          handleApiError(error);
+      },
+      onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["bp"] });
+      }
+  });
+};
+
+ export const updateBpData = async (bpid: string,  seasonName: string,
+    startDate: string,
+    endDate: string,
+    status: string,
+    tiercount: number,
+    premiumCost: number) => { 
+  const response = await axiosInstance.post("/battlepass/editbattlepassdetails", {bpid, seasonName, startDate, endDate, status, tiercount, premiumCost});
+  return response.data;
+};
+
+export const useUpdateBpData = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ bpid, seasonName, startDate, endDate, status, tiercount, premiumCost }: { bpid: string,  seasonName: string,
+    startDate: string,
+    endDate: string,
+    status: string,
+    tiercount: number,
+    premiumCost: number}) =>
+      updateBpData(bpid, seasonName, startDate, endDate, status, tiercount, premiumCost),
       onError: (error) => {
           handleApiError(error);
       },

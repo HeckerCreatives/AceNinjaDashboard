@@ -266,6 +266,16 @@ export const storePacksSchema = z.object({
   })
 });
 
+export const battlepassSchema = z.object({
+  seasonname: z.string().min(1, "Season name is required"),
+  startdate: z.string().min(1, "Start date is required"),
+  enddate: z.string().min(1, "End date is required"),
+  status: z.string().min(1, "Status is required"),
+  tiercount: z.number().min(1, "Tier count is required"),
+  premcost: z.number().min(1, "Premium cost is required"),
+  grandreward: z.string().min(1, "Grand reward is required"),
+});
+
 export type CreateNewsData = z.infer<typeof createNewsData>
 export type CreateAnnouncementData = z.infer<typeof createAnnouncementDataSchema>
 export type EditNewsData = z.infer<typeof editNewsdata>
@@ -284,3 +294,4 @@ export type UpdateStoreSchema = z.infer<typeof updateItemSchema>
 export type CreateSkinsItems = z.infer<typeof storeSkinsSchema>
 export type UpdateSkinsItems = z.infer<typeof updateSkinsSchema>
 export type StorePacksItems = z.infer<typeof storePacksSchema>
+export type BattlePassValidations = z.infer<typeof battlepassSchema>

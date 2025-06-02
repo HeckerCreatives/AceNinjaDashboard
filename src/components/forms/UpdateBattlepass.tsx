@@ -1,0 +1,172 @@
+'use client'
+import React, { useEffect, useState } from 'react'
+import { ImageUp, Pen, Plus} from 'lucide-react'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {useForm} from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { battlepassSchema, BattlePassValidations, createCode, CreateCode } from '@/validation/schema'
+import { useAddRedeemCode, useUpdateRedeemCode } from '@/client_actions/superadmin/redeemcodes'
+import toast from 'react-hot-toast'
+import Loader from '../common/Loader'
+import { useUpdateBpData } from '@/client_actions/superadmin/battlepass'
+
+
+
+const tabs = [
+  'Image',
+  'Video',
+]
+
+type Props ={
+    id: string
+    seasonname: string
+    start: string
+    end: string
+    status: string
+    tiercount: number
+    premcost: number
+    grandreward: string
+}
+
+export default function UpdateBattlePass( prop: Props) {
+    const [open, setOpen] = useState(false)
+    const {mutate: updateBpData, isPending} = useUpdateBpData()
+   
+
+    const {
+      register,
+      handleSubmit,
+      setValue,
+      reset,
+      trigger,
+      formState: { errors },
+    } = useForm<BattlePassValidations>({
+      resolver: zodResolver(battlepassSchema),
+      defaultValues:({
+        
+      })
+    });
+
+    const updateBattlePass = async ( data: BattlePassValidations) => {
+     updateBpData({bpid: prop.id, seasonName: data.seasonname, startDate: data.startdate, endDate: data.enddate, status: data.status, tiercount: data.tiercount, premiumCost: data.premcost},{
+     onSuccess: () => {
+       toast.success(`Battle pass details updated successfully.`);
+       setOpen(false)
+     }})
+   }
+
+    //reset form value
+    useEffect(() => {
+        reset()
+    },[open])
+
+    useEffect(() => {
+        if(prop){
+            reset({
+                seasonname: prop.seasonname,
+                startdate: prop.start.split('T')[0],
+                enddate: prop.end.split('T')[0],
+                status: prop.status,
+                tiercount: Number(prop.tiercount),
+                premcost: prop.premcost,
+                grandreward: prop.grandreward
+            })
+        }
+    },[prop])
+
+ 
+  
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+    <DialogTrigger className=' bg-yellow-500 text-black p-1 rounded-md flex items-center h-fit w-fit text-xs font-semibold'>
+    <Pen size={15}/>
+    </DialogTrigger>
+    <DialogContent className=' max-w-[600px] h-auto border-amber-500/80 border-[1px]'>
+      <DialogHeader className=' w-full bg-light p-3'>
+        <DialogTitle className=' text-sm'>Update Battle Pass</DialogTitle>
+        <DialogDescription>
+         
+        </DialogDescription>
+      </DialogHeader>
+      <form onSubmit={handleSubmit(updateBattlePass)} className=' text-xs flex flex-col gap-2 p-6'>
+
+            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            <label htmlFor="">Season Name</label>
+                <input type="text" placeholder='Season name' className={` input ${errors.seasonname && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('seasonname')} />
+                {errors.seasonname && <p className=' text-[.6em] text-red-500'>{errors.seasonname.message}</p>}
+            </div>
+
+            <div className=' w-full flex  gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+
+                <div className=' flex flex-col gap-1 w-full'>
+                    <label htmlFor="" className=''>Start Date</label>
+                    <input  type="date" placeholder='Start date' className={` input  text-xs `}  {...register('startdate')}/>
+                     {errors.startdate && <p className=' text-[.6em] text-red-500'>{errors.startdate.message}</p>}
+                </div>
+
+                <div className=' flex flex-col gap-1 w-full'>
+                    <label htmlFor="" className=''>End Date</label>
+                    <input  type="date" placeholder='Start date' className={` input  text-xs `}  {...register('enddate')}/>
+                     {errors.enddate && <p className=' text-[.6em] text-red-500'>{errors.enddate.message}</p>}
+                </div>
+
+               
+            </div>
+
+            <div className=' w-full flex  gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+                <div className=' w-full flex flex-col gap-1  '>
+                    <label htmlFor="">Status</label>
+                    <input disabled type="text" placeholder='Status' className={` input ${errors.status && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('status')} />
+                    {errors.status && <p className=' text-[.6em] text-red-500'>{errors.status.message}</p>}
+                </div>
+
+                <div className=' w-full flex flex-col gap-1 '>
+                 <label htmlFor="">Tier Count</label>
+                    <input disabled type="number" placeholder='Tier count' className={` input ${errors.tiercount && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('tiercount', {valueAsNumber: true})} />
+                    {errors.tiercount && <p className=' text-[.6em] text-red-500'>{errors.tiercount.message}</p>}
+                </div>
+            </div>
+
+          
+
+            
+
+            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+                 <label htmlFor="">Premium Cost</label>
+                <input type="text" placeholder='Premium Cost' className={` input ${errors.premcost && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('premcost')} />
+                {errors.premcost && <p className=' text-[.6em] text-red-500'>{errors.premcost.message}</p>}
+            </div>
+
+            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+                 <label htmlFor="">Grand Reward</label>
+                <input disabled type="text" placeholder='Grand Reward' className={` input ${errors.grandreward && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('grandreward')} />
+                {errors.grandreward && <p className=' text-[.6em] text-red-500'>{errors.grandreward.message}</p>}
+            </div>
+
+           
+
+           
+
+
+
+          <div className=' w-full flex items-end justify-end gap-4 mt-6 text-white'>
+            <button disabled={isPending} className=' bg-yellow-500 text-black text-xs px-8 py-2 rounded-md flex items-center justify-center gap-1'>
+              {isPending && <Loader/>}
+              Save</button>
+          </div>
+
+
+         </form>
+    </DialogContent>
+    </Dialog>
+  )
+}
