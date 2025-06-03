@@ -10,10 +10,12 @@ type Reward = {
 
 type DataItem = {
   id: string;
-  code: string;
   status: "active" | "inactive"; // You can expand the possible statuses if needed
   expiration: string; // ISO string for the expiration date
   rewards: Reward;
+  username: string
+  code: string
+  redeemedAt: string
 };
 
 type ApiResponse = {
