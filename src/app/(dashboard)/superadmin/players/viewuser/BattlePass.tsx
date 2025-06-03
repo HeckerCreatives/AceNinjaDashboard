@@ -26,7 +26,7 @@ import useUseridStore from '@/hooks/userid'
 export default function BattlePass() {
   const { characterid} = useCharacterStore()
   const {userid, setUserid} = useUseridStore()
-  const {data, isLoading} = useGetBattlepass(characterid, userid)
+  const {data, isLoading} = useGetBattlepass(0, 1)
 
   return (
     <div className=' w-full flex flex-col gap-8 overflow-hidden p-8'>
