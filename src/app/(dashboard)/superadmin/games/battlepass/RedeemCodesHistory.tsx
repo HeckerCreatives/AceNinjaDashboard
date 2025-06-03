@@ -9,7 +9,6 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import RedeemCards from './RedeemCards'
 import CreateCodesFrom from '@/components/forms/CreateCodesFrom'
 import { useGetRedeemCodes, useGetRedeemCodesHistory } from '@/client_actions/superadmin/redeemcodes'
 import PaginitionComponent from '@/components/common/Pagination'
