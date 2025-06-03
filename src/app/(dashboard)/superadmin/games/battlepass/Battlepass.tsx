@@ -146,7 +146,6 @@ export default function Battlepass() {
                             <UpdateBattlePass seasonname={item.seasonName} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.tierCount} grandreward={item.grandreward.name} id={item.id} />
                         </TableCell>
 
-
                         {/* <TableCell className="text-right flex items-center gap-2">
                             <DeleteRedemCode id={item.id}/>
                             <UpdateRedeemCode code={item.code} emerald={item.rewards.exp} coins={item.rewards.coins} crystal={item.rewards.crystal} expiration={item.expiration} id={item.id}/>
