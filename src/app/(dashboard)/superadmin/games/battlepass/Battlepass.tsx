@@ -143,7 +143,7 @@ export default function Battlepass() {
                       
                         <TableCell className="font-medium">{item.status}</TableCell>
                         <TableCell className="font-medium">
-                            <UpdateBattlePass seasonname={item.seasonName} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.tierCount} grandreward={item.grandreward.name} id={item.id} />
+                            <UpdateBattlePass seasonname={item.seasonName} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.premiumCost} grandreward={item.grandreward.name} id={item.id} />
                         </TableCell>
 
                         {/* <TableCell className="text-right flex items-center gap-2">
