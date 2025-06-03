@@ -17,7 +17,13 @@ export default function Monthlylogin() {
     setCurrentPage(page)
   }
 
-  console.log(data)
+
+function extractNumberFromString(str: any) {
+  const match = str.match(/\d+/);
+  return match ? Number(match[0]) : 0;
+}
+
+
 
   return (
     <div className=' w-full ~p-2/8'>
@@ -31,7 +37,7 @@ export default function Monthlylogin() {
 
             <div className=' w-full -full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] p-6 gap-4'>
                 {data?.data.map((item, index) => (
-                <Monthlylogincard amount={item.amount} type={item.type} day={index + 1} daytype={item.day} />
+                <Monthlylogincard amount={item.amount} type={item.type} day={extractNumberFromString(item.day)} daytype={item.day} />
                 ))}
                 
             </div>
