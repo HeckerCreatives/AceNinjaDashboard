@@ -64,7 +64,7 @@ export default function RedeemCodes() {
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="active">Active</SelectItem>
-                        <SelectItem value="redeemed">Reedemed</SelectItem>
+                        <SelectItem value="expired">Expired</SelectItem>
                         {/* <SelectItem value="unredeemed">Unredeemed</SelectItem> */}
                     </SelectContent>
                     </Select>
