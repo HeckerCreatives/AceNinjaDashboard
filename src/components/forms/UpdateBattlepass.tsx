@@ -34,6 +34,7 @@ type Props ={
     tiercount: number
     premcost: number
     grandreward: string
+    season: number
 }
 
 export default function UpdateBattlePass( prop: Props) {
@@ -56,7 +57,7 @@ export default function UpdateBattlePass( prop: Props) {
     });
 
     const updateBattlePass = async ( data: BattlePassValidations) => {
-     updateBpData({bpid: prop.id, seasonName: data.seasonname, startDate: data.startdate, endDate: data.enddate, status: data.status, tiercount: data.tiercount, premiumCost: data.premcost},{
+     updateBpData({bpid: prop.id, title: data.seasonname, startDate: data.startdate, endDate: data.enddate, status: data.status, tiercount: data.tiercount, premiumCost: data.premcost, season: data.season},{
      onSuccess: () => {
        toast.success(`Battle pass details updated successfully.`);
        setOpen(false)
@@ -77,7 +78,8 @@ export default function UpdateBattlePass( prop: Props) {
                 status: prop.status,
                 tiercount: Number(prop.tiercount),
                 premcost: prop.premcost,
-                grandreward: prop.grandreward
+                grandreward: prop.grandreward,
+                season: prop.season
             })
         }
     },[prop])
@@ -100,9 +102,15 @@ export default function UpdateBattlePass( prop: Props) {
       <form onSubmit={handleSubmit(updateBattlePass)} className=' text-xs flex flex-col gap-2 p-6'>
 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-            <label htmlFor="">Season Name</label>
+            <label htmlFor="">Battle Pass Title</label>
                 <input type="text" placeholder='Season name' className={` input ${errors.seasonname && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('seasonname')} />
                 {errors.seasonname && <p className=' text-[.6em] text-red-500'>{errors.seasonname.message}</p>}
+            </div>
+
+            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+             <label htmlFor="">Season</label>
+                <input type="text" placeholder='Season' className={` input ${errors.season && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('season', {valueAsNumber: true})} />
+                {errors.season && <p className=' text-[.6em] text-red-500'>{errors.season.message}</p>}
             </div>
 
             <div className=' w-full flex  gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>

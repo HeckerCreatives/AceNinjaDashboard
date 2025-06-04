@@ -95,7 +95,8 @@ export default function Battlepass() {
                     )}
                 <TableHeader>
                     <TableRow>
-                    <TableHead className="">Battle Pass</TableHead>
+                    <TableHead className="">Battle Pass Title</TableHead>
+                    <TableHead className="">Season</TableHead>
                     <TableHead className="">Start Date</TableHead>
                     <TableHead className="">End Date</TableHead>
                     <TableHead className="">Premium Cost</TableHead>
@@ -109,7 +110,8 @@ export default function Battlepass() {
                 <TableBody>
                     {data?.data.map((item, index) => (
                         <TableRow>
-                        <TableCell className="font-medium">{item.seasonName}</TableCell>
+                        <TableCell className="font-medium">{item.title}</TableCell>
+                        <TableCell className="font-medium">{item.season}</TableCell>
                         <TableCell className="font-medium">{new Date(item.startDate).toLocaleString()}</TableCell>
                         <TableCell className="font-medium">{new Date(item.endDate).toLocaleString()}</TableCell>
                         <TableCell className="font-medium">{item.premiumCost.toLocaleString()}</TableCell>
@@ -143,7 +145,7 @@ export default function Battlepass() {
                       
                         <TableCell className="font-medium">{item.status}</TableCell>
                         <TableCell className="font-medium">
-                            <UpdateBattlePass seasonname={item.seasonName} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.premiumCost} grandreward={item.grandreward.name} id={item.id} />
+                            <UpdateBattlePass seasonname={item.title} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.premiumCost} grandreward={item.grandreward.name} id={item.id} season={Number(item.season)} />
                         </TableCell>
 
                         {/* <TableCell className="text-right flex items-center gap-2">

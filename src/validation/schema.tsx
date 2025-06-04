@@ -267,13 +267,14 @@ export const storePacksSchema = z.object({
 });
 
 export const battlepassSchema = z.object({
-  seasonname: z.string().min(1, "Season name is required"),
+  seasonname: z.string().min(1, "Battle pass title is required"),
   startdate: z.string().min(1, "Start date is required"),
   enddate: z.string().min(1, "End date is required"),
   status: z.string().min(1, "Status is required"),
   tiercount: z.number().min(1, "Tier count is required"),
   premcost: z.number().min(1, "Premium cost is required"),
   grandreward: z.string().min(1, "Grand reward is required"),
+  season: z.number().min(1, "Season is required"),
 });
 
 export type CreateNewsData = z.infer<typeof createNewsData>

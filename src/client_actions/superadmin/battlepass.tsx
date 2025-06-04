@@ -12,7 +12,8 @@ interface ApiResponse {
 
 interface BattlepassSeason {
   id: string;
-  seasonName: string;
+  title: string;
+  season: number,
   startDate: string;
   endDate: string;
   status: "active" | "inactive" | string;
@@ -116,26 +117,28 @@ export const useUpdateBpTiers = () => {
   });
 };
 
- export const updateBpData = async (bpid: string,  seasonName: string,
+ export const updateBpData = async (bpid: string,  title: string,
     startDate: string,
     endDate: string,
     status: string,
     tiercount: number,
-    premiumCost: number) => { 
-  const response = await axiosInstance.post("/battlepass/editbattlepassdetails", {bpid, seasonName, startDate, endDate, status, tiercount, premiumCost});
+    premiumCost: number,
+  season: number) => { 
+  const response = await axiosInstance.post("/battlepass/editbattlepassdetails", {bpid, title, startDate, endDate, status, tiercount, premiumCost, season});
   return response.data;
 };
 
 export const useUpdateBpData = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ bpid, seasonName, startDate, endDate, status, tiercount, premiumCost }: { bpid: string,  seasonName: string,
+    mutationFn: ({ bpid, title, startDate, endDate, status, tiercount, premiumCost, season }: { bpid: string,  title: string,
     startDate: string,
     endDate: string,
     status: string,
     tiercount: number,
-    premiumCost: number}) =>
-      updateBpData(bpid, seasonName, startDate, endDate, status, tiercount, premiumCost),
+    premiumCost: number,
+  season: number}) =>
+      updateBpData(bpid, title, startDate, endDate, status, tiercount, premiumCost, season),
       onError: (error) => {
           handleApiError(error);
       },
