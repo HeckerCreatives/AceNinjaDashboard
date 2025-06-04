@@ -72,7 +72,7 @@ export default function DailyQuestCard({
     switch (key) {
       case "pvpwins":
         return "PvP Wins";
-      case "enemydefeated":
+      case "enemiesdefeated":
         return "Defeat Enemies";
       case "dailyquests":
         return "Daily Quests";
