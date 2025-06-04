@@ -58,6 +58,22 @@ interface Reward {
 }
 
 
+export interface QuestResponse {
+  message: string
+  data: Quest[]
+}
+
+export interface Quest {
+  id: string
+  missionName: string
+  description: string
+  requirements: Record<string, number>
+  daily: boolean
+  xpReward: number
+  createdAt: string
+}
+
+
 
 export const getBattlePass = async (page: number, limit: number): Promise<ApiResponse> => { 
   const response = await axiosInstance.get(
@@ -144,6 +160,47 @@ export const useUpdateBpData = () => {
       },
       onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["bp"] });
+      }
+  });
+};
+
+
+
+export const getDailyQuest = async (page: number, limit: number): Promise<QuestResponse> => { 
+  const response = await axiosInstance.get(
+    "/quest/getdailyquest",
+    {params: {page, limit}}
+  );
+  return response.data;
+};
+
+
+export const useGetDailyQuest = (page: number, limit: number) => {
+  return useQuery({
+    queryKey: ["dailyquest", page, limit ],
+    queryFn: () => getDailyQuest( page, limit),
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false, 
+    refetchOnWindowFocus: false,
+  });
+};
+
+
+ export const updateDailyQuest = async (id: string, xpReward: number, requirements: any ) => { 
+  const response = await axiosInstance.post("/quest/editdailyquest", {id, xpReward, requirements });
+  return response.data;
+};
+
+export const useUpdateDailyQuest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, xpReward, requirements }: { id: string, xpReward: number, requirements: any }) =>
+      updateDailyQuest(id, xpReward, requirements),
+      onError: (error) => {
+          handleApiError(error);
+      },
+      onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["dailyquest"] });
       }
   });
 };

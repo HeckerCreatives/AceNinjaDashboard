@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Sword, Clock, Trophy, Edit, Save, X } from "lucide-react";
+import { useUpdateDailyQuest } from "@/client_actions/superadmin/battlepass"; // ⚡ Use your API hook!
 
 const REQUIREMENT_TYPES = [
   "pvpwins",
@@ -34,18 +35,16 @@ interface QuestProps {
   id: string;
   missionName: string;
   description: string;
-  type: string
+  type: string;
   xpReward: number;
   requirements: Record<string, number>;
   currentPoints?: number;
   refreshTime?: string;
-  missiontype: string
-  onExpUpdate?: (questId: string, newExp: number) => void;
-  onRequirementsUpdate?: (questId: string, newRequirements: Record<string, number>) => void;
+  missiontype: string;
   isEditable?: boolean;
 }
 
-export default function QuestCard({
+export default function DailyQuestCard({
   id,
   missionName,
   description,
@@ -55,8 +54,6 @@ export default function QuestCard({
   requirements,
   currentPoints = 0,
   refreshTime = new Date(new Date().setHours(24, 0, 0, 0)).toISOString(),
-  onExpUpdate,
-  onRequirementsUpdate,
   isEditable = false,
 }: QuestProps) {
   const [timeRemaining, setTimeRemaining] = useState<string>("");
@@ -66,6 +63,8 @@ export default function QuestCard({
     Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
   );
 
+  const { mutate: updateDailyQuest, isPending: isUpdating } = useUpdateDailyQuest();
+
   const totalRequiredPoints = Object.values(requirements).reduce((a, b) => a + b, 0);
   const progress = Math.min((currentPoints / totalRequiredPoints) * 100, 100);
 
@@ -73,7 +72,7 @@ export default function QuestCard({
     switch (key) {
       case "pvpwins":
         return "PvP Wins";
-      case "enemiesdefeated":
+      case "enemydefeated":
         return "Defeat Enemies";
       case "dailyquests":
         return "Daily Quests";
@@ -140,8 +139,12 @@ export default function QuestCard({
       newRequirements[key] = parseInt(val) || 0;
     }
 
-    if (onExpUpdate) onExpUpdate(id, Math.max(0, newExp));
-    if (onRequirementsUpdate) onRequirementsUpdate(id, newRequirements);
+    // 🔥 Use the mutation to update on the server
+    updateDailyQuest({
+      id,
+      xpReward: Math.max(0, newExp),
+      requirements: newRequirements,
+    });
 
     setIsEditing(false);
   };
@@ -214,6 +217,7 @@ export default function QuestCard({
                   size="sm"
                   onClick={handleSaveClick}
                   className="h-8 w-8 p-0 text-green-600 hover:text-green-700"
+                  disabled={isUpdating}
                 >
                   <Save className="h-4 w-4" />
                 </Button>
@@ -250,16 +254,9 @@ export default function QuestCard({
                   <span className="font-medium text-white">{requiredPoints}</span>
                 )}
               </div>
-              {/* <div className="text-sm text-muted-foreground">
-                {currentPoints} / {requiredPoints}
-              </div> */}
             </div>
           ))}
         </div>
-
-        {/* <Progress value={progress} className="h-2" /> */}
-
-
 
         <div className="flex items-center justify-between text-sm mt-6">
           <div className="flex items-center gap-1">
