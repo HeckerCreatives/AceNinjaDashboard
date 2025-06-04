@@ -30,75 +30,100 @@ export default function Quest() {
     }
   }, [data])
 
-  // Handle EXP update
-  const handleExpUpdate = (questId: string, newExp: number) => {
-    const isDailyTab = tab === 'Daily'
+const handleExpUpdate = (questId: string, newExp: number) => {
+  const currentMissions = tabbp === 'Free' ? freeMissions : premiumMissions;
+  const updatedMissions = currentMissions.map((quest) =>
+    quest._id === questId ? { ...quest, xpReward: newExp } : quest
+  );
 
-    const currentMissions = isDailyTab ? freeMissions : premiumMissions
-    const updatedMissions = currentMissions.map((quest) =>
-      quest._id === questId ? { ...quest, xpReward: newExp } : quest
-    )
-
-    if (isDailyTab) {
-      setFreeMissions(updatedMissions)
-    } else {
-      setPremiumMissions(updatedMissions)
-    }
-
-    const updatePayload = {
-      bpid: data?.data[0].id || '',
-      ...(isDailyTab
-        ? { freeMissions: updatedMissions }
-        : { premiumMissions: updatedMissions }),
-    }
-
-    updateBpMission(updatePayload, {
-      onSuccess: () => {
-        toast.success('Quest updated successfully.')
-      },
-      onError: () => {
-        toast.error('Failed to update quest.')
-      },
-    })
+  if (tabbp === 'Free') {
+    setFreeMissions(updatedMissions);
+  } else {
+    setPremiumMissions(updatedMissions);
   }
 
-  // Handle Requirements update
-  const handleRequirementsUpdate = (
-    questId: string,
-    newRequirements: Record<string, number>
-  ) => {
-    const isDailyTab = tabbp === 'Free'
-
-    const currentMissions = isDailyTab ? freeMissions : premiumMissions
-    const updatedMissions = currentMissions.map((quest) =>
-      quest._id === questId ? { ...quest, requirements: newRequirements } : quest
-    )
-
-    if (isDailyTab) {
-      setFreeMissions(updatedMissions)
-    } else {
-      setPremiumMissions(updatedMissions)
-    }
-
-    const updatePayload = {
-      bpid: data?.data[0].id || '',
-      ...(isDailyTab
-        ? { freeMissions: updatedMissions }
-        : { premiumMissions: updatedMissions }),
-    }
-
-    updateBpMission(updatePayload, {
-      onSuccess: () => {
-        toast.success('Requirements updated successfully.')
+  // API call to update this mission only
+  const updatedQuest = updatedMissions.find((q) => q._id === questId);
+  if (updatedQuest) {
+    updateBpMission(
+      {
+        bpid: data?.data[0].id || '',
+        freeMissions: tabbp === 'Free' ? [updatedQuest] : [],
+        premiumMissions: tabbp === 'Premium' ? [updatedQuest] : [],
       },
-      onError: () => {
-        toast.error('Failed to update requirements.')
-      },
-    })
+      {
+        onSuccess: () => toast.success("Mission updated successfully."),
+        onError: () => toast.error("Failed to update mission."),
+      }
+    );
+  }
+};
+
+const handleRequirementsUpdate = (
+  questId: string,
+  newRequirements: Record<string, number>
+) => {
+  const currentMissions = tabbp === 'Free' ? freeMissions : premiumMissions;
+  const updatedMissions = currentMissions.map((quest) =>
+    quest._id === questId ? { ...quest, requirements: newRequirements } : quest
+  );
+
+  if (tabbp === 'Free') {
+    setFreeMissions(updatedMissions);
+  } else {
+    setPremiumMissions(updatedMissions);
   }
 
+  // API call to update this mission only
+  const updatedQuest = updatedMissions.find((q) => q._id === questId);
+  if (updatedQuest) {
+    updateBpMission(
+      {
+        bpid: data?.data[0].id || '',
+        freeMissions: tabbp === 'Free' ? [updatedQuest] : [],
+        premiumMissions: tabbp === 'Premium' ? [updatedQuest] : [],
+      },
+      {
+        onSuccess: () => toast.success("Mission updated successfully."),
+        onError: () => toast.error("Failed to update mission."),
+      }
+    );
+  }
+};
 
-  console.log(quest)
+const handleMissionUpdate = (
+  questId: string,
+  updates: Partial<{ xpReward: number; requirements: Record<string, number> }>
+) => {
+  const currentMissions = tabbp === 'Free' ? freeMissions : premiumMissions;
+  const updatedMissions = currentMissions.map((quest) =>
+    quest._id === questId ? { ...quest, ...updates } : quest
+  );
+
+  if (tabbp === 'Free') {
+    setFreeMissions(updatedMissions);
+  } else {
+    setPremiumMissions(updatedMissions);
+  }
+
+  const updatedQuest = updatedMissions.find((q) => q._id === questId);
+  if (updatedQuest) {
+    updateBpMission(
+      {
+        bpid: data?.data[0].id || '',
+        freeMissions: tabbp === 'Free' ? [updatedQuest] : [],
+        premiumMissions: tabbp === 'Premium' ? [updatedQuest] : [],
+      },
+      {
+        onSuccess: () => toast.success("Mission updated successfully."),
+        onError: () => toast.error("Failed to update mission."),
+      }
+    );
+  }
+};
+
+
+
 
   return (
     <div className="w-full ~p-2/8">
@@ -146,16 +171,14 @@ export default function Quest() {
                       {freeMissions.map((quest) => (
                         <QuestCard
                           key={quest._id}
-                          id={quest._id}
                           missionName={quest.missionName}
                           description={quest.description}
                           xpReward={quest.xpReward}
                           requirements={quest.requirements}
                           currentPoints={0}
                           type={quest.daily ? 'Daily Quest' : 'Weekly Quest'}
-                          onExpUpdate={handleExpUpdate}
-                          onRequirementsUpdate={handleRequirementsUpdate}
-                          isEditable={true} missiontype={'Free'}                    />
+                           id={quest._id}
+                          isEditable={true} missiontype={'Free'} bpid={data?.data[0].id || ''} missionCategory={'freeMissions'} missiondata={data?.data[0].freeMissions || []}                    />
                       ))}
 
                       
@@ -176,9 +199,10 @@ export default function Quest() {
                           requirements={quest.requirements}
                           currentPoints={0}
                           type={quest.daily ? 'Daily Quest' : 'Weekly Quest'}
-                          onExpUpdate={handleExpUpdate}
-                          onRequirementsUpdate={handleRequirementsUpdate}
-                          isEditable={true} missiontype={'Premium'}                    />
+                          missiondata={data?.data[0].premiumMissions || []}
+                          isEditable={true} missiontype={'Premium'}  
+                          bpid={data?.data[0].id || ''} missionCategory={'premiumMissions'}     
+                          />
                       ))}
 
 

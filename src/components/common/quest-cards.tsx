@@ -14,6 +14,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Sword, Clock, Trophy, Edit, Save, X } from "lucide-react";
+import toast from "react-hot-toast";
+
+// Import your API hook here:
+import { useUpdateBpMission } from "@/client_actions/superadmin/battlepass";
 
 const REQUIREMENT_TYPES = [
   "pvpwins",
@@ -30,34 +34,53 @@ const REQUIREMENT_TYPES = [
   "selfheal",
 ] as const;
 
+interface Mission {
+  missionName: string;
+  description: string;
+  xpReward: number;
+  requirements: {
+    [key: string]: number;
+  };
+  daily: boolean;
+  _id: string;
+}
+
+
 interface QuestProps {
   id: string;
   missionName: string;
   description: string;
-  type: string
+  type: string;
   xpReward: number;
   requirements: Record<string, number>;
   currentPoints?: number;
   refreshTime?: string;
-  missiontype: string
-  onExpUpdate?: (questId: string, newExp: number) => void;
-  onRequirementsUpdate?: (questId: string, newRequirements: Record<string, number>) => void;
+  missiontype: string;
+  missiondata: Mission[]
+  // Remove the following two props since updates are internal:
+  // onExpUpdate?: (questId: string, newExp: number) => void;
+  // onRequirementsUpdate?: (questId: string, newRequirements: Record<string, number>) => void;
   isEditable?: boolean;
+  // **New prop**: Pass the battlepass id to update, needed for API call
+  bpid: string;
+  // **New prop**: Specify if mission is 'freeMissions' or 'premiumMissions' for API
+  missionCategory: "freeMissions" | "premiumMissions";
 }
 
 export default function QuestCard({
   id,
   missionName,
   description,
+  missiondata,
   type,
   xpReward,
   missiontype,
   requirements,
   currentPoints = 0,
   refreshTime = new Date(new Date().setHours(24, 0, 0, 0)).toISOString(),
-  onExpUpdate,
-  onRequirementsUpdate,
   isEditable = false,
+  bpid,
+  missionCategory,
 }: QuestProps) {
   const [timeRemaining, setTimeRemaining] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -66,6 +89,8 @@ export default function QuestCard({
     Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
   );
 
+  const { mutate: updateBpMission } = useUpdateBpMission();
+
   const totalRequiredPoints = Object.values(requirements).reduce((a, b) => a + b, 0);
   const progress = Math.min((currentPoints / totalRequiredPoints) * 100, 100);
 
@@ -73,7 +98,7 @@ export default function QuestCard({
     switch (key) {
       case "pvpwins":
         return "PvP Wins";
-      case "enemiesdefeated":
+      case "enemydefeated":
         return "Defeat Enemies";
       case "dailyquests":
         return "Daily Quests";
@@ -133,18 +158,58 @@ export default function QuestCard({
     );
   };
 
-  const handleSaveClick = () => {
-    const newExp = parseInt(editedExp) || 0;
-    const newRequirements: Record<string, number> = {};
-    for (const [key, val] of Object.entries(editedRequirements)) {
-      newRequirements[key] = parseInt(val) || 0;
-    }
+const handleSaveClick = () => {
+  const newExp = parseInt(editedExp) || 0;
+  const newRequirements: Record<string, number> = {};
+  for (const [key, val] of Object.entries(editedRequirements)) {
+    newRequirements[key] = parseInt(val) || 0;
+  }
 
-    if (onExpUpdate) onExpUpdate(id, Math.max(0, newExp));
-    if (onRequirementsUpdate) onRequirementsUpdate(id, newRequirements);
+  // Find the original mission for full fields
+  const originalMission = missiondata.find((m) => m._id === id);
+  if (!originalMission) {
+    toast.error("Original mission not found.");
+    return;
+  }
 
-    setIsEditing(false);
+  // Build updated mission by merging original and updated fields
+  const updatedMission = {
+    ...originalMission,
+    xpReward: newExp,
+    requirements: newRequirements,
+    daily: type === "Daily Quest" ? true : originalMission.daily,
   };
+
+  // Replace mission in array
+  const updatedMissionData = missiondata.map((mission) =>
+    mission._id === id ? updatedMission : mission
+  );
+
+  // Prepare payload for API
+  const updatePayload = {
+    bpid,
+    [missionCategory]: updatedMissionData,
+  };
+
+  console.log("Payload to send:", updatePayload);
+
+  updateBpMission(updatePayload, {
+    onSuccess: () => {
+      toast.success("Quest updated successfully.");
+      setIsEditing(false);
+      setEditedExp(newExp.toString());
+      setEditedRequirements(
+        Object.fromEntries(Object.entries(newRequirements).map(([k, v]) => [k, v.toString()]))
+      );
+    },
+    onError: () => {
+      toast.error("Failed to update quest.");
+    },
+  });
+};
+
+
+
 
   const handleCancelClick = () => {
     setEditedExp(xpReward.toString());
@@ -250,16 +315,9 @@ export default function QuestCard({
                   <span className="font-medium text-white">{requiredPoints}</span>
                 )}
               </div>
-              {/* <div className="text-sm text-muted-foreground">
-                {currentPoints} / {requiredPoints}
-              </div> */}
             </div>
           ))}
         </div>
-
-        {/* <Progress value={progress} className="h-2" /> */}
-
-
 
         <div className="flex items-center justify-between text-sm mt-6">
           <div className="flex items-center gap-1">
@@ -270,5 +328,5 @@ export default function QuestCard({
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
