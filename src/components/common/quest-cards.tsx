@@ -34,6 +34,7 @@ interface QuestProps {
   id: string;
   missionName: string;
   description: string;
+  type: string
   xpReward: number;
   requirements: Record<string, number>;
   currentPoints?: number;
@@ -47,6 +48,7 @@ export default function QuestCard({
   id,
   missionName,
   description,
+  type,
   xpReward,
   requirements,
   currentPoints = 0,
