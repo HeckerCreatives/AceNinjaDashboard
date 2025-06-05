@@ -40,20 +40,31 @@ type ApiResponse = {
 };
 
 
+interface StoreItem {
+  itemid: string;
+  name: string;
+}
 
-export const getItemsAdmin = async ( type: string, rarity: string, search: string, page: number, limit: number): Promise<ApiResponse> => { 
+interface ResponseStoreItems {
+  message: string;
+  data: StoreItem[];
+}
+
+
+
+export const getItemsAdmin = async ( type: string, rarity: string, search: string, page: number, limit: number,markettype?: string): Promise<ApiResponse> => { 
   const response = await axiosInstance.get(
     "/marketplace/getmarketitemsadmin",
-    {params: {type, rarity, search, page, limit}}
+    {params: {type, rarity, search, page, limit, markettype}}
   );
   return response.data;
 };
 
 
-export const useGetItemsAdmin = ( type: string, rarity: string, search: string, page: number, limit: number) => {
+export const useGetItemsAdmin = ( type: string, rarity: string, search: string, page: number, limit: number,markettype?: string) => {
   return useQuery({
-    queryKey: ["store", type, rarity,search,page,limit ],
-    queryFn: () => getItemsAdmin( type, rarity,search,page,limit),
+    queryKey: ["store", type, rarity,search,page,limit,markettype ],
+    queryFn: () => getItemsAdmin( type, rarity,search,page,limit, markettype),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 
     refetchOnWindowFocus: false,
@@ -96,6 +107,7 @@ export const useDeleteStoreItem = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["store"] });
+            queryClient.invalidateQueries({ queryKey: ["storeitems"] });
         }
     });
 };
@@ -181,10 +193,52 @@ export const useCreatePacksItem = () => {
             handleApiError(error);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["store"] });
+            queryClient.invalidateQueries({ queryKey: ["storeitems"] });
         }
     });
 };
+
+
+export const addStoreItemList = async ( itemid: string, price: number) => { 
+    const response = await axiosInstance.post("/marketplace/addstoreitems", { itemid, price});
+    return response.data;
+};
+ 
+export const useAddStoreItemList = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: ({ itemid, price }: { itemid: string, price: number}) =>
+        addStoreItemList( itemid, price),
+        onError: (error) => {
+            handleApiError(error);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["store"] });
+            queryClient.invalidateQueries({ queryKey: ["storeitems"] });
+        }
+    });
+};
+
+
+export const getStoreItems = async (): Promise<ResponseStoreItems> => { 
+  const response = await axiosInstance.get(
+    "/marketplace/getstoreitemlist",
+    
+  );
+  return response.data;
+};
+
+
+export const useGetStoreItems = () => {
+  return useQuery({
+    queryKey: ["storeitems",],
+    queryFn: () => getStoreItems(),
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false, 
+    refetchOnWindowFocus: false,
+  });
+};
+
 
 
 

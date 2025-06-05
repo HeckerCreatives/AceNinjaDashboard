@@ -98,7 +98,7 @@ interface GrandRewardItem {
 interface BattlepassResponse {
   message: string; // "success" or "error"
   data: {
-    isActive: boolean;
+    hasPremium: boolean;
   };
 }
 

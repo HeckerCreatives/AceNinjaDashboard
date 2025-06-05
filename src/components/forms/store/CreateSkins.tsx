@@ -16,15 +16,15 @@ import { useAddRedeemCode } from '@/client_actions/superadmin/redeemcodes'
 import toast from 'react-hot-toast'
 import { createSeasonsSchema, CreateSeasonsSchema, CreateSkinsItems, storeItemSchema, StoreSchema, storeSkinsSchema } from '@/validation/schema'
 import { useCreateSeason } from '@/client_actions/superadmin/season'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
 import { useCreateSkinsItem, useCreateStoreItem } from '@/client_actions/superadmin/store'
 import Loader from '@/components/common/Loader'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
   
 
 
@@ -88,24 +88,24 @@ export default function CreateSkinsItemsForm() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger className=' bg-yellow-500 text-black px-6 py-2 rounded-md flex items-center w-fit text-xs font-semibold'>
-    <Plus size={15}/>Create
+    <Plus size={15}/>Add Item
     </DialogTrigger>
     <DialogContent className=' max-w-[600px] h-auto border-amber-500/80 border-[1px] overflow-y-auto max-h-[80%]'>
       <DialogHeader className=' w-full bg-light p-3'>
-        <DialogTitle className=' text-sm'>Create Skins Items</DialogTitle>
+        <DialogTitle className=' text-sm'>Add Item</DialogTitle>
         <DialogDescription>
          
         </DialogDescription>
       </DialogHeader>
       <form onSubmit={handleSubmit(createItem)} className=' text-xs flex flex-col gap-2 p-6 '>
 
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            {/* <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Name</label>
             <input type="text" placeholder='Title' className={` input ${errors.name && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('name')} />
             {errors.name && <p className=' text-[.6em] text-red-500'>{errors.name.message}</p>}
-            </div>
+            </div> */}
 
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            {/* <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Rarity</label>
             <Select onValueChange={(value) => setValue("rarity", value, { shouldValidate: true })}>
             <SelectTrigger className="bg-zinc-950 border-none">
@@ -120,15 +120,35 @@ export default function CreateSkinsItemsForm() {
             </SelectContent>
             </Select>
             {errors.rarity && <p className=' text-[.6em] text-red-500'>{errors.rarity.message}</p>}
+            </div> */}
+
+            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+              <label htmlFor="">Item</label>
+              {/* <input type="number" placeholder='Price' className={` input ${errors.price && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('price', {valueAsNumber: true})} /> */}
+              <Select>
+                <SelectTrigger className=" w-full bg-zinc-900 border-none">
+                  <SelectValue placeholder="Select Item" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="light">Light</SelectItem>
+                  <SelectItem value="dark">Dark</SelectItem>
+                  <SelectItem value="system">System</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.price && <p className=' text-[.6em] text-red-500'>{errors.price.message}</p>}
             </div>
 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-            <label htmlFor="">Price</label>
-            <input type="number" placeholder='Price' className={` input ${errors.price && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('price', {valueAsNumber: true})} />
-            {errors.price && <p className=' text-[.6em] text-red-500'>{errors.price.message}</p>}
+              <label htmlFor="">Price</label>
+              <input type="number" placeholder='Price' className={` input ${errors.price && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('price', {valueAsNumber: true})} />
+              {errors.price && <p className=' text-[.6em] text-red-500'>{errors.price.message}</p>}
             </div>
 
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+          
+
+            
+
+            {/* <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Currency</label>
             <Select onValueChange={(value) => setValue("currency", value, { shouldValidate: true })}>
             <SelectTrigger className="bg-zinc-950 border-none">
@@ -137,17 +157,16 @@ export default function CreateSkinsItemsForm() {
             <SelectContent>
                 <SelectItem value="coins">Coins</SelectItem>
                 <SelectItem value="crystal">Crystal</SelectItem>
-                {/* <SelectItem value="crystal">Crystal</SelectItem> */}
             </SelectContent>
             </Select>
             {errors.currency && <p className=' text-[.6em] text-red-500'>{errors.currency.message}</p>}
-            </div>
+            </div> */}
 
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            {/* <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Description</label>
             <textarea placeholder='Description' className={` input ${errors.description && 'border-[1px] h-[150px] focus:outline-none border-red-500'} text-xs `} {...register('description')} />
             {errors.description && <p className=' text-[.6em] text-red-500'>{errors.description.message}</p>}
-            </div>
+            </div> */}
 {/* 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
             <label htmlFor="">Damage</label>
@@ -164,7 +183,7 @@ export default function CreateSkinsItemsForm() {
             <input value={spd} onChange={(e) => setSpd(e.target.valueAsNumber)} type="number" placeholder='Speed' className={` input text-xs `}/>
             </div> */}
 
-            <div className=' w-full p-4 bg-light border-amber-800 border-[1px] rounded-md overflow-hidden mt-2'>
+            {/* <div className=' w-full p-4 bg-light border-amber-800 border-[1px] rounded-md overflow-hidden mt-2'>
                         <label htmlFor="" className=''>Image</label>
             
                         <div className=' w-full aspect-video bg-zinc-900 flex items-center justify-center mt-2 border-2 border-dashed border-zinc-700 rounded-md '>
@@ -196,7 +215,7 @@ export default function CreateSkinsItemsForm() {
             
                       {errors.imageUrl && <p className=' text-[.6em] text-red-500'>{errors.imageUrl.message}</p>}
             
-            </div>
+            </div> */}
 
      
          

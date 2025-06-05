@@ -30,7 +30,7 @@ export default function BattlePass() {
   return (
     <div className=' w-full flex flex-col gap-8 overflow-hidden p-8'>
 
-      {data?.data.isActive ? (
+      {data?.data.hasPremium ? (
          <div className=' w-fit  bg-amber-500 border-4 border-amber-900 p-3 rounded-sm'>
           <div className=' flex items-center justify-center gap-6 bg-yellow-300 p-8 rounded-sm'>
             <img src="/manage/icon.png" alt="battlepass" width={180} />

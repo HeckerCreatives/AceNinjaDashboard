@@ -20,6 +20,8 @@ currency: string
 gender: string
 type: string
 tab: string
+editable: boolean,
+deletable: boolean
 }
 export default function StoreItems(data: Items) {
 
@@ -85,8 +87,13 @@ export default function StoreItems(data: Items) {
                 </div>
             
                 <div className=' flex items-center gap-2'>
-                <DeleteStoreItems id={data.itemid}/>
-                <UpdateStoreItems imgUrl={data.imgUrl} damage={data.damage} defense={data.defense} speed={data.speed} itemid={data.itemid} itemname={data.itemname} itemprice={data.itemprice} rarity={data.rarity} description={data.description} gender={data.gender} currency={data.currency} type={data.type} tab={data.tab}/>
+                  {data.deletable && (
+                    <DeleteStoreItems id={data.itemid}/>
+                  )}
+
+                  {data.editable && (
+                    <UpdateStoreItems imgUrl={data.imgUrl} damage={data.damage} defense={data.defense} speed={data.speed} itemid={data.itemid} itemname={data.itemname} itemprice={data.itemprice} rarity={data.rarity} description={data.description} gender={data.gender} currency={data.currency} type={data.type} tab={data.tab}/>
+                  )}
                 </div>
 
                

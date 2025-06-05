@@ -41,7 +41,6 @@ import CreateChestsItemsForm from '@/components/forms/store/CreateChests'
 import CreateCrystalPacksItemsForm from '@/components/forms/store/CreateCrystalPacks'
 import CreateGoldPacksItemsForm from '@/components/forms/store/CreateGoldPacks'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import AddStoreItemData from '@/components/forms/store/StoreItem'
 
 const types = [
   'weapon', 'outfit', 'hair', 'face', 'eyes'
@@ -72,7 +71,7 @@ export default function Store() {
   const [itemtype, setItemtype] = useState('store')
 
  const filteredData = data
-  ? Object.values(data.data).filter(item => item.currency === 'crystal' || item.currency === 'topupcredit')
+  ? Object.values(data.data).filter(item => item.currency === 'coins')
   : [];
   
 
@@ -122,7 +121,7 @@ export default function Store() {
   return (
     <div className=' w-full flex flex-col gap-8 overflow-hidden p-8'>
 
-      <p className=' text-xl font-semibold'>Store</p>
+      <p className=' text-xl font-semibold'>Market</p>
 
       <div className=' flex items-center whitespace-nowrap overflow-x-auto gap-[1px]'>
           {stores.map((item, index) => (
@@ -138,10 +137,42 @@ export default function Store() {
       <div className=' w-full flex items-center justify-between'>
         <div className=' flex items-center gap-2'>
 
-          
-          <AddStoreItemData/>
+          {/* {tab === 'skins' && (
+            <CreateSkinsItemsForm/>
+          )}
 
-      
+          {tab === 'skills' && (
+            <CreateSkillsItemsForm/>
+          )}
+
+          {tab === 'chests' && (
+            <CreateChestsItemsForm/>
+          )}
+
+          {tab === 'crystalpacks' && (
+            <CreateCrystalPacksItemsForm/>
+          )}
+
+          {tab === 'goldpacks' && (
+            <CreateGoldPacksItemsForm/>
+          )} */}
+
+          {(tab === 'skins' || tab === 'skills' || tab === 'chests') && (
+            <>
+          
+
+          <DropdownMenu>
+            <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'><ListFilter size={15}/>Rarity: {rarity}</DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel className=' text-xs'>Rarity</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {rarities.map((item, index) => (
+              <DropdownMenuItem onClick={() => setRarity(item)} key={index} className=' text-[.7rem] cursor-pointer'>{item === rarity && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+            </>
+          )}
           
 
         </div>
@@ -163,7 +194,7 @@ export default function Store() {
         <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6'>
 
             {Object.values(filteredData).map((item, index) => (
-              <StoreItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description} currency={item.currency} gender={item.gender} type={item.type} tab={tab} editable={false} deletable={deleteState(tab)}/>
+              <StoreItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description} currency={item.currency} gender={item.gender} type={item.type} tab={tab} editable={false} deletable={false}/>
             ))}
         </div>
         </>

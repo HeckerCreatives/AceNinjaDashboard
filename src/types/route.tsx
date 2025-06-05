@@ -33,6 +33,7 @@ export const superadminRoutes = [
           {route:'/superadmin/games/pvp', name: 'PVP', icon: null},
           {route:'/superadmin/games/quest', name: 'Quest', icon: null},
           {route:'/superadmin/games/store', name: 'Store', icon: null},
+          {route:'/superadmin/games/market', name: 'Market', icon: null},
           {route:'/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null},
           {route:'/superadmin/games/battlepass', name: 'Battle Pass', icon: null},
  
