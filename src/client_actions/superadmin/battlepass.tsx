@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 interface ApiResponse {
   message: string;
   data: BattlepassSeason[];
+  grandrewarditems: GrandRewardItem[]
   totalPages: number;
   currentPage: number;
   totalCount: number;
@@ -24,7 +25,7 @@ interface BattlepassSeason {
     type: string
     rarity: string
     description: string
-    id: string
+    _id: string
   },
   createdAt: string;
   updatedAt: string;
@@ -71,6 +72,34 @@ export interface Quest {
   daily: boolean
   xpReward: number
   createdAt: string
+}
+
+interface StatDetails {
+  level: number;
+  damage: number;
+  defense: number;
+  speed: number;
+}
+
+interface GrandRewardItem {
+  id: string;
+  name: string;
+  type: string;      // e.g., "weapon", "skins"
+  rarity: string;    // e.g., "legendary"
+  description: string;
+  imageUrl: string;
+  isEquippable: boolean;
+  isOpenable: boolean;
+  crystals: number;
+  coins: number;
+  stats: StatDetails;
+}
+
+interface BattlepassResponse {
+  message: string; // "success" or "error"
+  data: {
+    isActive: boolean;
+  };
 }
 
 
@@ -139,22 +168,24 @@ export const useUpdateBpTiers = () => {
     status: string,
     tiercount: number,
     premiumCost: number,
-  season: number) => { 
-  const response = await axiosInstance.post("/battlepass/editbattlepassdetails", {bpid, title, startDate, endDate, status, tiercount, premiumCost, season});
+  season: number,
+grandreward: string) => { 
+  const response = await axiosInstance.post("/battlepass/editbattlepassdetails", {bpid, title, startDate, endDate, status, tiercount, premiumCost, season, grandreward});
   return response.data;
 };
 
 export const useUpdateBpData = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ bpid, title, startDate, endDate, status, tiercount, premiumCost, season }: { bpid: string,  title: string,
+    mutationFn: ({ bpid, title, startDate, endDate, status, tiercount, premiumCost, season, grandreward }: { bpid: string,  title: string,
     startDate: string,
     endDate: string,
     status: string,
     tiercount: number,
     premiumCost: number,
-  season: number}) =>
-      updateBpData(bpid, title, startDate, endDate, status, tiercount, premiumCost, season),
+  season: number,
+grandreward: string}) =>
+      updateBpData(bpid, title, startDate, endDate, status, tiercount, premiumCost, season, grandreward),
       onError: (error) => {
           handleApiError(error);
       },
@@ -204,6 +235,27 @@ export const useUpdateDailyQuest = () => {
       }
   });
 };
+
+
+export const getUserBattlePass = async (characterid: string): Promise<BattlepassResponse> => { 
+  const response = await axiosInstance.get(
+    "/battlepass/checkuserbattlepasssa",
+    {params: {characterid}}
+  );
+  return response.data;
+};
+
+
+export const useGetUserBattlepass = (characterid: string) => {
+  return useQuery({
+    queryKey: ["battlepassuser", characterid ],
+    queryFn: () => getUserBattlePass( characterid),
+    // staleTime: 5 * 60 * 1000,
+    // refetchOnMount: false, 
+    // refetchOnWindowFocus: false,
+  });
+};
+
 
 
   

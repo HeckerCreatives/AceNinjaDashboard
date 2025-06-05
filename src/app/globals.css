@@ -10,6 +10,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
 }
 
 @layer base {
@@ -143,4 +147,11 @@ body {
 
 .input-error{
   @apply text-red-600 text-[.6rem]
+}
+
+.bp-shadow{
+  -webkit-text-stroke: 1.5px rgb(88, 43, 0); /* 1px stroke in black */
+
+  /* text shadow */
+  text-shadow: 4px 4px 1px rgba(0, 0, 0, 0.6);
 }

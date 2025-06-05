@@ -37,6 +37,15 @@ interface Skill {
   }
 
 
+  interface BattlepassResponse {
+  message: string; // "success" or "error"
+  data: {
+    isActive: boolean;
+  };
+}
+
+
+
 export const getBattlePass = async (characterid: string): Promise<SkillResponse> => { 
   const response = await axiosInstance.get(
     "/battlepass/getbattlepass",
@@ -48,13 +57,34 @@ export const getBattlePass = async (characterid: string): Promise<SkillResponse>
 
 export const useGetBattlepass = (characterid: string) => {
   return useQuery({
-    queryKey: ["userdata", characterid ],
+    queryKey: ["battlepass", characterid ],
     queryFn: () => getBattlePass(characterid),
-    staleTime: 5 * 60 * 1000,
-    refetchOnMount: false, 
-    refetchOnWindowFocus: false,
+    // staleTime: 5 * 60 * 1000,
+    // refetchOnMount: false, 
+    // refetchOnWindowFocus: false,
   });
 };
+
+
+export const getUserBattlePass = async (characterid: string): Promise<BattlepassResponse> => { 
+  const response = await axiosInstance.get(
+    "/battlepass/checkuserbattlepass",
+    {params: {characterid}}
+  );
+  return response.data;
+};
+
+
+export const useGetUserBattlepass = (characterid: string) => {
+  return useQuery({
+    queryKey: ["battlepassuser", characterid ],
+    queryFn: () => getUserBattlePass( characterid),
+    // staleTime: 5 * 60 * 1000,
+    // refetchOnMount: false, 
+    // refetchOnWindowFocus: false,
+  });
+};
+
   
 
 

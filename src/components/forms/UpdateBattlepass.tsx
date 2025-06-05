@@ -17,6 +17,13 @@ import { useAddRedeemCode, useUpdateRedeemCode } from '@/client_actions/superadm
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
 import { useUpdateBpData } from '@/client_actions/superadmin/battlepass'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 
 
@@ -24,6 +31,8 @@ const tabs = [
   'Image',
   'Video',
 ]
+
+
 
 type Props ={
     id: string
@@ -35,6 +44,28 @@ type Props ={
     premcost: number
     grandreward: string
     season: number
+    rewarditems: GrandRewardItem[]
+}
+
+interface StatDetails {
+  level: number;
+  damage: number;
+  defense: number;
+  speed: number;
+}
+
+interface GrandRewardItem {
+  id: string;
+  name: string;
+  type: string;     
+  rarity: string;   
+  description: string;
+  imageUrl: string;
+  isEquippable: boolean;
+  isOpenable: boolean;
+  crystals: number;
+  coins: number;
+  stats: StatDetails;
 }
 
 export default function UpdateBattlePass( prop: Props) {
@@ -57,7 +88,7 @@ export default function UpdateBattlePass( prop: Props) {
     });
 
     const updateBattlePass = async ( data: BattlePassValidations) => {
-     updateBpData({bpid: prop.id, title: data.seasonname, startDate: data.startdate, endDate: data.enddate, status: data.status, tiercount: data.tiercount, premiumCost: data.premcost, season: data.season},{
+     updateBpData({bpid: prop.id, title: data.seasonname, startDate: data.startdate, endDate: data.enddate, status: data.status, tiercount: data.tiercount, premiumCost: data.premcost, season: data.season, grandreward: data.grandreward},{
      onSuccess: () => {
        toast.success(`Battle pass details updated successfully.`);
        setOpen(false)
@@ -83,6 +114,9 @@ export default function UpdateBattlePass( prop: Props) {
             })
         }
     },[prop])
+
+
+    console.log(prop)
 
  
   
@@ -131,11 +165,11 @@ export default function UpdateBattlePass( prop: Props) {
             </div>
 
             <div className=' w-full flex  gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-                <div className=' w-full flex flex-col gap-1  '>
-                    <label htmlFor="">Status</label>
-                    <input disabled type="text" placeholder='Status' className={` input ${errors.status && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('status')} />
-                    {errors.status && <p className=' text-[.6em] text-red-500'>{errors.status.message}</p>}
-                </div>
+                  <div className='w-full flex flex-col gap-1'>
+                      <label htmlFor="">Premium Cost</label>
+                      <input type="text" placeholder='Premium Cost' className={` input ${errors.premcost && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('premcost')} />
+                      {errors.premcost && <p className=' text-[.6em] text-red-500'>{errors.premcost.message}</p>}
+                  </div>
 
                 <div className=' w-full flex flex-col gap-1 '>
                  <label htmlFor="">Tier Count</label>
@@ -148,17 +182,30 @@ export default function UpdateBattlePass( prop: Props) {
 
             
 
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            {/* <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
                  <label htmlFor="">Premium Cost</label>
                 <input type="text" placeholder='Premium Cost' className={` input ${errors.premcost && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('premcost')} />
                 {errors.premcost && <p className=' text-[.6em] text-red-500'>{errors.premcost.message}</p>}
-            </div>
+            </div> */}
 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
                  <label htmlFor="">Grand Reward</label>
-                <input disabled type="text" placeholder='Grand Reward' className={` input ${errors.grandreward && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('grandreward')} />
+                {/* <input disabled type="text" placeholder='Grand Reward' className={` input ${errors.grandreward && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('grandreward')} /> */}
+                <Select defaultValue={prop.grandreward} onValueChange={(value) => setValue("grandreward", value, { shouldValidate: true })}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Grand Reward" />
+                </SelectTrigger>
+                <SelectContent>
+                  {prop.rewarditems.map((item, index) => (
+                  <SelectItem key={item.id} value={item.id}>{item.name}</SelectItem>
+                  ))}
+                
+                </SelectContent>
+              </Select>
                 {errors.grandreward && <p className=' text-[.6em] text-red-500'>{errors.grandreward.message}</p>}
             </div>
+
+            
 
            
 
