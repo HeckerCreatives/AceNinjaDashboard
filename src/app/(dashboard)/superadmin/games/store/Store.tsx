@@ -71,9 +71,7 @@ export default function Store() {
   const {data, isLoading} = useGetItemsAdmin( tab,`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10, 'store')
   const [itemtype, setItemtype] = useState('store')
 
- const filteredData = data
-  ? Object.values(data.data).filter(item => item.currency === 'crystal' || item.currency === 'topupcredit')
-  : [];
+
   
 
   //paginition
@@ -138,7 +136,7 @@ export default function Store() {
       <div className=' w-full flex items-center justify-between'>
         <div className=' flex items-center gap-2'>
 
-          
+
           <AddStoreItemData/>
 
       
@@ -162,7 +160,7 @@ export default function Store() {
         <>
         <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6'>
 
-            {Object.values(filteredData).map((item, index) => (
+            {Object.values(data?.data || {}).map((item, index) => (
               <StoreItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description} currency={item.currency} gender={item.gender} type={item.type} tab={tab} editable={false} deletable={deleteState(tab)}/>
             ))}
         </div>
