@@ -17,6 +17,7 @@ import Loader from '../common/Loader'
 import DeleteStoreItems from '../forms/DeleteStoreItems'
 import { useDeleteStoreItem } from '@/client_actions/superadmin/store'
 import UpdateStoreItems from '../forms/UpdateStoreItem'
+import { currencyImg } from '@/utils/findAsset'
   
 
 type Items = {
@@ -97,7 +98,7 @@ export default function GrantCard(data: Items) {
             <div className=' flex '>
                 <div className=' flex flex-col w-full gap-1'>
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
-                    <p className=' text-sm font-semibold'>{data.itemprice.toLocaleString()}</p>
+                   <p className=' text-sm font-semibold flex items-center gap-2'>{currencyImg(data.currency)}{data.itemprice.toLocaleString()}</p>
                 </div>
             
             </div>
