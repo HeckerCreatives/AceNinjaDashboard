@@ -67,7 +67,7 @@ export default function Store() {
   const [totalpage, setTotalpage] = useState(0)
   const [rarity, setRarity] = useState('all')
   const [search, setSearch] = useState('')
-  const {data, isLoading} = useGetItemsAdmin( tab,`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10, 'store')
+  const {data, isLoading} = useGetItemsAdmin( tab,`${rarity !== 'all' ? rarity : ''}`,search,currentPage,10, 'market')
   const [itemtype, setItemtype] = useState('store')
 
  const filteredData = data
