@@ -103,6 +103,7 @@ export default function Battlepass() {
                     <TableHead className="">Free Missions</TableHead>
                     <TableHead className="">Premium Missions</TableHead>
                     <TableHead className="">Tiers</TableHead>
+                    <TableHead className="">Grand Reward</TableHead>
                     <TableHead className="">Status</TableHead>
                     <TableHead className="">Action</TableHead>
                     </TableRow>
@@ -143,6 +144,11 @@ export default function Battlepass() {
                             </Dialog>
                         </TableCell>
                       
+                        <TableCell className="font-medium">
+                            <p className=' text-sm text-yellow-500'>Name: {item.grandreward.name}</p>
+                            <p className=' text-xs text-zinc-300'>Type: {item.grandreward.type}</p>
+                            <p className=' text-xs text-zinc-300'>Rarity: {item.grandreward.rarity}</p>
+                        </TableCell>
                         <TableCell className="font-medium">{item.status}</TableCell>
                         <TableCell className="font-medium">
                             <UpdateBattlePass seasonname={item.title} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.premiumCost} grandreward={item.grandreward._id} id={item.id} season={Number(item.season)} rewarditems={data.grandrewarditems} />
