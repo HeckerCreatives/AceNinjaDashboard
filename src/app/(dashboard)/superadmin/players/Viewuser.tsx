@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Boxes, Check, Eye, Menu, Navigation, ShoppingBag, Ticket, Users } from 'lucide-react'
+import { Boxes, Check, Eye, List, Menu, Navigation, ShoppingBag, Ticket, Users } from 'lucide-react'
 import { GiWhirlpoolShuriken } from "react-icons/gi";
 import { TbSwords } from "react-icons/tb";
 import { PiPath } from "react-icons/pi";
@@ -31,6 +31,7 @@ import {
 import useCharacterStore from '@/hooks/character';
 import { useGetCharacters } from '@/client_actions/superadmin/dashboard';
 import useCharacterNameStore from '@/hooks/characterUsername';
+import TransactionHsitory from './viewuser/TransactionHsitory';
   
 
 const viewnavigation = [
@@ -41,6 +42,7 @@ const viewnavigation = [
     {name: 'Skills', path: 'skills' , icon: <GiWhirlpoolShuriken size={20}/>},
     {name: 'Battle Pass', path: 'bp' , icon: <Ticket size={20}/>},
     {name: 'Friends', path: 'friends' , icon: <Users size={20}/>},
+    {name: 'Transaction History', path: 'history' , icon: <List size={20}/>},
 ]
 
 type Characters = {
@@ -221,6 +223,10 @@ export default function Viewuser( data: Props) {
 
                 {tab === 'purchase' && (
                     <Purchase/>
+                )}
+
+                 {tab === 'history' && (
+                    <TransactionHsitory/>
                 )}
 
                
