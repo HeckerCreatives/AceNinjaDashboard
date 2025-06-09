@@ -51,6 +51,25 @@ interface ResponseStoreItems {
 }
 
 
+interface ItemAll {
+  itemid: string;
+  name: string;
+  price: number;
+  currency: string;
+  type: string;
+  inventorytype: string;
+}
+
+interface Data {
+  items: ItemAll[];
+}
+
+interface ListAllItem {
+  message: string;
+  data: Data;
+}
+
+
 
 export const getItemsAdmin = async ( type: string, rarity: string, search: string, page: number, limit: number,markettype?: string): Promise<ApiResponse> => { 
   const response = await axiosInstance.get(
@@ -238,6 +257,26 @@ export const useGetStoreItems = () => {
     refetchOnWindowFocus: false,
   });
 };
+
+
+export const getAllItems = async ( ): Promise<ListAllItem> => { 
+  const response = await axiosInstance.get(
+    "/marketplace/getallitems?limit=99999",
+  );
+  return response.data;
+};
+
+
+export const useGetAllItems = () => {
+  return useQuery({
+    queryKey: ["store"],
+    queryFn: () => getAllItems( ),
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false, 
+    refetchOnWindowFocus: false,
+  });
+};
+
 
 
 

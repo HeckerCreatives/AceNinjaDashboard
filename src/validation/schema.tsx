@@ -282,6 +282,12 @@ export const addStoreItemSchema = z.object({
   amount: z.number().min(1,"Amount is required")
 });
 
+export const createShowcaseSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  itemid: z.string().min(1, "Item is required"),
+  itemtype: z.string().min(1, "Item type is required"),
+});
+
 
 export type CreateNewsData = z.infer<typeof createNewsData>
 export type CreateAnnouncementData = z.infer<typeof createAnnouncementDataSchema>
@@ -303,3 +309,4 @@ export type UpdateSkinsItems = z.infer<typeof updateSkinsSchema>
 export type StorePacksItems = z.infer<typeof storePacksSchema>
 export type BattlePassValidations = z.infer<typeof battlepassSchema>
 export type AddStoreItem = z.infer<typeof addStoreItemSchema>
+export type CreateShowcaseItem = z.infer<typeof createShowcaseSchema>

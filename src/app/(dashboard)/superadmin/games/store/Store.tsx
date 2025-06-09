@@ -136,8 +136,11 @@ export default function Store() {
       <div className=' w-full flex items-center justify-between'>
         <div className=' flex items-center gap-2'>
 
-
+          {tab === 'skins' && (
           <AddStoreItemData/>
+          )}
+
+
 
       
           

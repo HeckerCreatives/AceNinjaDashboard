@@ -36,6 +36,7 @@ export const superadminRoutes = [
           {route:'/superadmin/games/market', name: 'Market', icon: null},
           {route:'/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null},
           {route:'/superadmin/games/battlepass', name: 'Battle Pass', icon: null},
+          {route:'/superadmin/games/news', name: 'News & Showcase', icon: null},
  
       ] },
 
@@ -70,5 +71,5 @@ export const userRoutes = [
     {name: 'Battle Pass', path: '/user/bp' , icon: <Ticket size={20}/>},
     {name: 'Friends', path: '/user/friends' , icon: <Users size={20}/>},
     {name: 'Marketplace', path: '/user/purchase' , icon: <ShoppingBag size={20}/>},
-    // {name: 'Top Up', path: '/user/topup' , icon: <FaMoneyBill size={20}/>},
+    {name: 'Top Up', path: '/user/topup' , icon: <FaMoneyBill size={20}/>},
 ]
