@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import {
     Table,
     TableBody,
@@ -20,17 +21,19 @@ import {
 import useCharacterStore from '@/hooks/character'
 import { useGetBattlepass, useGetUserBattlepass } from '@/client_actions/superadmin/battlepass'
 import useUseridStore from '@/hooks/userid'
+import TopupHistory from './history/TopupHistory'
 
   
 
 export default function TransactionHsitory() {
   const { characterid} = useCharacterStore()
+  const [tab, setTab] = useState('Topup')
 
 
   return (
     <div className=' w-full flex flex-col gap-8 overflow-hidden p-8'>
 
-        <Select>
+        <Select value={tab} onValueChange={setTab}>
         <SelectTrigger className="w-fit">
             <SelectValue placeholder="Select type" />
         </SelectTrigger>
@@ -45,21 +48,11 @@ export default function TransactionHsitory() {
         </SelectContent>
         </Select>
 
-         <Table className=' text-xs'>
-               
-                <TableHeader>
-                    <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead className="">Status</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                
-                    
-                </TableBody>
-                </Table>
+        {tab === 'Topup' && (
+          <TopupHistory/>
+        )}
 
+      
 
     </div>
   )
