@@ -12,7 +12,7 @@ export default function page() {
                           <p className=' text-lg font-semibold'>Topup</p>
                       </div>
 
-                      <div className=' w-full grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6 p-6'>
+                      <div className=' w-full grid grid-cols-1 lg:grid-cols-[700px_1fr] gap-6 p-6'>
                       {/* <div className=' w-full max-w-[400px] bg-amber-950 h-fit rounded-md flex flex-col gap-6 items-center justify-center py-12 border-[1px] border-amber-900'>
                         <div className=' p-4 bg-zinc-950 rounded-md'>
                           <img src="/paypal.png" alt="" width={250} height={250} />

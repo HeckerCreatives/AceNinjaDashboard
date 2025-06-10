@@ -3,6 +3,10 @@
 import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import toast from "react-hot-toast"
+import { useUserData } from "@/client_actions/user/dashboard/dashboard"
+import useCharacterStore from "@/hooks/character"
+import { useCompleteOrder, useGetTopupItems } from "@/client_actions/user/topup"
 
 declare global {
   interface Window {
@@ -10,18 +14,16 @@ declare global {
   }
 }
 
-const amounts = [
-  { value: "10", label: "$10", description: "For 10 credits" },
-  { value: "20", label: "$20", description: "For 20 credits" },
-  { value: "50", label: "$50", description: "For 50 credits" },
-  { value: "100", label: "$100", description: "For 100 credits" },
-]
-
 export default function PayPalTopUpCard() {
   const [selectedAmount, setSelectedAmount] = useState<string>("")
+  const [selectedItem, setSelectedItem] = useState<string>("")
   const [isPayPalLoaded, setIsPayPalLoaded] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const paypalRef = useRef<HTMLDivElement>(null)
+  const { characterid } = useCharacterStore()
+  const { data, isLoading } = useUserData(characterid)
+  const { data: topupitemsData } = useGetTopupItems(characterid)
+  const { mutate:completeOrder} = useCompleteOrder()
 
   // Load PayPal SDK
   useEffect(() => {
@@ -45,7 +47,6 @@ export default function PayPalTopUpCard() {
   // Render PayPal buttons when amount is selected and SDK is loaded
   useEffect(() => {
     if (isPayPalLoaded && selectedAmount && paypalRef.current && window.paypal) {
-      // Clear previous buttons
       paypalRef.current.innerHTML = ""
 
       window.paypal
@@ -57,8 +58,26 @@ export default function PayPalTopUpCard() {
                   amount: {
                     value: selectedAmount,
                     currency_code: "USD",
+                    breakdown: {
+                      item_total: {
+                        value: selectedAmount,
+                        currency_code: "USD",
+                      },
+                    },
                   },
-                  description: `Top up ${selectedAmount === "10" ? "10" : selectedAmount === "20" ? "20" : selectedAmount === "50" ? "50" : "100"} credits`,
+                  description: `Top up ${selectedAmount} credits`,
+                  items: [
+                    {
+                      name: "Account Top-Up",
+                      description: `Top-up of ${selectedAmount} credits`,
+                      unit_amount: {
+                        value: selectedAmount,
+                        currency_code: "USD",
+                      },
+                      quantity: "1",
+                      category: "DIGITAL_GOODS",
+                    },
+                  ],
                 },
               ],
             })
@@ -68,31 +87,29 @@ export default function PayPalTopUpCard() {
             try {
               const order = await actions.order.capture()
               console.log("Payment successful:", order)
+              toast.success(`Payment successful! Order ID: ${order.id}`)
 
-              // Here you would typically:
-              // 1. Send the order details to your backend
-              // 2. Update user's credit balance
-              // 3. Show success message
+        
+            completeOrder({ orderdata: order, characterid: characterid, itemid: selectedItem },
+              {  onSuccess: () => {
+              },})
 
-              alert(`Payment successful! Order ID: ${order.id}`)
-
-              // Reset the form
               setSelectedAmount("")
             } catch (error) {
               console.error("Payment capture failed:", error)
-              alert("Payment failed. Please try again.")
+              toast.error("Payment failed. Please try again.")
             } finally {
               setIsProcessing(false)
             }
           },
           onError: (err: any) => {
             console.error("PayPal error:", err)
-            alert("An error occurred with PayPal. Please try again.")
+            toast.error("An error occurred with PayPal. Please try again.")
             setIsProcessing(false)
           },
           onCancel: (data: any) => {
             console.log("Payment cancelled:", data)
-            alert("Payment was cancelled.")
+            toast.error("Payment was cancelled.")
             setIsProcessing(false)
           },
           style: {
@@ -113,8 +130,8 @@ export default function PayPalTopUpCard() {
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <Card className="w-full max-w-md shadow-lg border-[1px] border-amber-800">
+    <div className=" w-full flex items-center justify-center">
+      <Card className="w-full  max-w-7xl shadow-lg border-[1px] border-amber-800">
         <CardHeader className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-2">
             <div className="bg-zinc-950 rounded-md">
@@ -122,51 +139,51 @@ export default function PayPalTopUpCard() {
             </div>
           </div>
           <CardTitle className="text-sm font-bold text-gray-400">Top Up Your Account</CardTitle>
-          <p className="text-gray-300 text-xs">Select an amount to topup.</p>
+          <p className="text-gray-300 text-xs">Select a credit pack to top up.</p>
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-2 gap-2">
-            {amounts.map((amount) => (
-              <div key={amount.value} className="relative">
+          <div className="flex flex-col gap-2 w-[50%] h-auto bg-white rounded-lg text-black p-6">
+            <p className="text-xs">Credit Balance</p>
+            <h2 className="text-2xl font-semibold">{(data?.wallet.find((item) => item.type === 'topupcredit')?.amount || 0).toLocaleString()}</h2>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+            {topupitemsData?.data.topupitems.map((item) => (
+              <div key={item.id} className="relative">
                 <input
                   type="radio"
-                  id={amount.value}
+                  id={item.id}
                   name="amount"
-                  value={amount.value}
-                  checked={selectedAmount === amount.value}
-                  onChange={(e) => handleAmountChange(e.target.value)}
+                  value={item.price}
+                  checked={selectedAmount === item.price.toString()}
+                  onChange={(e) => {handleAmountChange(e.target.value), setSelectedItem(item.id)}}
                   className="sr-only"
                   disabled={isProcessing}
                 />
                 <label
-                  htmlFor={amount.value}
-                  className={`flex items-center justify-between p-4 border-1 rounded-lg bg-white cursor-pointer transition-all duration-200 ${
-                    selectedAmount === amount.value
+                  htmlFor={item.id}
+                  className={`flex flex-col gap-1 p-4 border rounded-lg bg-white cursor-pointer transition-all duration-200 ${
+                    selectedAmount === item.price.toString()
                       ? "border-orange-600 bg-orange-50 ring-2 ring-orange-200 shadow-md"
                       : "border-gray-200 hover:border-orange-300 hover:bg-blue-25"
                   } ${isProcessing ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  <div className="flex flex-col">
-                    <span
-                      className={`text-sm font-bold ${
-                        selectedAmount === amount.value ? "text-orange-700" : "text-gray-800"
-                      }`}
-                    >
-                      {amount.label}
-                    </span>
-                    <span
-                      className={`text-[.6rem] ${selectedAmount === amount.value ? "text-orange-600" : "text-gray-500"}`}
-                    >
-                      {amount.description}
-                    </span>
+                  <span className="text-sm font-bold text-gray-800">{item.name}</span>
+                  <span className="text-[.6rem] text-gray-600">{item.description}</span>
+                  <div className="flex justify-between items-center text-xs text-gray-500 mt-1">
+                    <span className=" ">Price: <span className=" text-sm font-bold text-black"> ${item.price}</span></span>
+                    <span>Credits: {item.topupcredit}</span>
                   </div>
+                  {item.bonusEligible && (
+                    <span className="text-[0.6rem] font-bold text-orange-500 mt-1">Bonus Eligible</span>
+                  )}
                   <div
                     className={`w-6 h-6 border-2 rounded-full flex items-center justify-center transition-all duration-200 ${
-                      selectedAmount === amount.value ? "border-orange-600 bg-orange-600" : "border-gray-300"
-                    }`}
+                      selectedAmount === item.price.toString() ? "border-orange-600 bg-orange-600" : "border-gray-300"
+                    } absolute top-2 right-2`}
                   >
-                    {selectedAmount === amount.value && <div className="w-2.5 h-2.5 bg-white rounded-full"></div>}
+                    {selectedAmount === item.price.toString() && <div className="w-2.5 h-2.5 bg-white rounded-full"></div>}
                   </div>
                 </label>
               </div>
@@ -183,7 +200,6 @@ export default function PayPalTopUpCard() {
             </div>
           )}
 
-          {/* PayPal Buttons Container */}
           {selectedAmount && isPayPalLoaded && (
             <div className="space-y-2">
               <div ref={paypalRef} className="paypal-buttons-container"></div>
@@ -202,7 +218,7 @@ export default function PayPalTopUpCard() {
               disabled
               className="w-full bg-gray-400 h-[40px] text-white font-semibold py-3 text-sm cursor-not-allowed"
             >
-              Select Amount to Continue
+              Select Pack to Continue
             </Button>
           )}
         </CardFooter>
