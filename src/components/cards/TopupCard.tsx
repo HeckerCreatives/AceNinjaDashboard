@@ -7,6 +7,7 @@ import toast from "react-hot-toast"
 import { useUserData } from "@/client_actions/user/dashboard/dashboard"
 import useCharacterStore from "@/hooks/character"
 import { useCompleteOrder, useGetTopupItems } from "@/client_actions/user/topup"
+import { Wallet } from "lucide-react"
 
 declare global {
   interface Window {
@@ -17,6 +18,9 @@ declare global {
 export default function PayPalTopUpCard() {
   const [selectedAmount, setSelectedAmount] = useState<string>("")
   const [selectedItem, setSelectedItem] = useState<string>("")
+  const [selectedItemName, setSelectedItemName] = useState<string>("")
+  const [selectedItemDesc, setSelectedItemDesc] = useState<string>("")
+  const [bonusElegible, setBunosEligible] = useState<boolean>(false)
   const [isPayPalLoaded, setIsPayPalLoaded] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const paypalRef = useRef<HTMLDivElement>(null)
@@ -68,8 +72,8 @@ export default function PayPalTopUpCard() {
                   description: `Top up ${selectedAmount} credits`,
                   items: [
                     {
-                      name: "Account Top-Up",
-                      description: `Top-up of ${selectedAmount} credits`,
+                      name: selectedItemName,
+                      description: selectedItemDesc,
                       unit_amount: {
                         value: selectedAmount,
                         currency_code: "USD",
@@ -87,11 +91,12 @@ export default function PayPalTopUpCard() {
             try {
               const order = await actions.order.capture()
               console.log("Payment successful:", order)
-              toast.success(`Payment successful! Order ID: ${order.id}`)
+              // toast.success(`Payment successful! Order ID: ${order.id}`)
 
         
-            completeOrder({ orderdata: order, characterid: characterid, itemid: selectedItem },
+            completeOrder({ orderdata: order, characterid: characterid, itemid: selectedItem, bonusEligible: bonusElegible },
               {  onSuccess: () => {
+                toast.success(`Payment successful! Order: ${selectedItemName}`)
               },})
 
               setSelectedAmount("")
@@ -143,10 +148,16 @@ export default function PayPalTopUpCard() {
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <div className="flex flex-col gap-2 w-[50%] h-auto bg-white rounded-lg text-black p-6">
-            <p className="text-xs">Credit Balance</p>
-            <h2 className="text-2xl font-semibold">{(data?.wallet.find((item) => item.type === 'topupcredit')?.amount || 0).toLocaleString()}</h2>
+          <div className=" flex items-center justify-center w-full">
+             <div className="flex flex-col gap-2 w-full md:w-[50%] h-auto bg-amber-950 rounded-lg text-white border-[1px] border-amber-700 p-6">
+              <p className="text-xs text-amber-50">Credit Balance</p>
+              <div className=" flex items-center gap-2">
+                <Wallet size={30}/>
+                <h2 className="text-2xl font-semibold">{(data?.wallet.find((item) => item.type === 'topupcredit')?.amount || 0).toLocaleString()}</h2>
+              </div>
+            </div>
           </div>
+         
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
             {topupitemsData?.data.topupitems.map((item) => (
@@ -157,7 +168,7 @@ export default function PayPalTopUpCard() {
                   name="amount"
                   value={item.price}
                   checked={selectedAmount === item.price.toString()}
-                  onChange={(e) => {handleAmountChange(e.target.value), setSelectedItem(item.id)}}
+                  onChange={(e) => {handleAmountChange(e.target.value), setSelectedItem(item.id), setBunosEligible(item.bonusEligible), setSelectedItemName(item.name), setSelectedItemDesc(item.description)}}
                   className="sr-only"
                   disabled={isProcessing}
                 />
@@ -172,8 +183,8 @@ export default function PayPalTopUpCard() {
                   <span className="text-sm font-bold text-gray-800">{item.name}</span>
                   <span className="text-[.6rem] text-gray-600">{item.description}</span>
                   <div className="flex justify-between items-center text-xs text-gray-500 mt-1">
-                    <span className=" ">Price: <span className=" text-sm font-bold text-black"> ${item.price}</span></span>
-                    <span>Credits: {item.topupcredit}</span>
+                    <span className=" ">Price: <span className=" text-sm font-bold text-black"> ${item.price.toLocaleString()}</span></span>
+                    <span>Credits: {item.topupcredit.toLocaleString()}</span>
                   </div>
                   {item.bonusEligible && (
                     <span className="text-[0.6rem] font-bold text-orange-500 mt-1">Bonus Eligible</span>
