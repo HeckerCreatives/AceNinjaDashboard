@@ -1,4 +1,4 @@
-import { Box, Boxes, Coins, Gamepad, Gem, Globe, Globe2, Home, LayoutGrid, ShoppingBag, ShoppingBasket, Swords, Ticket, TicketCheck, User, UserRound, Users, UsersRound, Wallet } from "lucide-react";
+import { Box, Boxes, Coins, Gamepad, Gem, Globe, Globe2, Home, LayoutGrid, List, ShoppingBag, ShoppingBasket, Swords, Ticket, TicketCheck, User, UserRound, Users, UsersRound, Wallet } from "lucide-react";
 import { FaBullhorn, FaMoneyBill } from "react-icons/fa";
 import { GiRank1, GiWhirlpoolShuriken } from "react-icons/gi";
 import { GrVmMaintenance } from "react-icons/gr";
@@ -49,6 +49,7 @@ export const superadminRoutes = [
  
       ] },
      {route:'/superadmin/grant', name: 'Grant', icon: <Box size={15}/>, subitems: [] },
+     {route:'/superadmin/topuphistory', name: 'Topup History', icon: <List size={15}/>, subitems: [] },
 
      {route:'/superadmin/', name: 'Website', icon: <Globe2 size={15}/>,
       subitems: [

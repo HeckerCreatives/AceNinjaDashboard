@@ -1,3 +1,4 @@
+import { useDebounce } from "@/hooks/debounce";
 import axiosInstance from "@/lib/axiosInstance";
 import axiosInstanceFormData from "@/lib/axiosInstanceFormData";
 import { handleApiError } from "@/lib/errorHandler";
@@ -41,6 +42,8 @@ interface Transaction {
   status: string;
   items: Item[];
   date: string;
+  characterid: string
+  characterusername: string,
 }
 
 interface TransactionResponse {
@@ -114,6 +117,28 @@ export const useGetTopupHistory = (characterid: string, page: number, limit: num
     // refetchOnWindowFocus: false,
   });
 };
+
+
+  export const getAllTopupHistory = async ( page: number, limit: number, search: string): Promise<TransactionResponse> => { 
+  const response = await axiosInstance.get(
+    "/transaction/getcharactertopuphistorysa",
+    {params: {page, limit, search}}
+  );
+  return response.data;
+};
+
+
+export const useGetAllTopupHistory = ( page: number, limit: number, search: string) => {
+   const debouncedQuery = useDebounce(search, 500);
+  return useQuery({
+    queryKey: ["topuphistoryall", page, limit, debouncedQuery ],
+    queryFn: () => getAllTopupHistory(page, limit, debouncedQuery),
+    // staleTime: 5 * 60 * 1000,
+    // refetchOnMount: false, 
+    // refetchOnWindowFocus: false,
+  });
+};
+
 
 
 

@@ -31,6 +31,18 @@ interface GetCharactersResponse {
   data: Character[];
 }
 
+interface SalesData {
+  websales: number;
+  payinsales: number;
+  totalsales: number;
+}
+
+interface SalesApiResponse {
+  success: boolean;
+  data: SalesData;
+}
+
+
 const getCharacters = async (id: string): Promise<Character[]> => {
   const response = await axiosInstance.get<GetCharactersResponse>("/character/getplayercharactersadmin",
     {params: {id}}
@@ -106,7 +118,26 @@ export const getGraph = async (charttype: string) => {
         refetchOnMount: false, 
         refetchOnWindowFocus: false,
       });
-      };
+  };
+
+
+  export const getSales = async (): Promise<SalesApiResponse> => { 
+      const response = await axiosInstance.get(
+        "/dashboard/gettotalsales",
+      );
+      return response.data
+  };
+    
+    
+    export const useGetSales = () => {
+      return useQuery({
+        queryKey: ["sales"],
+        queryFn: () => getSales(),
+        staleTime: 5 * 60 * 1000,
+        refetchOnMount: false, 
+        refetchOnWindowFocus: false,
+      });
+  };
     
   
 

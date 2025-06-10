@@ -1,5 +1,5 @@
 'use client'
-import { useGetCounts, useGetGraph } from "@/client_actions/superadmin/dashboard";
+import { useGetCounts, useGetGraph, useGetSales } from "@/client_actions/superadmin/dashboard";
 import { useGetCurrentSeason } from "@/client_actions/superadmin/season";
 import Card from "@/components/cards/Card";
 import Barchart from "@/components/charts/Barchart";
@@ -14,6 +14,9 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const {data, isLoading} = useGetCounts()
   const {data: currentSeason} = useGetCurrentSeason()
+  const {data: sales, isLoading: salesLoading} = useGetSales()
+
+  console.log(sales)
 
 
 
@@ -35,8 +38,8 @@ export default function Home() {
         </div>
 
         <div className=' relative z-10 w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-8 bg-[#531414] rounded-md border-[1px] border-amber-900 ~px-2/8 py-2'>
-          <Card name={"Total Sales"} value={999999} isAmount={true} icon={<DollarSign size={20} />} isLoading={false} bg={"bg-[#220909]"} border={false}/>
-          <Card name={"Website Sales"} value={999999} isAmount={true} icon={<LaptopMinimal size={20} />} isLoading={false} bg={"bg-[#220909]"} border={false}/>
+          <Card name={"Total Sales"} value={(sales?.data.websales || 0)} isAmount={true} icon={<DollarSign size={20} />} isLoading={true} bg={"bg-[#220909]"} border={false}/>
+          <Card name={"Website Sales"} value={sales?.data.websales || 0} isAmount={true} icon={<LaptopMinimal size={20} />} isLoading={true} bg={"bg-[#220909]"} border={false}/>
           <Card name={"Playstore / Ios Sales"} value={999999} isAmount={true} icon={<TabletSmartphone size={20} />} isLoading={false} bg={"bg-[#220909]"} border={false}/>
           <Card name={"Steam Sales"} value={999999} isAmount={true} icon={<ArrowUpRight size={20} />} isLoading={false} bg={"bg-[#220909]"} border={false}/>
         </div>
