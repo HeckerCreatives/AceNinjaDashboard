@@ -161,7 +161,7 @@ export default function PayPalTopUpCard() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
             {topupitemsData?.data.topupitems.map((item) => (
-              <div key={item.id} className="relative">
+              <div key={item.id} className="relative ">
                 <input
                   type="radio"
                   id={item.id}
@@ -174,7 +174,7 @@ export default function PayPalTopUpCard() {
                 />
                 <label
                   htmlFor={item.id}
-                  className={`flex flex-col gap-1 p-4 border rounded-lg bg-white cursor-pointer transition-all duration-200 ${
+                  className={`flex flex-col h-full gap-1 p-4 border rounded-lg bg-white cursor-pointer transition-all duration-200 ${
                     selectedAmount === item.price.toString()
                       ? "border-orange-600 bg-orange-50 ring-2 ring-orange-200 shadow-md"
                       : "border-gray-200 hover:border-orange-300 hover:bg-blue-25"
