@@ -26,6 +26,7 @@ import useCharacterNameStore from "@/hooks/characterUsername";
 import useDialogStore from "@/hooks/globals";
 import ChangePasswordUser from "../forms/ChangePassword";
 import usePlayerNameStore from "@/hooks/player";
+import { useUserData } from "@/client_actions/user/dashboard/dashboard";
 
 
 export default function Userlayout({ children }: { children: React.ReactNode }) {
@@ -38,6 +39,7 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
   const { charactername, setCharactername} = useCharacterNameStore()
   const {isOpen, openDialog, closeDialog} = useDialogStore()
   const {playername} = usePlayerNameStore()
+    const { data: chardata } = useUserData(characterid)
 
   //charcter id persist
  useEffect(() => {
@@ -69,7 +71,7 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
               <DropdownMenuTrigger className="lg:block hidden">
                 <div className="flex items-center gap-2">
                   <div className="flex flex-col items-end text-amber-950">
-                    <p className="text-sm font-bold">{playername}</p>
+                    <p className="text-sm font-bold">{chardata?.username}</p>
                     <p className="text-xs">Player</p>
                   </div>
                   <img src="/dashboard/small LOGO.png" alt="user" width={60} height={60} />
