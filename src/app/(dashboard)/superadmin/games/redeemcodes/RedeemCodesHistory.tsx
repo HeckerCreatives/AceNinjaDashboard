@@ -61,6 +61,7 @@ export default function RedeemCodesHistory() {
                     <TableRow>
                     <TableHead>Code</TableHead>
                     <TableHead className="">Reward</TableHead>
+                    <TableHead className="">Item Reward</TableHead>
                     <TableHead className="">Username</TableHead>
                     <TableHead className="">Redeemed at</TableHead>
                     </TableRow>
@@ -75,6 +76,10 @@ export default function RedeemCodesHistory() {
                             <p>Crystal: {item.rewards.crystal}</p>
                             
                         </TableCell>
+                        <TableCell className="font-medium">{item?.itemrewards?.[0]?.name || "No item!"}</TableCell>
+                    
+                      
+
                         <TableCell className="font-medium">{item.username}</TableCell>
                         <TableCell className="font-medium">{new Date(item.redeemedAt).toLocaleString()}</TableCell>
 

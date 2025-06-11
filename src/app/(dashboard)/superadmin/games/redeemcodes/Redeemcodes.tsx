@@ -85,6 +85,7 @@ export default function RedeemCodes() {
                     <TableRow>
                     <TableHead>Code</TableHead>
                     <TableHead className="">Reward</TableHead>
+                    <TableHead className="">Item Reward</TableHead>
                     <TableHead className="">Expiration</TableHead>
                     <TableHead className="">Status</TableHead>
                     <TableHead className="">Action</TableHead>
@@ -100,12 +101,15 @@ export default function RedeemCodes() {
                             <p>Crystal: {item.rewards.crystal}</p>
                             
                         </TableCell>
+                                                <TableCell className="font-medium">{item?.itemrewards?.[0]?.name || "No item!"}</TableCell>
+                        
+
                         <TableCell>{new Date(item.expiration).toLocaleString()}</TableCell>
                         <TableCell className="font-medium">{item.status}</TableCell>
 
                         <TableCell className="text-right flex items-center gap-2">
                             <DeleteRedemCode id={item.id}/>
-                            <UpdateRedeemCode code={item.code} emerald={item.rewards.exp} coins={item.rewards.coins} crystal={item.rewards.crystal} expiration={item.expiration} id={item.id}/>
+                            <UpdateRedeemCode code={item.code} emerald={item.rewards.exp} coins={item.rewards.coins} crystal={item.rewards.crystal} expiration={item.expiration} id={item.id} itemreward={item.itemrewards}/>
                         </TableCell>
                         </TableRow>
                     ))}

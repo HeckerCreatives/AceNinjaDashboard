@@ -16,6 +16,14 @@ import { createCode, CreateCode } from '@/validation/schema'
 import { useAddRedeemCode } from '@/client_actions/superadmin/redeemcodes'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
+import { useGetAllItems } from '@/client_actions/superadmin/store'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 
 
@@ -32,6 +40,9 @@ export default function CreateQuestForm() {
     const [coins, setCoins] = useState(0)
     const [exp, setExp] = useState(0)
     const [crystal, setCrystal] = useState(0)
+    const [itemreward, setItemReward] = useState<string[]>([])
+    const {data, isLoading} = useGetAllItems([])
+    
 
     //create news validation
     const {
@@ -46,7 +57,7 @@ export default function CreateQuestForm() {
     });
 
     const createRedeemcodes = async ( data: CreateCode) => {
-      addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: exp, crystal: crystal}},{
+      addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: exp, crystal: crystal}, itemrewards: itemreward},{
         onSuccess: () => {
           toast.success(`Code created successfully.`);
           setOpen(false)
@@ -59,6 +70,8 @@ export default function CreateQuestForm() {
     useEffect(() => {
         reset()
     },[open])
+
+    console.log(itemreward)
   
 
   return (
@@ -93,6 +106,26 @@ export default function CreateQuestForm() {
               <label htmlFor="" className=''>Crystal</label>
               <input value={crystal} onChange={(e) => setCrystal(e.target.valueAsNumber)} type="number" placeholder='Crystal' className={` input  text-xs `}  />
             </div>
+
+            <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+                      <label htmlFor="">Select Item</label>
+                      <Select 
+                         onValueChange={(value) => {
+                          setItemReward([value]);
+                        }}
+                      >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Item" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {data?.data.items.map((item, index) => (
+                            <SelectItem value={item.itemid}>{item.name}</SelectItem>
+                            ))}
+                            
+                        </SelectContent>
+                        </Select>
+                      
+                    </div>
 
 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>

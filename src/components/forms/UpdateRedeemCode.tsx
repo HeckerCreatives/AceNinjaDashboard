@@ -16,6 +16,15 @@ import { createCode, CreateCode } from '@/validation/schema'
 import { useAddRedeemCode, useUpdateRedeemCode } from '@/client_actions/superadmin/redeemcodes'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useGetAllItems } from '@/client_actions/superadmin/store'
+
 
 
 
@@ -24,6 +33,11 @@ const tabs = [
   'Video',
 ]
 
+type ItemRewards = {
+   _id: string
+  name: string
+}
+
 type Props ={
     code: string
     emerald: number
@@ -31,6 +45,7 @@ type Props ={
     crystal: number
     expiration: string
     id: string
+    itemreward: ItemRewards[]
 }
 
 export default function UpdateRedeemCode( prop: Props) {
@@ -41,6 +56,8 @@ export default function UpdateRedeemCode( prop: Props) {
     const [coins, setCoins] = useState(0)
     const [emerald, setEmerald] = useState(0)
     const [crystal, setCrystal] = useState(0)
+    const [itemreward, setItemReward] = useState<string[]>([])
+    const {data, isLoading} = useGetAllItems([])
 
     //create news validation
     const {
@@ -60,7 +77,7 @@ export default function UpdateRedeemCode( prop: Props) {
 
     //create news
     const createRedeemcodes = async ( data: CreateCode) => {
-        updateRedeemCode({id: prop.id, code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: emerald, crystal: crystal}},{
+        updateRedeemCode({id: prop.id, code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: emerald, crystal: crystal}, itemrewards: itemreward},{
         onSuccess: () => {
           toast.success(`Redeem code updated successfully.`);
           setOpen(false)
@@ -75,13 +92,19 @@ export default function UpdateRedeemCode( prop: Props) {
         reset()
     },[open])
 
-    useEffect(() => {
-        setCoins(prop.coins)
-        setEmerald(prop.emerald)
-        setCrystal(prop.crystal)
-    },[])
+      useEffect(() => {
+      // Initialize coins, emerald, crystal
+      setCoins(prop.coins);
+      setEmerald(prop.emerald);
+      setCrystal(prop.crystal);
 
-    console.log(prop,prop.expiration.split('T')[0])
+      // Initialize item reward to first item's _id (if available)
+      if (prop.itemreward?.length > 0) {
+        setItemReward([prop.itemreward[0]._id]);
+      }
+    }, [prop]);
+
+    console.log(prop)
   
 
   return (
@@ -116,6 +139,25 @@ export default function UpdateRedeemCode( prop: Props) {
               <label htmlFor="" className=''>Crystal</label>
               <input value={crystal} onChange={(e) => setCrystal(e.target.valueAsNumber)} type="number" placeholder='Crystal' className={` input  text-xs `}  />
             </div>
+
+              <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+                      <label htmlFor="">Select Item</label>
+                      <Select 
+                        value={itemreward[0]}
+                        onValueChange={(value) => setItemReward([value])}
+                      >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Item" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {data?.data.items.map((item, index) => (
+                            <SelectItem value={item.itemid}>{item.name}</SelectItem>
+                            ))}
+                            
+                        </SelectContent>
+                        </Select>
+                      
+                    </div>
 
 
             <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
