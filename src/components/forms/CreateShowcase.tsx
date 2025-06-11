@@ -38,7 +38,7 @@ export default function CreateShowcaseForm() {
     const [open, setOpen] = useState(false)
     const [tab, setTab] = useState('Image')
     const {mutate: createShowcaseItem, isPending} = useCreateShowcaseItem()
-    const {data, isLoading} = useGetAllItems(['skills'])
+    const {data, isLoading} = useGetAllItems(['skills','freebie','chests','crystalpacks','goldpacks'])
 
 
   
