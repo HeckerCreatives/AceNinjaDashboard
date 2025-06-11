@@ -42,6 +42,7 @@ export default function CreateQuestForm() {
     const [crystal, setCrystal] = useState(0)
     const [itemreward, setItemReward] = useState<string[]>([])
     const {data, isLoading} = useGetAllItems(['chests','freebie'])
+    const [type, setType] = useState('')
     
 
     //create news validation
@@ -57,7 +58,8 @@ export default function CreateQuestForm() {
     });
 
     const createRedeemcodes = async ( data: CreateCode) => {
-      addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: exp, crystal: crystal}, itemrewards: itemreward},{
+      addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: exp, crystal: crystal}, itemrewards: type === 'skills' ? [] : itemreward,
+    skillsreward: type === 'skills' ? itemreward : []},{
         onSuccess: () => {
           toast.success(`Code created successfully.`);
           setOpen(false)
@@ -112,6 +114,7 @@ export default function CreateQuestForm() {
                       <Select 
                          onValueChange={(value) => {
                           setItemReward([value]);
+                          
                         }}
                       >
                         <SelectTrigger className="w-full">
@@ -119,7 +122,7 @@ export default function CreateQuestForm() {
                         </SelectTrigger>
                         <SelectContent>
                             {data?.data.items.map((item, index) => (
-                            <SelectItem value={item.itemid}>{item.name}</SelectItem>
+                            <SelectItem onClick={() => setType(item.type)} value={item.itemid}>{item.name}</SelectItem>
                             ))}
                             
                         </SelectContent>

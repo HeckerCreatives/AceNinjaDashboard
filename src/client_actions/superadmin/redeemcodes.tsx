@@ -11,6 +11,7 @@ type Reward = {
 type ItemRewards = {
    _id: string
   name: string
+  type: string
 }
 
 type DataItem = {
@@ -97,16 +98,16 @@ export const useGetRedeemCodesAnalytics = () => {
 };
 
 
- export const addRedeemCode = async ( code: string, status: string, expiry: string, rewards: {coins: number, exp: number, crystal: number}, itemrewards: string []) => { 
-     const response = await axiosInstance.post("/redeemcode/createcode", {  code, status, expiry, rewards, itemrewards });
+ export const addRedeemCode = async ( code: string, status: string, expiry: string, rewards: {coins: number, exp: number, crystal: number}, itemrewards?: string [], skillsreward?: string[]) => { 
+     const response = await axiosInstance.post("/redeemcode/createcode", {  code, status, expiry, rewards, itemrewards, skillsreward });
      return response.data;
  };
   
  export const useAddRedeemCode = () => {
      const queryClient = useQueryClient();
      return useMutation({
-       mutationFn: ({ code, status, expiry, rewards, itemrewards }: {  code: string, status: string, expiry: string, rewards: {coins: number, exp: number, crystal: number},itemrewards: string []}) =>
-        addRedeemCode(code, status, expiry, rewards, itemrewards),
+       mutationFn: ({ code, status, expiry, rewards, itemrewards, skillsreward }: {  code: string, status: string, expiry: string, rewards: {coins: number, exp: number, crystal: number},itemrewards?: string [],skillsreward?: string[]}) =>
+        addRedeemCode(code, status, expiry, rewards, itemrewards, skillsreward),
          onError: (error) => {
              handleApiError(error);
          },
@@ -138,16 +139,16 @@ export const useGetRedeemCodesAnalytics = () => {
  };
 
 
- export const updateRedeemCode = async (id: string, code: string, status: string, expiry: string, rewards: {coins: number, exp: number, crystal: number},itemrewards: string []) => { 
-  const response = await axiosInstance.post("/redeemcode/updatecode", { id, code, status, expiry, rewards, itemrewards });
+ export const updateRedeemCode = async (id: string, code: string, status: string, expiry: string, rewards: {coins: number, exp: number, crystal: number},itemrewards: string [],skillsreward?: string[]) => { 
+  const response = await axiosInstance.post("/redeemcode/updatecode", { id, code, status, expiry, rewards, itemrewards, skillsreward });
   return response.data;
 };
 
 export const useUpdateRedeemCode = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, code, status, expiry, rewards, itemrewards }: { id: string,  code: string, status: string, expiry: string, rewards: {coins: number, exp: number, crystal: number},itemrewards: string []}) =>
-      updateRedeemCode(id, code, status, expiry, rewards, itemrewards),
+    mutationFn: ({ id, code, status, expiry, rewards, itemrewards, skillsreward}: { id: string,  code: string, status: string, expiry: string, rewards: {coins: number, exp: number, crystal: number},itemrewards: string [], skillsreward?: string[]}) =>
+      updateRedeemCode(id, code, status, expiry, rewards, itemrewards, skillsreward),
       onError: (error) => {
           handleApiError(error);
       },

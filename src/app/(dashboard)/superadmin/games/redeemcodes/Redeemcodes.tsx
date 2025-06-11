@@ -109,7 +109,7 @@ export default function RedeemCodes() {
 
                         <TableCell className="text-right flex items-center gap-2">
                             <DeleteRedemCode id={item.id}/>
-                            <UpdateRedeemCode code={item.code} emerald={item.rewards.exp} coins={item.rewards.coins} crystal={item.rewards.crystal} expiration={item.expiration} id={item.id} itemreward={item.itemrewards}/>
+                            <UpdateRedeemCode code={item.code} emerald={item.rewards.exp} coins={item.rewards.coins} crystal={item.rewards.crystal} expiration={item.expiration} id={item.id} itemreward={item.itemrewards} type={item.itemrewards[0]?.type}/>
                         </TableCell>
                         </TableRow>
                     ))}

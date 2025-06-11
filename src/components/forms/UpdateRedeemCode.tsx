@@ -46,6 +46,7 @@ type Props ={
     expiration: string
     id: string
     itemreward: ItemRewards[]
+    type:string
 }
 
 export default function UpdateRedeemCode( prop: Props) {
@@ -58,6 +59,8 @@ export default function UpdateRedeemCode( prop: Props) {
     const [crystal, setCrystal] = useState(0)
     const [itemreward, setItemReward] = useState<string[]>([])
     const {data, isLoading} = useGetAllItems(['chests','freebie'])
+        const [type, setType] = useState('')
+    
 
     //create news validation
     const {
@@ -77,7 +80,9 @@ export default function UpdateRedeemCode( prop: Props) {
 
     //create news
     const createRedeemcodes = async ( data: CreateCode) => {
-        updateRedeemCode({id: prop.id, code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: emerald, crystal: crystal}, itemrewards: itemreward},{
+      
+        updateRedeemCode({id: prop.id, code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: emerald, crystal: crystal}, itemrewards: type === 'skills' ? [] : itemreward,
+    skillsreward: type === 'skills' ? itemreward : []},{
         onSuccess: () => {
           toast.success(`Redeem code updated successfully.`);
           setOpen(false)
@@ -105,6 +110,10 @@ export default function UpdateRedeemCode( prop: Props) {
     }, [prop]);
 
     console.log(prop)
+
+    useEffect(() => {
+      setType(prop.type)
+    },[])
   
 
   return (
@@ -151,7 +160,7 @@ export default function UpdateRedeemCode( prop: Props) {
                         </SelectTrigger>
                         <SelectContent>
                             {data?.data.items.map((item, index) => (
-                            <SelectItem value={item.itemid}>{item.name}</SelectItem>
+                            <SelectItem onClick={() => setType(item.type)} value={item.itemid}>{item.name}</SelectItem>
                             ))}
                             
                         </SelectContent>

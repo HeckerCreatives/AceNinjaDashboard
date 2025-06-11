@@ -16,6 +16,7 @@ import { useCreateNews } from '@/client_actions/superadmin/website'
 import { createNewsData, CreateNewsData } from '@/validation/schema'
 import toast from 'react-hot-toast'
 import { Input } from '../ui/input'
+import Loader from '../common/Loader'
 
 
 const tabs = [
@@ -153,7 +154,14 @@ export default function CreateNewsForm() {
 
 
           <div className=' w-full flex items-end justify-end gap-4 mt-6 text-white'>
-            <button className=' bg-yellow-500 text-black text-xs px-8 py-2 rounded-md'>Save</button>
+             <button
+                         type="submit"
+                         disabled={isPending}
+                         className="bg-yellow-500 text-black text-xs px-8 py-2 rounded-md flex items-center justify-center gap-1"
+                       >
+                         {isPending && <Loader />}
+                         Save
+                       </button>
           </div>
 
 
