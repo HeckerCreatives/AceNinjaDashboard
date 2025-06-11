@@ -135,13 +135,13 @@ export default function EditShowcaseForm( prop: Props) {
                 <SelectValue placeholder="Select Item Type" />
             </SelectTrigger>
             <SelectContent>
-           
-                <SelectItem value="skins">Skin</SelectItem>
-                <SelectItem value="skills">Skill</SelectItem>
-                <SelectItem value="goldpacks">Gold Pack</SelectItem>
-                <SelectItem value="crystalpacks">Crystal Pack</SelectItem>
-                <SelectItem value="chests">Chest</SelectItem>
-                <SelectItem value="freebie">Freebie</SelectItem>
+              <SelectItem value="skins">Skin</SelectItem>
+              <SelectItem value="skills">Skills</SelectItem>
+              {/* <SelectItem value="skills">Skill</SelectItem> */}
+              {/* <SelectItem value="goldpacks">Gold Pack</SelectItem>
+              <SelectItem value="crystalpacks">Crystal Pack</SelectItem>
+              <SelectItem value="chests">Chest</SelectItem>
+              <SelectItem value="freebie">Freebie</SelectItem> */}
             </SelectContent>
             </Select>
           {errors.itemtype && <p className=' text-[.6em] text-red-500'>{errors.itemtype.message}</p>}

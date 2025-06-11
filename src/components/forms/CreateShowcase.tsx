@@ -16,7 +16,7 @@ import { useCreateNews } from '@/client_actions/superadmin/website'
 import { createNewsData, CreateNewsData, CreateShowcaseItem, createShowcaseSchema } from '@/validation/schema'
 import toast from 'react-hot-toast'
 import { Input } from '../ui/input'
-import { useGetAllItems, useGetItemsAdmin } from '@/client_actions/superadmin/store'
+import { useGetAllItems, useGetAllSkills, useGetItemsAdmin } from '@/client_actions/superadmin/store'
 import {
   Select,
   SelectContent,
@@ -39,6 +39,7 @@ export default function CreateShowcaseForm() {
     const [tab, setTab] = useState('Image')
     const {mutate: createShowcaseItem, isPending} = useCreateShowcaseItem()
     const {data, isLoading} = useGetAllItems(['skills','freebie','chests','crystalpacks','goldpacks'])
+    const {data: skills} = useGetAllSkills()
 
 
   
@@ -104,6 +105,8 @@ export default function CreateShowcaseForm() {
                 {data?.data.items.map((item, index) => (
                 <SelectItem value={item.itemid}>{item.name}</SelectItem>
                 ))}
+
+              
                 
             </SelectContent>
             </Select>
@@ -119,11 +122,12 @@ export default function CreateShowcaseForm() {
             <SelectContent>
            
                 <SelectItem value="skins">Skin</SelectItem>
+                <SelectItem value="skills">Skills</SelectItem>
                 {/* <SelectItem value="skills">Skill</SelectItem> */}
-                <SelectItem value="goldpacks">Gold Pack</SelectItem>
+                {/* <SelectItem value="goldpacks">Gold Pack</SelectItem>
                 <SelectItem value="crystalpacks">Crystal Pack</SelectItem>
                 <SelectItem value="chests">Chest</SelectItem>
-                <SelectItem value="freebie">Freebie</SelectItem>
+                <SelectItem value="freebie">Freebie</SelectItem> */}
             </SelectContent>
             </Select>
           {errors.itemtype && <p className=' text-[.6em] text-red-500'>{errors.itemtype.message}</p>}

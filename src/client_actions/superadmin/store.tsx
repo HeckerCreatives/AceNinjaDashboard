@@ -279,6 +279,44 @@ export const useGetAllItems = ( excludeType: string[]) => {
 };
 
 
+export const getAllSkills = async ( ): Promise<ListAllItem> => { 
+  const response = await axiosInstance.get(
+    "/marketplace/getskills",
+  );
+  return response.data;
+};
+
+
+export const useGetAllSkills = ( ) => {
+  return useQuery({
+    queryKey: ["skills"],
+    queryFn: () => getAllSkills( ),
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false, 
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const getAllSkins = async ( ): Promise<ListAllItem> => { 
+  const response = await axiosInstance.get(
+    "marketplace/getskinitems",
+  );
+  return response.data;
+};
+
+
+export const useGetAllSkins = ( ) => {
+  return useQuery({
+    queryKey: ["skills"],
+    queryFn: () => getAllSkins( ),
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: false, 
+    refetchOnWindowFocus: false,
+  });
+};
+
+
+
 
 
 
