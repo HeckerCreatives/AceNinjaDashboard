@@ -72,7 +72,7 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
                 <div className="flex items-center gap-2">
                   <div className="flex flex-col items-end text-amber-950">
                     <p className="text-sm font-bold">{chardata?.username}</p>
-                    <p className="text-xs">Player</p>
+                    <p className="text-xs">Character</p>
                   </div>
                   <img src="/dashboard/small LOGO.png" alt="user" width={60} height={60} />
                 </div>
