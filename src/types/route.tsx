@@ -1,4 +1,4 @@
-import { Box, Boxes, Coins, Gamepad, Gem, Globe, Globe2, Home, LayoutGrid, List, ShoppingBag, ShoppingBasket, Swords, Ticket, TicketCheck, User, UserRound, Users, UsersRound, Wallet } from "lucide-react";
+import { Box, Boxes, Coins, Gamepad, Gem, GemIcon, Globe, Globe2, Home, LayoutGrid, List, ShoppingBag, ShoppingBasket, Swords, Ticket, TicketCheck, User, UserRound, Users, UsersRound, Wallet } from "lucide-react";
 import { FaBullhorn, FaMoneyBill } from "react-icons/fa";
 import { GiRank1, GiWhirlpoolShuriken } from "react-icons/gi";
 import { GrVmMaintenance } from "react-icons/gr";
@@ -54,6 +54,7 @@ export const superadminRoutes: SuperadminRoute[] = [
       { route: '/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null, subitems: [] },
       { route: '/superadmin/games/battlepass', name: 'Battle Pass', icon: null, subitems: [] },
       { route: '/superadmin/games/news', name: 'News & Showcase', icon: null, subitems: [] },
+      { route: '/superadmin/games/general', name: 'General', icon: null, subitems: [] },
     ],
   },
   
@@ -69,6 +70,7 @@ export const superadminRoutes: SuperadminRoute[] = [
     ],
   },
   
+//   { route: '/superadmin/freebie', name: 'Freebie', icon: <GemIcon size={15} />, subitems: [] },
   { route: '/superadmin/grant', name: 'Grant', icon: <Box size={15} />, subitems: [] },
   
   { route: '/superadmin/topuphistory', name: 'Topup History', icon: <List size={15} />, subitems: [] },

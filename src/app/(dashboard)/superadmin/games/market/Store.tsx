@@ -55,7 +55,7 @@ const stores = [
   {name: 'Skins', data: "skins"},
   // {name: 'Skills', data: "skills"},
   {name: 'Chests', data: "chests"},
-  {name: 'Freebie', data: "freebie"},
+  // {name: 'Freebie', data: "freebie"},
   // {name: 'Crystal Packs', data: "crystalpacks"},
   // {name: 'Gold Packs', data: "goldpacks"},
 ]
