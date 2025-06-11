@@ -36,9 +36,23 @@ function extractNumberFromString(str: any) {
             </div>
 
             <div className=' w-full -full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] p-6 gap-4'>
-                {data?.data.map((item, index) => (
-                <Monthlylogincard amount={item.amount} type={item.type} day={extractNumberFromString(item.day)} daytype={item.day} />
-                ))}
+              {data?.data.slice(0, -1).map((item, index, array) => {
+                  // If this is the second to last item, change its day to "day25"
+                  const modifiedItem = index === array.length - 1
+                    ? { ...item, day: "day25" }
+                    : item;
+
+                  return (
+                    <Monthlylogincard
+                      key={modifiedItem.id}
+                      amount={modifiedItem.amount}
+                      type={modifiedItem.type}
+                      day={extractNumberFromString(modifiedItem.day)}
+                      daytype={modifiedItem.day}
+                    />
+                  );
+                })}
+
                 
             </div>
 
