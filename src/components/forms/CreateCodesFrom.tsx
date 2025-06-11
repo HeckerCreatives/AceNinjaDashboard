@@ -60,7 +60,7 @@ export default function CreateQuestForm() {
 
     const createRedeemcodes = async ( data: CreateCode) => {
       addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: exp, crystal: crystal}, itemrewards: type === 'skills' ? [] : itemreward,
-    skillsreward: type === 'skills' ? itemreward : []},{
+    skillrewards: type === 'skills' ? itemreward : []},{
         onSuccess: () => {
           toast.success(`Code created successfully.`);
           setOpen(false)

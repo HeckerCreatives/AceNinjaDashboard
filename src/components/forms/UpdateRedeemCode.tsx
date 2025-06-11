@@ -82,7 +82,7 @@ export default function UpdateRedeemCode( prop: Props) {
     const createRedeemcodes = async ( data: CreateCode) => {
       
         updateRedeemCode({id: prop.id, code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: emerald, crystal: crystal}, itemrewards: type === 'skills' ? [] : itemreward,
-    skillsreward: type === 'skills' ? itemreward : []},{
+    skillrewards: type === 'skills' ? itemreward : []},{
         onSuccess: () => {
           toast.success(`Redeem code updated successfully.`);
           setOpen(false)
