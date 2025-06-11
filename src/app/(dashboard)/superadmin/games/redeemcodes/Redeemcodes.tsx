@@ -96,12 +96,12 @@ export default function RedeemCodes() {
                         <TableRow>
                         <TableCell className="font-medium">{item.code}</TableCell>
                         <TableCell>
-                            <p>Coins: {item.rewards.coins}</p>
-                            <p>Exp: {item.rewards.exp}</p>
-                            <p>Crystal: {item.rewards.crystal}</p>
+                            <p>Coins: {item?.rewards?.coins}</p>
+                            <p>Exp: {item?.rewards?.exp}</p>
+                            <p>Crystal: {item?.rewards?.crystal}</p>
                             
                         </TableCell>
-                                                <TableCell className="font-medium">{item?.itemrewards?.[0]?.name || "No item!"}</TableCell>
+                        <TableCell className="font-medium">{(item?.itemrewards?.[0]?.name || item?.skillrewards?.[0]?.name) || "No item!"}</TableCell>
                         
 
                         <TableCell>{new Date(item.expiration).toLocaleString()}</TableCell>

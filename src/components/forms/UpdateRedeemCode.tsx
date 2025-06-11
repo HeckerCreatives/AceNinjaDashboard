@@ -153,7 +153,13 @@ export default function UpdateRedeemCode( prop: Props) {
                       <label htmlFor="">Select Item</label>
                       <Select 
                         value={itemreward[0]}
-                        onValueChange={(value) => setItemReward([value])}
+                        onValueChange={(value) => {setItemReward([value]);
+                           const selectedItem = data?.data.items.find((item) => item.itemid === value);
+                            if (selectedItem) {
+                              setType(selectedItem.type);
+                            }
+
+                        }}
                       >
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select Item" />
@@ -162,6 +168,8 @@ export default function UpdateRedeemCode( prop: Props) {
                             {data?.data.items.map((item, index) => (
                             <SelectItem onClick={() => setType(item.type)} value={item.itemid}>{item.name}</SelectItem>
                             ))}
+
+                            
                             
                         </SelectContent>
                         </Select>

@@ -16,7 +16,7 @@ import { createCode, CreateCode } from '@/validation/schema'
 import { useAddRedeemCode } from '@/client_actions/superadmin/redeemcodes'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
-import { useGetAllItems } from '@/client_actions/superadmin/store'
+import { useGetAllItems, useGetAllSkills } from '@/client_actions/superadmin/store'
 import {
   Select,
   SelectContent,
@@ -43,6 +43,7 @@ export default function CreateQuestForm() {
     const [itemreward, setItemReward] = useState<string[]>([])
     const {data, isLoading} = useGetAllItems(['chests','freebie'])
     const [type, setType] = useState('')
+    const {data: skills} = useGetAllSkills()
     
 
     //create news validation
@@ -73,7 +74,7 @@ export default function CreateQuestForm() {
         reset()
     },[open])
 
-    console.log(itemreward)
+    console.log(skills)
   
 
   return (
@@ -114,7 +115,10 @@ export default function CreateQuestForm() {
                       <Select 
                          onValueChange={(value) => {
                           setItemReward([value]);
-                          
+                            const selectedItem = data?.data.items.find((item) => item.itemid === value);
+                            if (selectedItem) {
+                              setType(selectedItem.type);
+                            }
                         }}
                       >
                         <SelectTrigger className="w-full">
@@ -122,8 +126,10 @@ export default function CreateQuestForm() {
                         </SelectTrigger>
                         <SelectContent>
                             {data?.data.items.map((item, index) => (
-                            <SelectItem onClick={() => setType(item.type)} value={item.itemid}>{item.name}</SelectItem>
+                            <SelectItem  value={item.itemid}>{item.name}</SelectItem>
                             ))}
+
+                            
                             
                         </SelectContent>
                         </Select>

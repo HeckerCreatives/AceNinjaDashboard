@@ -22,6 +22,7 @@ type DataItem = {
   username: string
   code: string
   itemrewards: ItemRewards[]
+  skillrewards: ItemRewards[]
   redeemedAt: string
 };
 
@@ -39,6 +40,7 @@ interface Analytics {
     total: number;
   };
 }
+
 
 
 export const getRedeemcodes = async ( status: string, page: number, limit: number): Promise<ApiResponse> => { 
