@@ -70,10 +70,10 @@ console.log(data)
     </TableBody>
     </Table>
 
-      {data?.data && (
-        <PaginitionComponent currentPage={currentPage} total={totalPage} onPageChange={handlePageChange}/>
-
-        )}
+      {data?.data.length !== 0 && (
+             <PaginitionComponent currentPage={currentPage} total={totalPage} onPageChange={handlePageChange}/>
+     
+             )}
 
 
     </div>

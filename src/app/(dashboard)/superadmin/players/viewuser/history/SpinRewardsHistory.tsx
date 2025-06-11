@@ -12,17 +12,16 @@ import {
 import PaginitionComponent from '@/components/common/Pagination'
 import useCharacterStore from '@/hooks/character'
 import { useGetTopupHistory } from '@/client_actions/superadmin/topup'
+import { useGetUserHistory } from '@/client_actions/superadmin/history'
   
 
 export default function SpinRewardHistory() {
-  const [currentPage, setCurrentPage] = useState(0)
+    const [currentPage, setCurrentPage] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
   const { characterid } = useCharacterStore()
-  const {data, isLoading} = useGetTopupHistory(characterid, currentPage, 10)
+  const {data, isLoading} = useGetUserHistory(characterid, currentPage, 10, 'claim', 'rewards')
 
 
-
-  
   //paginition
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
@@ -30,10 +29,10 @@ export default function SpinRewardHistory() {
 
 
     useEffect(() => {
-    setTotalPage(data?.pagination.totalPages || 0)
-    console.log('pagination',data?.pagination)
+     setTotalPage(data?.pagination.totalPages || 0)
+   },[data])
 
-  },[data])
+console.log(data)
 
 
   return (
@@ -49,31 +48,32 @@ export default function SpinRewardHistory() {
     <TableHeader>
         <TableRow>
         <TableHead className="">Date</TableHead>
-        <TableHead>Order Id</TableHead>
+        {/* <TableHead>Amount</TableHead> */}
+        <TableHead>Description</TableHead>
         <TableHead>Amount</TableHead>
-        <TableHead className="">Item</TableHead>
-        <TableHead className="">Status</TableHead>
+        {/* <TableHead className="">Item</TableHead> */}
+        <TableHead className="">Type</TableHead>
       
         </TableRow>
     </TableHeader>
     <TableBody className=' text-xs'>
       {data?.data.map((item, index) => (
         <TableRow key={item.id}>
-        <TableCell className="">{new Date(item.date).toLocaleString()}</TableCell>
-        <TableCell className="">{item.transactionId}</TableCell>
-        <TableCell className="">${item.amount.toLocaleString()}</TableCell>
-        <TableCell className="">{item.items[0].name}</TableCell>
-        <TableCell className=" text-green-400">{item.status}</TableCell>
+        <TableCell className="">{new Date(item.createdAt).toLocaleString()}</TableCell>
+        <TableCell className="">{item.description}</TableCell>
+        <TableCell className="">{item.amount.toLocaleString()}</TableCell>
+
+        <TableCell className=" text-green-400">{item.type}</TableCell>
         </TableRow>
       ))}
         
     </TableBody>
     </Table>
 
-      {data?.data && (
-        <PaginitionComponent currentPage={currentPage} total={totalPage} onPageChange={handlePageChange}/>
-
-        )}
+      {data?.data.length !== 0 && (
+             <PaginitionComponent currentPage={currentPage} total={totalPage} onPageChange={handlePageChange}/>
+     
+             )}
 
 
     </div>

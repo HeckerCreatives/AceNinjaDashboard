@@ -42,9 +42,9 @@ export const useGetUserHistory = (characterid: string,page: number, limit: numbe
   return useQuery({
     queryKey: ["topup",characterid,page, limit, action, type],
     queryFn: () => getUserHistory(characterid,page, limit, action, type),
-    staleTime: 5 * 60 * 1000,
-    refetchOnMount: false, 
-    refetchOnWindowFocus: false,
+    // staleTime: 5 * 60 * 1000,
+    // refetchOnMount: false, 
+    // refetchOnWindowFocus: false,
   });
 };
 

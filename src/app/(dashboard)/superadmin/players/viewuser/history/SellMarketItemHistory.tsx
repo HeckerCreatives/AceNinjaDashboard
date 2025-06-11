@@ -19,7 +19,7 @@ export default function SellMarketHistory() {
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
   const { characterid } = useCharacterStore()
-  const {data, isLoading} = useGetUserHistory(characterid, currentPage, 10, 'sell', 'market')
+  const {data, isLoading} = useGetUserHistory(characterid, currentPage, 10, '', 'market')
 
 
 
@@ -72,10 +72,10 @@ console.log(data)
     </TableBody>
     </Table>
 
-      {data?.data && (
-        <PaginitionComponent currentPage={currentPage} total={totalPage} onPageChange={handlePageChange}/>
-
-        )}
+     {data?.data.length !== 0 && (
+            <PaginitionComponent currentPage={currentPage} total={totalPage} onPageChange={handlePageChange}/>
+    
+            )}
 
 
     </div>
