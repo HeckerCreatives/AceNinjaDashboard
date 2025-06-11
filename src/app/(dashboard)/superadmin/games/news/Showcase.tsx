@@ -104,11 +104,11 @@ export default function Showcase() {
                         <TableRow key={item.id}>
                       
                         <TableCell>{item.title}</TableCell>
-                        <TableCell>{item.item.name}</TableCell>
+                        <TableCell>{item.item?.name}</TableCell>
                         <TableCell>{item.itemtype}</TableCell>
-                        <TableCell>{item.item.rarity}</TableCell>
+                        <TableCell>{item.item?.rarity}</TableCell>
                         <TableCell className=' flex items-center gap-2'>
-                            <EditShowcaseForm itemid={item.item._id} itemtype={item.itemtype} title={item.title} id={item.id} />
+                            <EditShowcaseForm itemid={item.item?._id} itemtype={item.itemtype} title={item.title} id={item.id} />
                             {/* <EditNewsForm title={item.title} content={item.content} type={item.type} url={item.url} id={item.id}/> */}
                             <Dialog>
                             <DialogTrigger className=' flex items-center gap-1 bg-red-600 p-1 rounded-sm text-xs'>

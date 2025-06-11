@@ -41,7 +41,7 @@ export default function CreateQuestForm() {
     const [exp, setExp] = useState(0)
     const [crystal, setCrystal] = useState(0)
     const [itemreward, setItemReward] = useState<string[]>([])
-    const {data, isLoading} = useGetAllItems(['chests','freebie','crystalpacks','goldpacks'])
+    const {data, isLoading} = useGetAllItems(['chests','freebie'])
     
 
     //create news validation
