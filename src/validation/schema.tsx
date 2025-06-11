@@ -28,7 +28,7 @@ export const createNewsData = z.object({
     z.instanceof(File).refine((file) => file.type.startsWith("image/"), {
       message: "Only image files are allowed (JPEG, PNG, etc.).",
     }),
-    z.string().url("Invalid video URL. Please provide a valid URL."),
+    z.string().url("Please provide an image or video url."),
   ]).optional(), 
 });
 

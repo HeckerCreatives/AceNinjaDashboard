@@ -24,10 +24,18 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
   
-import { ArrowLeft, CircleUser, Home, Menu, User, Users } from 'lucide-react';
+import { ArrowLeft, ChevronRight, CircleUser, Home, Menu, User, Users } from 'lucide-react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { superadminRoutes } from '@/types/route';
-  
+
+
+interface SuperadminRoute {
+  route: string;
+  name: string;
+  icon: JSX.Element | null;
+  subitems: SuperadminRoute[];
+}
+
 
 export default function Superadminlayout({
     children,
@@ -38,9 +46,19 @@ export default function Superadminlayout({
 const path = usePathname()
 const params = useSearchParams()
 
-const matchedRoutes = superadminRoutes
-  .filter((item) => path.includes(item.name.toLowerCase()))
-  .map((item) => item.name);
+
+
+const matchedRoute = superadminRoutes
+  .filter((item) => path.startsWith(item.route))
+  .sort((a, b) => b.route.length - a.route.length)[0];
+
+const matchedSubitem = matchedRoute?.subitems
+  .filter((subitem) => path.startsWith(subitem.route))
+  .sort((a, b) => b.route.length - a.route.length)[0];
+
+
+
+console.log('Text',path, matchedRoute?.route, matchedSubitem?.subitems)
 
   return (
     <div className="flex min-h-screen w-full overflow-hidden">
@@ -121,7 +139,46 @@ const matchedRoutes = superadminRoutes
 
             <div className=' flex items-center gap-4 ml-4'>
               <img src="/logo.png" alt="" width={50} height={50} className=' lg:hidden block' />
-              <p className=' text-amber-950 font-bold text-lg'>Dashboard </p>
+              <div className=' flex flex-wrap items-center text-amber-950'>
+                  <a
+                    href='/superadmin/dashboard'
+                    className=' font-bold text-[.7rem] md:text-sm'
+                  >
+                    Dashboard
+                  </a>
+
+                 {matchedRoute && (
+                    <>
+                      <ChevronRight size={20} />
+                      {matchedRoute.subitems && matchedRoute.subitems.length > 0 ? (
+                        <span className=' font-bold text-[.7rem] md:text-sm'>
+                          {matchedRoute.name}
+                        </span>
+                      ) : (
+                        <a
+                          href={matchedRoute.route}
+                          className=' font-bold text-[.7rem] md:text-sm'
+                        >
+                          {matchedRoute.name}
+                        </a>
+                      )}
+                    </>
+                  )}
+
+
+                  {matchedSubitem && (
+                    <>
+                      <ChevronRight size={20} />
+                      <a
+                        href={matchedSubitem.route}
+                        className=' font-bold text-[.7rem] md:text-sm'
+                      >
+                        {matchedSubitem.name}
+                      </a>
+                    </>
+                  )}
+                </div>
+
             </div>
             <Sheet>
               <SheetTrigger asChild>

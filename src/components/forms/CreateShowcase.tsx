@@ -38,7 +38,7 @@ export default function CreateShowcaseForm() {
     const [open, setOpen] = useState(false)
     const [tab, setTab] = useState('Image')
     const {mutate: createShowcaseItem, isPending} = useCreateShowcaseItem()
-    const {data, isLoading} = useGetAllItems()
+    const {data, isLoading} = useGetAllItems(['skills'])
 
 
   
@@ -119,7 +119,7 @@ export default function CreateShowcaseForm() {
             <SelectContent>
            
                 <SelectItem value="skins">Skin</SelectItem>
-                <SelectItem value="skills">Skill</SelectItem>
+                {/* <SelectItem value="skills">Skill</SelectItem> */}
                 <SelectItem value="goldpacks">Gold Pack</SelectItem>
                 <SelectItem value="crystalpacks">Crystal Pack</SelectItem>
                 <SelectItem value="chests">Chest</SelectItem>

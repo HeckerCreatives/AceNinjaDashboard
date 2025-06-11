@@ -33,11 +33,17 @@ export default function Topup() {
         sendAmount({playerusername: data.username, type: data.currency, amount: data.amount}, {
             onSuccess: () => {
                 toast.success("Sent successfully");
-                reset()
+                 reset({
+                    username: '',
+                    amount: 0,
+                    currency: ''
+                    });
     
               },
            })
     };
+
+    const currency = watch("currency")
 
     return (
         <div className='w-full h-full flex items-center justify-center mt-8'>
@@ -45,9 +51,9 @@ export default function Topup() {
                 <h1>Send</h1>
 
                 {/* Username Input */}
-                <label className='text-xs mt-4'>Username</label>
+                <label className='text-xs mt-4'>Character Name</label>
                 <Input 
-                    placeholder='Username' 
+                    placeholder='Character name' 
                     type='text' 
                     className='border-amber-400 bg-[#4C4106] text-white' 
                     {...register('username')} 
@@ -57,11 +63,10 @@ export default function Topup() {
                 {/* Currency Select */}
                 <label className='text-xs mt-2'>Currency</label>
                 <Select 
+                     value={currency} 
                     onValueChange={(value) => {
                         setValue("currency", value);
-                        trigger("currency"); // Trigger validation
-                    }} 
-                    defaultValue={watch("currency")}
+                    }}
                 >
                     <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select currency" />
@@ -70,7 +75,6 @@ export default function Topup() {
                         <SelectItem value="coins">Coins</SelectItem>
                         <SelectItem value="crystal">Crystal</SelectItem>
                         <SelectItem value="topupcredit">Credit</SelectItem>
-                        {/* <SelectItem value="emerald">Emerald</SelectItem> */}
                     </SelectContent>
                 </Select>
                 {errors.currency && <p className="text-red-500 text-xs">{errors.currency.message}</p>}

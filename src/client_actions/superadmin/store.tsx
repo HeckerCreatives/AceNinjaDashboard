@@ -259,18 +259,19 @@ export const useGetStoreItems = () => {
 };
 
 
-export const getAllItems = async ( ): Promise<ListAllItem> => { 
+export const getAllItems = async ( excludeType: string[]): Promise<ListAllItem> => { 
   const response = await axiosInstance.get(
     "/marketplace/getallitems?limit=99999",
+    {params:{excludeType}}
   );
   return response.data;
 };
 
 
-export const useGetAllItems = () => {
+export const useGetAllItems = ( excludeType: string[]) => {
   return useQuery({
-    queryKey: ["store"],
-    queryFn: () => getAllItems( ),
+    queryKey: ["store",excludeType],
+    queryFn: () => getAllItems(excludeType ),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 
     refetchOnWindowFocus: false,
