@@ -47,7 +47,7 @@ export default function EditShowcaseForm( prop: Props) {
     const [open, setOpen] = useState(false)
     const [tab, setTab] = useState('Image')
     const {mutate: editShowcaseItem, isPending} = useEditShowcaseItem()
-    const {data, isLoading} = useGetAllItems()
+    const {data, isLoading} = useGetAllItems(['skills'])
 
 
   
