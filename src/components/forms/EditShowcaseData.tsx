@@ -27,6 +27,7 @@ import {
 import { useCreateShowcaseItem, useEditShowcaseItem } from '@/client_actions/superadmin/news'
 import { string } from 'zod'
 import { title } from 'process'
+import Loader from '../common/Loader'
 
 
 const tabs = [
@@ -148,7 +149,14 @@ export default function EditShowcaseForm( prop: Props) {
         </div>
 
         <div className=' w-full flex items-end justify-end gap-4 mt-6 text-white'>
-          <button className=' bg-yellow-500 text-black text-xs px-8 py-2 rounded-md'>Save</button>
+          <button
+                                   type="submit"
+                                   disabled={isPending}
+                                   className="bg-yellow-500 text-black text-xs px-8 py-2 rounded-md flex items-center justify-center gap-1"
+                                 >
+                                   {isPending && <Loader />}
+                                   Save
+                                 </button>
         </div>
 
 
