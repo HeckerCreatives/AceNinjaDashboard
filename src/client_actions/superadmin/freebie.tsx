@@ -37,21 +37,21 @@ export const useDailyFreebie = () => {
   });
 };
 
-export const updateDailyFreebie = async ( slot: number, amount: number, type: string, chance: number) => { 
-     const response = await axiosInstance.post("/rewards/editdailyspin", { slot, amount, type, chance});
+export const updateFreebie = async (itemid: string, description: string, amount: number) => { 
+     const response = await axiosInstance.post("/marketplace/editfreebiereward", {itemid, description, amount});
      return response.data;
  };
   
-export const useUpdateDailyFreebie = () => {
+export const useUpdateFreebie = () => {
      const queryClient = useQueryClient();
      return useMutation({
-       mutationFn: ({  slot, amount, type, chance}: {slot: number, amount: number, type: string, chance: number}) =>
-        updateDailyFreebie(   slot, amount, type, chance),
+       mutationFn: ({ itemid, description, amount}: {itemid: string, description: string, amount: number}) =>
+        updateFreebie(  itemid, description, amount),
          onError: (error) => {
              handleApiError(error);
          },
          onSuccess: () => {
-             queryClient.invalidateQueries({ queryKey: ["dailyspin"] });
+             queryClient.invalidateQueries({ queryKey: ["store"] });
          }
      });
 };

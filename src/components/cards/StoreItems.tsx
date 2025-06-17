@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import DeleteStoreItems from '../forms/DeleteStoreItems'
 import UpdateStoreItems from '../forms/UpdateStoreItem'
 import { currencyImg } from '@/utils/findAsset'
+import EditFreebieForm from '../forms/store/EditFreebieData'
   
 
 type Items = {
@@ -25,6 +26,7 @@ deletable: boolean,
 crystal?: number,
 exp?: number,
 coins?: number,
+itemtype?: string
 }
 
 const rarutyFilter = [
@@ -50,6 +52,7 @@ export default function StoreItems(data: Items) {
         }
       }
 
+
      let displayValue = data.itemprice;
       let currencyType = data.currency;
 
@@ -67,13 +70,33 @@ export default function StoreItems(data: Items) {
       }
 
 
+      console.log(data)
+
+      const itemIcon = () => {
+        if(data.itemtype === 'skins'){
+          return '/store/skins.png'
+        } else  if(data.itemtype === 'skills'){
+          return '/store/skills.png'
+        } else if(data.itemtype === 'chest'){
+          return '/store/chest.png'
+        } else if(data.itemtype === 'freebie'){
+          return '/store/freebie.png'
+        } else if(data.itemtype === 'crystalpacks'){
+          return '/store/crystalpack.png'
+        } else if(data.itemtype === 'goldpacks'){
+          return '/store/goldpacks.png'
+        }
+      }
+
+
+
   return (
     <div className=' w-full h-auto flex flex-col'>
-        <div className=' relative w-full h-[300px] bg-zinc-800 flex items-center justify-center'
+        <div className=' relative w-full h-[300px] bg-zinc-800 flex items-center justify-center overflow-hidden'
         // style={{backgroundImage: `url('${data.imgUrl}')`, backgroundRepeat:'no-repeat', backgroundSize:'cover'}}
         >
 
-            <img src={data.imgUrl} alt="item" className=' object-cover w-full h-full opacity-70' />
+            <img src={itemIcon()} alt="item" className=' object-cover h-full opacity-50' />
             <div className=' flex flex-col gap-1 absolute left-2 top-2 p-4'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>
@@ -102,7 +125,7 @@ export default function StoreItems(data: Items) {
             </div>
 
             <div className=' w-full absolute bottom-0 p-4'>
-                <p className=' text-[.7rem] text-zinc-300'>{data.description}</p>
+                <p className=' text-[.7rem] text-zinc-100'>{data.description}</p>
 
             </div>
         </div>
@@ -123,6 +146,10 @@ export default function StoreItems(data: Items) {
 
                   {data.editable && (
                     <UpdateStoreItems imgUrl={data.imgUrl} damage={data.damage} defense={data.defense} speed={data.speed} itemid={data.itemid} itemname={data.itemname} itemprice={data.itemprice} rarity={data.rarity} description={data.description} gender={data.gender} currency={data.currency} type={data.type} tab={data.tab}/>
+                  )}
+
+                   {data.itemtype === 'freebie' && (
+                    <EditFreebieForm itemid={data.itemid} description={data.description} amount={0} exp={data.exp || 0} coins={data.coins || 0} crystal={data.crystal || 0}/>
                   )}
                 </div>
 
