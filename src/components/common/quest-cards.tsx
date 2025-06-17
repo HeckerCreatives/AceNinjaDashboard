@@ -65,6 +65,7 @@ interface QuestProps {
   bpid: string;
   // **New prop**: Specify if mission is 'freeMissions' or 'premiumMissions' for API
   missionCategory: "freeMissions" | "premiumMissions";
+  rewardtype?: string
 }
 
 export default function QuestCard({
@@ -81,6 +82,7 @@ export default function QuestCard({
   isEditable = false,
   bpid,
   missionCategory,
+  rewardtype
 }: QuestProps) {
   const [timeRemaining, setTimeRemaining] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -93,6 +95,7 @@ export default function QuestCard({
 
   const totalRequiredPoints = Object.values(requirements).reduce((a, b) => a + b, 0);
   const progress = Math.min((currentPoints / totalRequiredPoints) * 100, 100);
+  const [editedRewardType, setEditedRewardType] = useState<string>('');
 
 
   const getLabelForRequirement = (key: string) => {
@@ -168,6 +171,7 @@ useEffect(() => {
     setEditedRequirements(
       Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
     );
+    setEditedRewardType(rewardtype || "exp");
   };
 
 const handleSaveClick = () => {
@@ -190,6 +194,7 @@ const handleSaveClick = () => {
     xpReward: newExp,
     requirements: newRequirements,
     daily: type === "Daily Quest" ? true : originalMission.daily,
+    rewardtype: editedRewardType || "exp", // ← ✅ add this line
   };
 
   // Replace mission in array
@@ -239,6 +244,12 @@ const handleSaveClick = () => {
     setEditedRequirements((prev) => ({ ...prev, [key]: value }));
   };
 
+
+  useEffect(() => {
+  setEditedRewardType(rewardtype ?? "exp");
+}, []);
+
+
   return (
     <Card className="w-full max-w-md border-2 hover:shadow-lg bg-amber-950 border-amber-900 transition-shadow">
       <CardHeader className="pb-2">
@@ -268,9 +279,15 @@ const handleSaveClick = () => {
               <Trophy className="h-4 w-4 text-amber-500" />
               {isEditing ? (
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="exp-input" className="text-sm font-medium">
-                    EXP:
-                  </Label>
+                   <select
+                    value={editedRewardType}
+                    onChange={(e) => setEditedRewardType(e.target.value)}
+                   className="bg-amber-900 border border-amber-700 text-white text-sm rounded-md px-2 py-1 h-8"
+                  >
+                    <option value="exp">EXP</option>
+                    <option value="coins">Coins</option>
+                    <option value="crystal">Crystal</option>
+                  </select>
                   <Input
                     id="exp-input"
                     type="number"
@@ -281,7 +298,7 @@ const handleSaveClick = () => {
                   />
                 </div>
               ) : (
-                <span className="font-medium">{xpReward} EXP</span>
+                <span className="font-medium uppercase">{xpReward} {editedRewardType}</span>
               )}
             </div>
             {isEditing && (

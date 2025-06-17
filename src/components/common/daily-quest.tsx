@@ -160,6 +160,7 @@ export default function DailyQuestCard({
       id,
       xpReward: Math.max(0, newExp),
       requirements: newRequirements,
+      rewardtype: editedRewardType || "exp",
     });
 
     setIsEditing(false);
@@ -198,6 +199,11 @@ const handleCancelClick = () => {
   );
   setIsEditing(false);
 };
+
+ useEffect(() => {
+  setEditedRewardType(rewardtype ?? "exp");
+}, []);
+
 
 
 
@@ -254,7 +260,7 @@ const handleCancelClick = () => {
                   />
                 </div>
               ) : (
-                <span className="font-medium">{xpReward} EXP</span>
+                <span className="font-medium uppercase">{xpReward} {editedRewardType}</span>
               )}
             </div>
             {isEditing && (

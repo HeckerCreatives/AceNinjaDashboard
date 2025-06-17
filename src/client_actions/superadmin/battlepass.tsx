@@ -47,6 +47,7 @@ interface Mission {
   };
   daily: boolean;
   _id: string;
+  rewardtype: string
 }
 
 interface Tier {
@@ -76,6 +77,7 @@ export interface Quest {
   daily: boolean
   xpReward: number
   createdAt: string
+  rewardtype: string
 }
 
 interface StatDetails {
@@ -222,16 +224,16 @@ export const useGetDailyQuest = (page: number, limit: number) => {
 };
 
 
- export const updateDailyQuest = async (id: string, xpReward: number, requirements: any ) => { 
-  const response = await axiosInstance.post("/quest/editdailyquest", {id, xpReward, requirements });
+ export const updateDailyQuest = async (id: string, xpReward: number, requirements: any, rewardtype: string ) => { 
+  const response = await axiosInstance.post("/quest/editdailyquest", {id, xpReward, requirements, rewardtype });
   return response.data;
 };
 
 export const useUpdateDailyQuest = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, xpReward, requirements }: { id: string, xpReward: number, requirements: any }) =>
-      updateDailyQuest(id, xpReward, requirements),
+    mutationFn: ({ id, xpReward, requirements, rewardtype }: { id: string, xpReward: number, requirements: any, rewardtype: string }) =>
+      updateDailyQuest(id, xpReward, requirements, rewardtype),
       onError: (error) => {
           handleApiError(error);
       },
