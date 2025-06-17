@@ -115,19 +115,35 @@ export default function UpdateBattlePass( prop: Props) {
     },[open])
 
     useEffect(() => {
-        if(prop){
-            reset({
-                seasonname: prop.seasonname,
-                startdate: prop.start.split('T')[0],
-                enddate: prop.end.split('T')[0],
-                status: prop.status,
-                tiercount: Number(prop.tiercount),
-                premcost: prop.premcost,
-                // grandreward: prop.grandreward,
-                season: prop.season
-            })
+      if (prop && open) {
+        reset({
+          seasonname: prop.seasonname,
+          startdate: prop.start.split('T')[0],
+          enddate: prop.end.split('T')[0],
+          status: prop.status,
+          tiercount: Number(prop.tiercount),
+          premcost: prop.premcost,
+          season: prop.season
+        });
+
+        setFilter(prop.itemtype); // outfit or weapon
+        const items = prop.items;
+
+        if (prop.itemtype === 'weapon') {
+          if (items.length > 0) {
+            setItem(items[0].itemid);
+            setItemlist([items[0].itemid]);
+          }
+        } else if (prop.itemtype === 'outfit') {
+          // male = items[0], female = items[1]
+          const [maleItem, femaleItem] = items;
+          setMale(maleItem?.itemid || '');
+          setFemale(femaleItem?.itemid || '');
+          setItemlist([maleItem?.itemid || '', femaleItem?.itemid || '']);
         }
-    },[prop])
+      }
+    }, [prop, open]);
+
 
 
 
@@ -219,26 +235,10 @@ export default function UpdateBattlePass( prop: Props) {
 
             
 
-            {/* <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-                 <label htmlFor="">Premium Cost</label>
-                <input type="text" placeholder='Premium Cost' className={` input ${errors.premcost && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('premcost')} />
-                {errors.premcost && <p className=' text-[.6em] text-red-500'>{errors.premcost.message}</p>}
-            </div> */}
 
             <div className=' w-full flex flex-col gap-3 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
                  <label htmlFor="">Grand Reward</label>
-                {/* <input disabled type="text" placeholder='Grand Reward' className={` input ${errors.grandreward && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('grandreward')} /> */}
-                {/* <Select defaultValue={prop.grandreward} onValueChange={(value) => setValue("grandreward", value, { shouldValidate: true })}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Grand Reward" />
-                </SelectTrigger>
-                <SelectContent>
-                  {prop.rewarditems.map((item, index) => (
-                  <SelectItem key={item.id} value={item.id}>{item.name}</SelectItem>
-                  ))}
-                
-                </SelectContent>
-              </Select> */}
+            
 
              <DropdownMenu>
                          <DropdownMenuTrigger className=' bg-amber-800 px-3 py-1 rounded-sm flex items-center gap-1 w-fit'><AlignCenter size={15}/>Type : {filter}</DropdownMenuTrigger>
@@ -302,7 +302,7 @@ export default function UpdateBattlePass( prop: Props) {
                                   
                                    </div>
                                  )}
-                {/* {errors.grandreward && <p className=' text-[.6em] text-red-500'>{errors.grandreward.message}</p>} */}
+              
             </div>
 
             

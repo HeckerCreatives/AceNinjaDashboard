@@ -27,6 +27,7 @@ interface BattlepassSeason {
     rarity: string
     description: string
     _id: string
+    inventorytype: string
 
   
   }],
@@ -96,6 +97,7 @@ interface GrandRewardItem {
   crystals: number;
   coins: number;
   stats: StatDetails;
+  inventorytype: string
 }
 
 interface BattlepassResponse {
