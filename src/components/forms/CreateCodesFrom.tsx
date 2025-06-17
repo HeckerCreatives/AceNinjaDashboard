@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { ImageUp, Plus} from 'lucide-react'
+import { AlignCenter, ImageUp, Plus} from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -24,6 +24,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useGetItemRewards } from '@/client_actions/superadmin/itemrewards'
 
 
 
@@ -44,6 +53,15 @@ export default function CreateQuestForm() {
     const {data, isLoading} = useGetAllItems(['chests','freebie'])
     const [type, setType] = useState('')
     const {data: skills} = useGetAllSkills()
+    const [filter, setFilter] = useState('outfit')
+    const [item, setItem] = useState('')
+    const [male, setMale] = useState('')
+    const [itemlist, setItemlist] = useState<string[]>([])
+    const [female, setFemale] = useState('')
+    const actualFilter = filter !== 'outfit' ? filter : '';
+    const {data: others} = useGetItemRewards(actualFilter, filter !== 'item' ? 'unisex' : '')
+    const {data: maleitems} = useGetItemRewards('outfit', 'male')
+    const {data: femaleitems} = useGetItemRewards('outfit', 'female')
     
 
     //create news validation
@@ -59,13 +77,22 @@ export default function CreateQuestForm() {
     });
 
     const createRedeemcodes = async ( data: CreateCode) => {
-      addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: exp, crystal: crystal}, itemrewards: type === 'skills' ? [] : itemreward,
-    skillrewards: type === 'skills' ? itemreward : []},{
-        onSuccess: () => {
-          toast.success(`Code created successfully.`);
-          setOpen(false)
-        },
-      })
+        if(filter !== 'outfit' && item === ''){
+                toast.error(`Please select an item.`);
+            } else if(filter === 'outfit' && male === ''){
+                toast.error(`Please select a male ${filter}.`);
+            } else if(filter === 'outfit' && female === ''){
+                toast.error(`Please select a female ${filter}.`);
+            } else {
+                addRedeemCode({code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: exp, crystal: crystal}, itemrewards: filter === 'skills' ? [] : itemlist,
+              skillrewards: filter === 'skills' ? itemlist : []},{
+                  onSuccess: () => {
+                    toast.success(`Code created successfully.`);
+                    setOpen(false)
+                  },
+                })
+            }
+    
      
     }
 
@@ -74,7 +101,31 @@ export default function CreateQuestForm() {
         reset()
     },[open])
 
-    console.log(skills)
+
+    useEffect(() => {
+          setItemlist([])
+          setItem('')
+          setMale('')
+          setFemale('')
+        }, [filter])
+    
+        const handleWeaponChange = (value: string) => {
+          setItem(value);
+          setItemlist([value]); 
+        };
+    
+         const handleMaleChange = (value: string) => {
+          setMale(value);
+          setItemlist(([_, femaleId]) => [value, femaleId || '']);
+        };
+    
+        const handleFemaleChange = (value: string) => {
+          setFemale(value);
+          setItemlist(([maleId]) => [maleId || '', value]);
+        };
+    
+        console.log(itemlist)
+    
   
 
   return (
@@ -112,7 +163,7 @@ export default function CreateQuestForm() {
 
             <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
                       <label htmlFor="">Select Item</label>
-                      <Select 
+                      {/* <Select 
                          onValueChange={(value) => {
                           setItemReward([value]);
                             const selectedItem = data?.data.items.find((item) => item.itemid === value);
@@ -133,7 +184,72 @@ export default function CreateQuestForm() {
                             
                         </SelectContent>
                         </Select>
-                      
+                       */}
+
+                            <DropdownMenu>
+                                                <DropdownMenuTrigger className=' bg-amber-800 px-3 py-1 rounded-sm flex items-center gap-1 w-fit'><AlignCenter size={15}/>Type : {filter}</DropdownMenuTrigger>
+                                                <DropdownMenuContent className=' bg-amber-800'>
+                                                  <DropdownMenuLabel className=' text-xs'>Select</DropdownMenuLabel>
+                                                  <DropdownMenuSeparator />
+                                                  <DropdownMenuItem className={` text-xs cursor-pointer ${filter === 'outfit' && 'text-yellow-500'}`} onClick={() => setFilter('outfit')}>Outfit</DropdownMenuItem>
+                                                  <DropdownMenuItem className={` text-xs cursor-pointer ${filter === 'weapon' && 'text-yellow-500'}`} onClick={() => setFilter('weapon')}>Weapon</DropdownMenuItem>
+                                                    <DropdownMenuItem className={` text-xs cursor-pointer ${filter === 'skills' && 'text-yellow-500'}`} onClick={() => setFilter('skills')}>Skills</DropdownMenuItem>
+                                                      <DropdownMenuItem className={` text-xs cursor-pointer ${filter === 'item' && 'text-yellow-500'}`} onClick={() => setFilter('item')}>Items</DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                              </DropdownMenu>
+                                              {filter !== 'outfit' ? (
+                                                          <div className=' flex flex-col gap-2 w-full'>
+                                                          <label htmlFor="" className=' '> {actualFilter && actualFilter.charAt(0).toUpperCase() + actualFilter.slice(1)}</label>
+                                                          <Select value={item} 
+                                                           onValueChange={handleWeaponChange}
+                                                          >
+                                                            <SelectTrigger className="w-full">
+                                                                <SelectValue placeholder="Select Item" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {others?.data.items.map((item, index) => (
+                                                                <SelectItem key={index} value={item.itemid}>{item.name}</SelectItem>
+                                                                ))}
+                                              
+                                                            </SelectContent>
+                                                          </Select>
+                                                          </div>
+                                                        ) : (
+                                                           <div className=' flex items-center gap-4 w-full'>
+                                                           <div className=' flex flex-col gap-2 w-full'>
+                                                             <label htmlFor="">Male</label>
+                                                              <Select  value={male} onValueChange={handleMaleChange}>
+                                                                <SelectTrigger className="w-full">
+                                                                    <SelectValue placeholder="Select Item" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {maleitems?.data.items.map((item, index) => (
+                                                                    <SelectItem key={index} value={item.itemid}>{item.name}</SelectItem>
+                                                                    ))}
+                                              
+                                                                  
+                                                                    
+                                                                </SelectContent>
+                                                              </Select>
+                                                           </div>
+                                              
+                                                           <div className=' flex flex-col gap-2 w-full'>
+                                                             <label htmlFor="">Female</label>
+                                                              <Select value={female} onValueChange={handleFemaleChange}>
+                                                                <SelectTrigger className="w-full">
+                                                                    <SelectValue placeholder="Select Item" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                   {femaleitems?.data.items.map((item, index) => (
+                                                                    <SelectItem key={index} value={item.itemid}>{item.name}</SelectItem>
+                                                                    ))}
+                                              
+                                                                </SelectContent>
+                                                              </Select>
+                                                           </div>
+                                                         
+                                                          </div>
+                                                        )}
                     </div>
 
 

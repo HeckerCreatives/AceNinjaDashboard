@@ -11,6 +11,7 @@ interface ApiResponse {
   totalCount: number;
 }
 
+
 interface BattlepassSeason {
   id: string;
   title: string;
@@ -20,13 +21,15 @@ interface BattlepassSeason {
   status: "active" | "inactive" | string;
   tierCount: number;
   premiumCost: number;
-  grandreward: {
+  grandreward: [{
     name: string
     type: string
     rarity: string
     description: string
     _id: string
-  },
+
+  
+  }],
   createdAt: string;
   updatedAt: string;
   freeMissions: Mission[];
@@ -169,7 +172,7 @@ export const useUpdateBpTiers = () => {
     tiercount: number,
     premiumCost: number,
   season: number,
-grandreward: string) => { 
+grandreward: string[]) => { 
   const response = await axiosInstance.post("/battlepass/editbattlepassdetails", {bpid, title, startDate, endDate, status, tiercount, premiumCost, season, grandreward});
   return response.data;
 };
@@ -184,7 +187,7 @@ export const useUpdateBpData = () => {
     tiercount: number,
     premiumCost: number,
   season: number,
-grandreward: string}) =>
+grandreward: string[]}) =>
       updateBpData(bpid, title, startDate, endDate, status, tiercount, premiumCost, season, grandreward),
       onError: (error) => {
           handleApiError(error);

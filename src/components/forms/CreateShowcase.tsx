@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { ImageUp, Plus} from 'lucide-react'
+import { AlignCenter, ImageUp, Plus} from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -26,6 +26,15 @@ import {
 } from "@/components/ui/select"
 import { useCreateShowcaseItem } from '@/client_actions/superadmin/news'
 import Loader from '../common/Loader'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useGetItemRewards } from '@/client_actions/superadmin/itemrewards'
 
 
 const tabs = [
@@ -33,14 +42,20 @@ const tabs = [
   'Video',
 ]
 
+
+
 export default function CreateShowcaseForm() {
-    const [image, setImage] = useState('')
-    const [preview, setPreview] = useState<string | null>(null);
     const [open, setOpen] = useState(false)
-    const [tab, setTab] = useState('Image')
+    const [filter, setFilter] = useState('outfit')
+    const [item, setItem] = useState('')
+    const [male, setMale] = useState('')
+    const [itemlist, setItemlist] = useState<{ itemid: string; itemtype: string }[]>([])
+    const [female, setFemale] = useState('')
     const {mutate: createShowcaseItem, isPending} = useCreateShowcaseItem()
-    const {data, isLoading} = useGetAllItems(['skills','freebie','chests','crystalpacks','goldpacks'])
-    const {data: skills} = useGetAllSkills()
+    const {data, isLoading} = useGetAllItems(['skills','freebie','chests','crystalpacks','goldpacks','skins'])
+    const {data: others} = useGetItemRewards('weapon', 'unisex')
+    const {data: maleitems} = useGetItemRewards('outfit', 'male')
+    const {data: femaleitems} = useGetItemRewards('outfit', 'female')
 
 
   
@@ -56,13 +71,21 @@ export default function CreateShowcaseForm() {
     });
 
     const createShowcaseData = async ( data: CreateShowcaseItem) => {
-      console.log(data)
-      createShowcaseItem({title: data.title, itemid: data.itemid, itemtype: data.itemtype},{
-        onSuccess: () => {
-          toast.success(`Showcase item created successfully`);
-          setOpen(false)
-        },
-      })
+      if(filter === 'weapon' && item === ''){
+          toast.error(`Please select a ${filter}.`);
+      } else if(filter === 'outfit' && male === ''){
+          toast.error(`Please select a male ${filter}.`);
+      } else if(filter === 'outfit' && female === ''){
+          toast.error(`Please select a female ${filter}.`);
+      } else {
+         console.log(data)
+         createShowcaseItem({title: data.title, items: itemlist, itemtype: filter},{
+           onSuccess: () => {
+             toast.success(`Showcase item created successfully`);
+             setOpen(false)
+           },
+         })
+      }
      
     }
 
@@ -71,7 +94,44 @@ export default function CreateShowcaseForm() {
         reset()
     },[open])
 
-    console.log(errors)
+
+    useEffect(() => {
+      setItemlist([])
+      setItem('')
+      setMale('')
+      setFemale('')
+    }, [filter])
+
+   const handleWeaponChange = (value: string) => {
+      setItem(value);
+      setItemlist([{ itemid: value, itemtype: 'weapon' }]);
+    };
+
+    const handleMaleChange = (value: string) => {
+      setMale(value);
+      setItemlist((prev) => {
+        const femaleItem = prev.find(i => i.itemtype === 'outfit');
+        return [
+          { itemid: value, itemtype: 'outfit' },
+          ...(femaleItem ? [femaleItem] : [])
+        ];
+      });
+    };
+
+    const handleFemaleChange = (value: string) => {
+      setFemale(value);
+      setItemlist((prev) => {
+        const maleItem = prev.find(i => i.itemtype === 'outfit');
+        return [
+          ...(maleItem ? [maleItem] : []),
+          { itemid: value, itemtype: 'outfit' }
+        ];
+      });
+    };
+
+
+    console.log(itemlist)
+
 
  
   
@@ -96,25 +156,73 @@ export default function CreateShowcaseForm() {
           {errors.title && <p className=' text-[.6em] text-red-500'>{errors.title.message}</p>}
         </div>
 
-         <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-          <label htmlFor="">Item</label>
-          <Select  onValueChange={(value) => setValue("itemid", value, { shouldValidate: true })}>
-            <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Item" />
-            </SelectTrigger>
-            <SelectContent>
-                {data?.data.items.map((item, index) => (
-                <SelectItem value={item.itemid}>{item.name}</SelectItem>
-                ))}
+         <div className=' flex flex-col items-start gap-4 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+          <DropdownMenu>
+            <DropdownMenuTrigger className=' bg-amber-800 px-3 py-1 rounded-sm flex items-center gap-1'><AlignCenter size={15}/>Type : {filter}</DropdownMenuTrigger>
+            <DropdownMenuContent className=' bg-amber-800'>
+              <DropdownMenuLabel className=' text-xs'>Select</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className={` text-xs cursor-pointer ${filter === 'outfit' && 'text-yellow-500'}`} onClick={() => setFilter('outfit')}>Outfit</DropdownMenuItem>
+              <DropdownMenuItem className={` text-xs cursor-pointer ${filter === 'weapon' && 'text-yellow-500'}`} onClick={() => setFilter('weapon')}>Weapon</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {filter === 'weapon' ? (
+            <div className=' flex flex-col gap-2 w-full'>
+            <label htmlFor="">Weapon</label>
+            <Select value={item} 
+             onValueChange={handleWeaponChange}
+            >
+              <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Item" />
+              </SelectTrigger>
+              <SelectContent>
+                  {others?.data.items.map((item, index) => (
+                  <SelectItem key={index} value={item.itemid}>{item.name}</SelectItem>
+                  ))}
 
-              
-                
-            </SelectContent>
+              </SelectContent>
             </Select>
-          {errors.itemid && <p className=' text-[.6em] text-red-500'>{errors.itemid.message}</p>}
+            </div>
+          ) : (
+             <div className=' flex items-center gap-4 w-full'>
+             <div className=' flex flex-col gap-2 w-full'>
+               <label htmlFor="">Male</label>
+                <Select  value={male} onValueChange={handleMaleChange}>
+                  <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Item" />
+                  </SelectTrigger>
+                  <SelectContent>
+                      {maleitems?.data.items.map((item, index) => (
+                      <SelectItem key={index} value={item.itemid}>{item.name}</SelectItem>
+                      ))}
+
+                    
+                      
+                  </SelectContent>
+                </Select>
+             </div>
+
+             <div className=' flex flex-col gap-2 w-full'>
+               <label htmlFor="">Female</label>
+                <Select value={female} onValueChange={handleFemaleChange}>
+                  <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Item" />
+                  </SelectTrigger>
+                  <SelectContent>
+                     {femaleitems?.data.items.map((item, index) => (
+                      <SelectItem key={index} value={item.itemid}>{item.name}</SelectItem>
+                      ))}
+
+                  </SelectContent>
+                </Select>
+             </div>
+           
+            </div>
+          )}
+          
         </div>
 
-         <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+         {/* <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
           <label htmlFor="">Item Type</label>
           <Select onValueChange={(value) => setValue("itemtype", value, { shouldValidate: true })}>
             <SelectTrigger className="w-full bg-zinc-900 border-none">
@@ -122,17 +230,13 @@ export default function CreateShowcaseForm() {
             </SelectTrigger>
             <SelectContent>
            
-                <SelectItem value="skins">Skin</SelectItem>
-                <SelectItem value="skills">Skills</SelectItem>
-                {/* <SelectItem value="skills">Skill</SelectItem> */}
-                {/* <SelectItem value="goldpacks">Gold Pack</SelectItem>
-                <SelectItem value="crystalpacks">Crystal Pack</SelectItem>
-                <SelectItem value="chests">Chest</SelectItem>
-                <SelectItem value="freebie">Freebie</SelectItem> */}
+                <SelectItem value="outfit">Outfit</SelectItem>
+                <SelectItem value="weapon">Weapon</SelectItem>
+              
             </SelectContent>
             </Select>
           {errors.itemtype && <p className=' text-[.6em] text-red-500'>{errors.itemtype.message}</p>}
-        </div>
+        </div> */}
 
         
 

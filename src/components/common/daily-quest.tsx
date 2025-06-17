@@ -42,6 +42,7 @@ interface QuestProps {
   refreshTime?: string;
   missiontype: string;
   isEditable?: boolean;
+  rewardtype?: string
 }
 
 export default function DailyQuestCard({
@@ -55,6 +56,7 @@ export default function DailyQuestCard({
   currentPoints = 0,
   refreshTime = new Date(new Date().setHours(24, 0, 0, 0)).toISOString(),
   isEditable = false,
+  rewardtype
 }: QuestProps) {
   const [timeRemaining, setTimeRemaining] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -62,6 +64,8 @@ export default function DailyQuestCard({
   const [editedRequirements, setEditedRequirements] = useState<Record<string, string>>(
     Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
   );
+  const [editedRewardType, setEditedRewardType] = useState<string>(rewardtype || "exp");
+  
 
   const { mutate: updateDailyQuest, isPending: isUpdating } = useUpdateDailyQuest();
 
@@ -99,38 +103,48 @@ export default function DailyQuestCard({
     }
   };
 
-  useEffect(() => {
-    const calculateTimeRemaining = () => {
-      const now = new Date();
-      const refreshDate = new Date(refreshTime);
-      const diffMs = refreshDate.getTime() - now.getTime();
+ useEffect(() => {
+  const calculateTimeRemaining = () => {
+    const now = new Date();
 
-      if (diffMs <= 0) return "Refreshing...";
+    // Set refresh time to 8:00 AM today
+    const refreshDate = new Date();
+    refreshDate.setHours(8, 0, 0, 0); // 8:00:00 AM
 
-      const hours = Math.floor(diffMs / (1000 * 60 * 60));
-      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+    // If it's already past 8 AM, move to tomorrow
+    if (now >= refreshDate) {
+      refreshDate.setDate(refreshDate.getDate() + 1);
+    }
 
-      return `${hours.toString().padStart(2, "0")}:${minutes
-        .toString()
-        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-    };
+    const diffMs = refreshDate.getTime() - now.getTime();
 
-    setTimeRemaining(calculateTimeRemaining());
-    const timer = setInterval(() => {
-      setTimeRemaining(calculateTimeRemaining());
-    }, 1000);
+    if (diffMs <= 0) return "Refreshing...";
 
-    return () => clearInterval(timer);
-  }, [refreshTime]);
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-    setEditedExp(xpReward.toString());
-    setEditedRequirements(
-      Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
-    );
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
+
+  setTimeRemaining(calculateTimeRemaining());
+
+  const timer = setInterval(() => {
+    setTimeRemaining(calculateTimeRemaining());
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, [refreshTime]);
+
+  // const handleEditClick = () => {
+  //   setIsEditing(true);
+  //   setEditedExp(xpReward.toString());
+  //   setEditedRequirements(
+  //     Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
+  //   );
+  // };
 
   const handleSaveClick = () => {
     const newExp = parseInt(editedExp) || 0;
@@ -138,6 +152,8 @@ export default function DailyQuestCard({
     for (const [key, val] of Object.entries(editedRequirements)) {
       newRequirements[key] = parseInt(val) || 0;
     }
+
+    console.log(newRequirements)
 
     // 🔥 Use the mutation to update on the server
     updateDailyQuest({
@@ -149,13 +165,13 @@ export default function DailyQuestCard({
     setIsEditing(false);
   };
 
-  const handleCancelClick = () => {
-    setEditedExp(xpReward.toString());
-    setEditedRequirements(
-      Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
-    );
-    setIsEditing(false);
-  };
+  // const handleCancelClick = () => {
+  //   setEditedExp(xpReward.toString());
+  //   setEditedRequirements(
+  //     Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
+  //   );
+  //   setIsEditing(false);
+  // };
 
   const handleExpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditedExp(e.target.value);
@@ -164,6 +180,26 @@ export default function DailyQuestCard({
   const handleRequirementChange = (key: string, value: string) => {
     setEditedRequirements((prev) => ({ ...prev, [key]: value }));
   };
+
+  const handleEditClick = () => {
+  setIsEditing(true);
+  setEditedExp(xpReward.toString());
+  setEditedRewardType(rewardtype || "exp");
+  setEditedRequirements(
+    Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
+  );
+};
+
+const handleCancelClick = () => {
+  setEditedExp(xpReward.toString());
+  setEditedRewardType(rewardtype || "exp");
+  setEditedRequirements(
+    Object.fromEntries(Object.entries(requirements).map(([k, v]) => [k, v.toString()]))
+  );
+  setIsEditing(false);
+};
+
+
 
   return (
     <Card className="w-full max-w-md border-2 hover:shadow-lg bg-amber-950 border-amber-900 transition-shadow">
@@ -194,9 +230,20 @@ export default function DailyQuestCard({
               <Trophy className="h-4 w-4 text-amber-500" />
               {isEditing ? (
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="exp-input" className="text-sm font-medium">
-                    EXP:
-                  </Label>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="reward-select" className="text-sm font-medium">Reward</Label>
+                    <select
+                      id="reward-select"
+                      value={editedRewardType}
+                      onChange={(e) => setEditedRewardType(e.target.value)}
+                      className="bg-amber-900 border border-amber-700 text-white text-sm rounded-md px-2 py-1 h-8"
+                    >
+                      <option value="exp">EXP</option>
+                      <option value="coins">Coins</option>
+                      <option value="crystal">Crystal</option>
+                    </select>
+                  </div>
+
                   <Input
                     id="exp-input"
                     type="number"

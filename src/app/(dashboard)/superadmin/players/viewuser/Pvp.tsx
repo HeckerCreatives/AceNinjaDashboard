@@ -14,6 +14,13 @@ import useCharacterStore from '@/hooks/character'
 import { useGetPvpHistory } from '@/client_actions/superadmin/pvp'
 import PaginitionComponent from '@/components/common/Pagination'
 import { RefreshCcw } from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
   
 
 export default function Pvp() {

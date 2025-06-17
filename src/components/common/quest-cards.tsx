@@ -94,6 +94,7 @@ export default function QuestCard({
   const totalRequiredPoints = Object.values(requirements).reduce((a, b) => a + b, 0);
   const progress = Math.min((currentPoints / totalRequiredPoints) * 100, 100);
 
+
   const getLabelForRequirement = (key: string) => {
     switch (key) {
       case "pvpwins":
@@ -125,30 +126,41 @@ export default function QuestCard({
     }
   };
 
-  useEffect(() => {
-    const calculateTimeRemaining = () => {
-      const now = new Date();
-      const refreshDate = new Date(refreshTime);
-      const diffMs = refreshDate.getTime() - now.getTime();
+useEffect(() => {
+  const calculateTimeRemaining = () => {
+    const now = new Date();
 
-      if (diffMs <= 0) return "Refreshing...";
+    // Set refresh time to 8:00 AM today
+    const refreshDate = new Date();
+    refreshDate.setHours(8, 0, 0, 0); // 8:00:00 AM
 
-      const hours = Math.floor(diffMs / (1000 * 60 * 60));
-      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+    // If it's already past 8 AM, move to tomorrow
+    if (now >= refreshDate) {
+      refreshDate.setDate(refreshDate.getDate() + 1);
+    }
 
-      return `${hours.toString().padStart(2, "0")}:${minutes
-        .toString()
-        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-    };
+    const diffMs = refreshDate.getTime() - now.getTime();
 
+    if (diffMs <= 0) return "Refreshing...";
+
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  setTimeRemaining(calculateTimeRemaining());
+
+  const timer = setInterval(() => {
     setTimeRemaining(calculateTimeRemaining());
-    const timer = setInterval(() => {
-      setTimeRemaining(calculateTimeRemaining());
-    }, 1000);
+  }, 1000);
 
-    return () => clearInterval(timer);
-  }, [refreshTime]);
+  return () => clearInterval(timer);
+}, [refreshTime]);
+
 
   const handleEditClick = () => {
     setIsEditing(true);

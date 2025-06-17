@@ -66,8 +66,8 @@ export default function Freebie() {
             </div>
 
             <div className=' w-full -full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] p-6 gap-4'>
-                {data?.data.map((item, index) => (
-                <DailyFreebiecard amount={item.amount} type={item.type} slot={item.slot} chance={item.chance}/>
+                {Object.values(freebie?.data || {}).map((item, index) => (
+                <DailyFreebiecard amount={item.price} type={item.name} />
                 ))}
                 
             </div>

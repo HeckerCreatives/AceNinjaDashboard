@@ -20,6 +20,7 @@ export default function Dashboard() {
     const {data: currentSeason} = useGetCurrentSeason()
     const {data: rank} = useGetRank(characterid)
     const {data: payin} = useGetTotalPayin(characterid)
+    
         const {setPlayername} = usePlayerNameStore()
 
         useEffect(() => {

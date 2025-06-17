@@ -12,6 +12,7 @@ type ItemRewards = {
    _id: string
   name: string
   type: string
+  inventorytype: string
 }
 
 type DataItem = {

@@ -100,8 +100,8 @@ export default function Battlepass() {
                     <TableHead className="">Start Date</TableHead>
                     <TableHead className="">End Date</TableHead>
                     <TableHead className="">Premium Cost</TableHead>
-                    <TableHead className="">Free Missions</TableHead>
-                    <TableHead className="">Premium Missions</TableHead>
+                    {/* <TableHead className="">Free Missions</TableHead>
+                    <TableHead className="">Premium Missions</TableHead> */}
                     <TableHead className="">Tiers</TableHead>
                     <TableHead className="">Grand Reward</TableHead>
                     <TableHead className="">Status</TableHead>
@@ -116,7 +116,7 @@ export default function Battlepass() {
                         <TableCell className="font-medium">{new Date(item.startDate).toLocaleString()}</TableCell>
                         <TableCell className="font-medium">{new Date(item.endDate).toLocaleString()}</TableCell>
                         <TableCell className="font-medium">{item.premiumCost.toLocaleString()}</TableCell>
-                        <TableCell className="font-medium">
+                        {/* <TableCell className="font-medium">
                             <Dialog>
                             <DialogTrigger className=' flex items-center justify-center gap-1 bg-amber-700 rounded-md px-3 py-1'><Eye size={20}/>View</DialogTrigger>
                             <DialogContent className=' h-fit max-h-[90%] w-full max-w-[500px]'>
@@ -133,7 +133,7 @@ export default function Battlepass() {
                                 <BpFreemission id={item.id} title=' Battle Pass Premium Missions' freeMission={item.premiumMissions || []}/>
                             </DialogContent>
                             </Dialog>
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell className="font-medium">
                              <Dialog>
                             <DialogTrigger className=' flex items-center justify-center gap-1 bg-amber-700 rounded-md px-3 py-1'><Eye size={20}/>View</DialogTrigger>
@@ -145,13 +145,19 @@ export default function Battlepass() {
                         </TableCell>
                       
                         <TableCell className="font-medium">
-                            <p className=' text-sm text-yellow-500'>Name: {item.grandreward.name}</p>
-                            <p className=' text-xs text-zinc-300'>Type: {item.grandreward.type}</p>
-                            <p className=' text-xs text-zinc-300'>Rarity: {item.grandreward.rarity}</p>
+                             {item.grandreward?.length ? (
+                                item.grandreward
+                                .map((reward) => reward?.name)
+                                .filter(Boolean)
+                                .join(", ")
+                            ) : (
+                                "No item!"
+                            )}
+                            
                         </TableCell>
                         <TableCell className="font-medium">{item.status}</TableCell>
                         <TableCell className="font-medium">
-                            <UpdateBattlePass seasonname={item.title} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.premiumCost} grandreward={item.grandreward._id} id={item.id} season={Number(item.season)} rewarditems={data.grandrewarditems} />
+                            <UpdateBattlePass seasonname={item.title} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.premiumCost} grandreward={item.grandreward.map(reward => reward._id)} id={item.id} season={Number(item.season)} rewarditems={data.grandrewarditems} itemtype={item.grandreward[0].type} items={[]} />
                         </TableCell>
 
                         {/* <TableCell className="text-right flex items-center gap-2">

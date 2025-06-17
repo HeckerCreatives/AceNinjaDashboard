@@ -22,7 +22,7 @@ export default function Quest() {
   const [premiumMissions, setPremiumMissions] = useState<any[]>([])
   const [dailyQuest, setDailyQuest] = useState<any[]>([])
 
-  // Initialize local states on data load
+
   useEffect(() => {
     if (data && data.data && data.data[0]) {
       setFreeMissions(data.data[0].freeMissions || [])
@@ -187,7 +187,7 @@ const handleMissionUpdate = (
                 ) : (
                   <div className="container mx-auto py-8">
                     <h1 className="text-2xl font-bold mb-6">Premium Missions</h1>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-[repeat(auto-fit,_minmax(250px,_1fr))] lg:grid-cols-[repeat(auto-fit,_minmax(320px,_1fr))] gap-6">
 
                       {premiumMissions.map((quest) => (
                         <QuestCard
@@ -227,7 +227,7 @@ const handleMissionUpdate = (
                           requirements={quest.requirements}
                           currentPoints={0}
                           type={quest.daily ? 'Daily Quest' : 'Weekly Quest'}
-                          isEditable={true} missiontype={'Daily'} />
+                          isEditable={true} missiontype={'Daily'} rewardtype='exp' />
                       ))}
 
                       

@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { ImageUp, Pen, Plus} from 'lucide-react'
+import { AlignCenter, ImageUp, Pen, Plus} from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -24,14 +24,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
-
-
-const tabs = [
-  'Image',
-  'Video',
-]
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useGetAllItems } from '@/client_actions/superadmin/store'
+import { useGetItemRewards } from '@/client_actions/superadmin/itemrewards'
 
 
 type Props ={
@@ -42,9 +44,11 @@ type Props ={
     status: string
     tiercount: number
     premcost: number
-    grandreward: string
+    grandreward: string[]
     season: number
     rewarditems: GrandRewardItem[]
+    itemtype: string; // 'outfit' | 'weapon'
+    items: { itemid: string; itemtype: string }[];
 }
 
 interface StatDetails {
@@ -71,6 +75,16 @@ interface GrandRewardItem {
 export default function UpdateBattlePass( prop: Props) {
     const [open, setOpen] = useState(false)
     const {mutate: updateBpData, isPending} = useUpdateBpData()
+    const [filter, setFilter] = useState('outfit')
+    const [item, setItem] = useState('')
+    const [male, setMale] = useState('')
+    const [itemlist, setItemlist] = useState<string[]>([])
+    const [female, setFemale] = useState('')
+    const {data, isLoading} = useGetAllItems(['skills','freebie','chests','crystalpacks','goldpacks'])
+    const {data: others} = useGetItemRewards('weapon', 'unisex')
+    const {data: maleitems} = useGetItemRewards('outfit', 'male')
+    const {data: femaleitems} = useGetItemRewards('outfit', 'female')
+    
    
 
     const {
@@ -88,7 +102,7 @@ export default function UpdateBattlePass( prop: Props) {
     });
 
     const updateBattlePass = async ( data: BattlePassValidations) => {
-     updateBpData({bpid: prop.id, title: data.seasonname, startDate: data.startdate, endDate: data.enddate, status: data.status, tiercount: data.tiercount, premiumCost: data.premcost, season: data.season, grandreward: data.grandreward},{
+     updateBpData({bpid: prop.id, title: data.seasonname, startDate: data.startdate, endDate: data.enddate, status: data.status, tiercount: data.tiercount, premiumCost: data.premcost, season: data.season, grandreward: itemlist},{
      onSuccess: () => {
        toast.success(`Battle pass details updated successfully.`);
        setOpen(false)
@@ -109,14 +123,37 @@ export default function UpdateBattlePass( prop: Props) {
                 status: prop.status,
                 tiercount: Number(prop.tiercount),
                 premcost: prop.premcost,
-                grandreward: prop.grandreward,
+                // grandreward: prop.grandreward,
                 season: prop.season
             })
         }
     },[prop])
 
 
-    console.log(prop)
+
+     useEffect(() => {
+          setItemlist([])
+          setItem('')
+          setMale('')
+          setFemale('')
+        }, [filter])
+    
+        const handleWeaponChange = (value: string) => {
+          setItem(value);
+          setItemlist([value]); 
+        };
+    
+         const handleMaleChange = (value: string) => {
+          setMale(value);
+          setItemlist(([_, femaleId]) => [value, femaleId || '']);
+        };
+    
+        const handleFemaleChange = (value: string) => {
+          setFemale(value);
+          setItemlist(([maleId]) => [maleId || '', value]);
+        };
+
+        console.log(itemlist)
 
  
   
@@ -188,10 +225,10 @@ export default function UpdateBattlePass( prop: Props) {
                 {errors.premcost && <p className=' text-[.6em] text-red-500'>{errors.premcost.message}</p>}
             </div> */}
 
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
+            <div className=' w-full flex flex-col gap-3 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
                  <label htmlFor="">Grand Reward</label>
                 {/* <input disabled type="text" placeholder='Grand Reward' className={` input ${errors.grandreward && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('grandreward')} /> */}
-                <Select defaultValue={prop.grandreward} onValueChange={(value) => setValue("grandreward", value, { shouldValidate: true })}>
+                {/* <Select defaultValue={prop.grandreward} onValueChange={(value) => setValue("grandreward", value, { shouldValidate: true })}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select Grand Reward" />
                 </SelectTrigger>
@@ -201,8 +238,71 @@ export default function UpdateBattlePass( prop: Props) {
                   ))}
                 
                 </SelectContent>
-              </Select>
-                {errors.grandreward && <p className=' text-[.6em] text-red-500'>{errors.grandreward.message}</p>}
+              </Select> */}
+
+             <DropdownMenu>
+                         <DropdownMenuTrigger className=' bg-amber-800 px-3 py-1 rounded-sm flex items-center gap-1 w-fit'><AlignCenter size={15}/>Type : {filter}</DropdownMenuTrigger>
+                         <DropdownMenuContent className=' bg-amber-800'>
+                           <DropdownMenuLabel className=' text-xs'>Select</DropdownMenuLabel>
+                           <DropdownMenuSeparator />
+                           <DropdownMenuItem className={` text-xs cursor-pointer ${filter === 'outfit' && 'text-yellow-500'}`} onClick={() => setFilter('outfit')}>Outfit</DropdownMenuItem>
+                           <DropdownMenuItem className={` text-xs cursor-pointer ${filter === 'weapon' && 'text-yellow-500'}`} onClick={() => setFilter('weapon')}>Weapon</DropdownMenuItem>
+                         </DropdownMenuContent>
+                       </DropdownMenu>
+                       {filter === 'weapon' ? (
+                                   <div className=' flex flex-col gap-2 w-full'>
+                                   <label htmlFor="">Weapon</label>
+                                   <Select value={item} 
+                                    onValueChange={handleWeaponChange}
+                                   >
+                                     <SelectTrigger className="w-full">
+                                         <SelectValue placeholder="Select Item" />
+                                     </SelectTrigger>
+                                     <SelectContent>
+                                         {others?.data.items.map((item, index) => (
+                                         <SelectItem key={index} value={item.itemid}>{item.name}</SelectItem>
+                                         ))}
+                       
+                                     </SelectContent>
+                                   </Select>
+                                   </div>
+                                 ) : (
+                                    <div className=' flex items-center gap-4 w-full'>
+                                    <div className=' flex flex-col gap-2 w-full'>
+                                      <label htmlFor="">Male</label>
+                                       <Select  value={male} onValueChange={handleMaleChange}>
+                                         <SelectTrigger className="w-full">
+                                             <SelectValue placeholder="Select Item" />
+                                         </SelectTrigger>
+                                         <SelectContent>
+                                             {maleitems?.data.items.map((item, index) => (
+                                             <SelectItem key={index} value={item.itemid}>{item.name}</SelectItem>
+                                             ))}
+                       
+                                           
+                                             
+                                         </SelectContent>
+                                       </Select>
+                                    </div>
+                       
+                                    <div className=' flex flex-col gap-2 w-full'>
+                                      <label htmlFor="">Female</label>
+                                       <Select value={female} onValueChange={handleFemaleChange}>
+                                         <SelectTrigger className="w-full">
+                                             <SelectValue placeholder="Select Item" />
+                                         </SelectTrigger>
+                                         <SelectContent>
+                                            {femaleitems?.data.items.map((item, index) => (
+                                             <SelectItem key={index} value={item.itemid}>{item.name}</SelectItem>
+                                             ))}
+                       
+                                         </SelectContent>
+                                       </Select>
+                                    </div>
+                                  
+                                   </div>
+                                 )}
+                {/* {errors.grandreward && <p className=' text-[.6em] text-red-500'>{errors.grandreward.message}</p>} */}
             </div>
 
             

@@ -25,28 +25,16 @@ interface ItemStats {
 }
 
 interface Item {
-  stats: ItemStats;
-  _id: string;
-  name: string;
-  price: number;
-  currency: string;
-  type: string;
-  inventorytype: string;
-  gender: string;
-  description: string;
-  rarity: string;
-  imageUrl: string;
-  isEquippable: boolean;
-  isOpenable: boolean;
-  crystals: number;
-  coins: number;
-  __v: number;
+  itemid: string,
+  itemname: string,
+  itemgender: string,
+  itemtype: string
 }
 
 interface DataEntry {
   id: string;
   title: string;
-  item: Item;
+  items: Item[];
   itemtype: string;
 }
 
@@ -187,16 +175,16 @@ export const deleteShowcaseItem = async (id: string) => {
   };
 
 
-export const createShowcaseItem = async ( title: string, itemid: string, itemtype: string) => { 
-     const response = await axiosInstance.post("/news/createitemnews", {  title, itemid, itemtype});
+export const createShowcaseItem = async ( title: string, items: { itemid: string; itemtype: string }[], itemtype: string) => { 
+     const response = await axiosInstance.post("/news/createitemnews", {  title, items, itemtype});
      return response.data;
 };
   
 export const useCreateShowcaseItem = () => {
      const queryClient = useQueryClient();
      return useMutation({
-       mutationFn: ({title, itemid, itemtype}: {  title: string, itemid: string, itemtype: string}) =>
-        createShowcaseItem( title, itemid, itemtype),
+       mutationFn: ({title, items, itemtype}: {  title: string, items: { itemid: string; itemtype: string }[], itemtype: string}) =>
+        createShowcaseItem( title, items, itemtype),
          onError: (error) => {
              handleApiError(error);
          },
@@ -206,16 +194,16 @@ export const useCreateShowcaseItem = () => {
      });
 };
 
-export const editShowcaseItem = async ( id: string, title: string, itemid: string, itemtype: string) => { 
-     const response = await axiosInstance.post("/news/edititemnews", { id, title, itemid, itemtype});
+export const editShowcaseItem = async ( id: string, title: string, items: { itemid: string; itemtype: string }[], itemtype: string) => { 
+     const response = await axiosInstance.post("/news/edititemnews", { id, title, items, itemtype});
      return response.data;
 };
   
 export const useEditShowcaseItem = () => {
      const queryClient = useQueryClient();
      return useMutation({
-       mutationFn: ({ id, title, itemid, itemtype}: { id: string,  title: string, itemid: string, itemtype: string}) =>
-        editShowcaseItem( id ,title, itemid, itemtype),
+       mutationFn: ({ id, title, items, itemtype}: { id: string,  title: string, items: { itemid: string; itemtype: string }[], itemtype: string}) =>
+        editShowcaseItem( id ,title, items, itemtype),
          onError: (error) => {
              handleApiError(error);
          },

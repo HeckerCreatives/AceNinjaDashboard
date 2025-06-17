@@ -1,197 +1,187 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { ImageUp, Pen, Plus} from 'lucide-react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {useForm} from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Pen, AlignCenter } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { createCode, CreateCode } from '@/validation/schema'
-import { useAddRedeemCode, useUpdateRedeemCode } from '@/client_actions/superadmin/redeemcodes'
+import { useUpdateRedeemCode } from '@/client_actions/superadmin/redeemcodes'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { useGetAllItems } from '@/client_actions/superadmin/store'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import { useGetItemRewards } from '@/client_actions/superadmin/itemrewards'
 
-
-
-
-const tabs = [
-  'Image',
-  'Video',
-]
-
-type ItemRewards = {
-   _id: string
-  name: string
+type ItemRewards = { _id: string; name: string }
+type Props = {
+   code: string
+  emerald: number
+  coins: number
+  crystal: number
+  expiration: string
+  id: string
+  itemreward: ItemRewards[]
+  type: string
 }
 
-type Props ={
-    code: string
-    emerald: number
-    coins: number
-    crystal: number
-    expiration: string
-    id: string
-    itemreward: ItemRewards[]
-    type:string
-}
+export default function UpdateRedeemCode(prop: Props) {
+  const [open, setOpen] = useState(false)
+  const [exp, setExp] = useState(0)
 
-export default function UpdateRedeemCode( prop: Props) {
-    const [image, setImage] = useState('')
-    const [open, setOpen] = useState(false)
-    const [tab, setTab] = useState('Image')
-    const {mutate: updateRedeemCode, isPending} = useUpdateRedeemCode()
-    const [coins, setCoins] = useState(0)
-    const [emerald, setEmerald] = useState(0)
-    const [crystal, setCrystal] = useState(0)
-    const [itemreward, setItemReward] = useState<string[]>([])
-    const {data, isLoading} = useGetAllItems(['chests','freebie'])
-        const [type, setType] = useState('')
-    
+  const [coins, setCoins] = useState(prop.coins)
+  const [crystal, setCrystal] = useState(prop.crystal)
+  const [itemList, setItemList] = useState<string[]>(prop.itemreward.map(i => i._id))
+  const [filter, setFilter] = useState<Props['type']>(prop.type)
+  const actualFilter = filter !== 'outfit' ? filter : '';
 
-    //create news validation
-    const {
-      register,
-      handleSubmit,
-      setValue,
-      reset,
-      trigger,
-      formState: { errors },
-    } = useForm<CreateCode>({
-      resolver: zodResolver(createCode),
-      defaultValues:({
-        code: prop.code,
-        expiration: prop.expiration.split('T')[0]
-      })
-    });
 
-    //create news
-    const createRedeemcodes = async ( data: CreateCode) => {
-      
-        updateRedeemCode({id: prop.id, code: data.code, status: 'active', expiry: data.expiration, rewards:{coins: coins, exp: emerald, crystal: crystal}, itemrewards: type === 'skills' ? [] : itemreward,
-    skillrewards: type === 'skills' ? itemreward : []},{
-        onSuccess: () => {
-          toast.success(`Redeem code updated successfully.`);
-          setOpen(false)
+  const {data: others} = useGetItemRewards(actualFilter, filter !== 'item' ? 'unisex' : '')
+  const {data: maleitems} = useGetItemRewards('outfit', 'male')
+  const {data: femaleitems} = useGetItemRewards('outfit', 'female')
+  const { mutate: updateCode, isPending } = useUpdateRedeemCode()
 
-        },
-      })
-     
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateCode>({
+    resolver: zodResolver(createCode),
+    defaultValues: {
+      code: prop.code,
+      expiration: prop.expiration.split('T')[0],
+    }
+  })
+
+ useEffect(() => {
+  reset({ code: prop.code, expiration: prop.expiration.split('T')[0] })
+  setCoins(prop.coins)
+  setCrystal(prop.crystal)
+  setExp(prop.emerald) // assuming `emerald` is actually EXP in this context
+  setFilter(prop.type)
+  setItemList(prop.itemreward.map(i => i._id))
+}, [prop, reset])
+
+
+  const handleItemChange = (value: string, position?: 'male' | 'female') => {
+    if (filter === 'outfit') {
+      // ensure two slots
+      const [first, second] = itemList
+      if (position === 'male') setItemList([value, second || ''])
+      else setItemList([first || '', value])
+    } else {
+      setItemList([value])
+    }
+  }
+
+  const onSubmit = (data: CreateCode) => {
+    if (filter === 'outfit') {
+      if (!itemList[0] || !itemList[1]) return toast.error('Please select both male and female outfit.')
+    } else {
+      if (!itemList[0]) return toast.error('Please select an item.')
     }
 
-    //reset form value
-    useEffect(() => {
-        reset()
-    },[open])
-
-      useEffect(() => {
-      // Initialize coins, emerald, crystal
-      setCoins(prop.coins);
-      setEmerald(prop.emerald);
-      setCrystal(prop.crystal);
-
-      // Initialize item reward to first item's _id (if available)
-      if (prop.itemreward?.length > 0) {
-        setItemReward([prop.itemreward[0]._id]);
+    updateCode({
+      id: prop.id,
+      code: data.code,
+      expiry: data.expiration,
+      rewards: { coins, crystal, exp },
+      itemrewards: filter === 'skills' ? [] : itemList,
+      skillrewards: filter === 'skills' ? itemList : [],
+      status: ''
+    }, {
+      onSuccess: () => {
+        toast.success('Code updated successfully.')
+        setOpen(false)
       }
-    }, [prop]);
-
-    console.log(prop)
-
-    useEffect(() => {
-      setType(prop.type)
-    },[])
-  
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-    <DialogTrigger className=' bg-yellow-500 text-black p-2 rounded-md flex items-center h-fit w-fit text-xs font-semibold'>
-    <Pen size={15}/>
-    </DialogTrigger>
-    <DialogContent className=' max-w-[800px] h-auto border-amber-500/80 border-[1px]'>
-      <DialogHeader className=' w-full bg-light p-3'>
-        <DialogTitle className=' text-sm'>Update Code</DialogTitle>
-        <DialogDescription>
-         
-        </DialogDescription>
-      </DialogHeader>
-      <form onSubmit={handleSubmit(createRedeemcodes)} className=' text-xs flex flex-col gap-2 p-6'>
+      <DialogTrigger className="bg-yellow-500 text-black p-2 rounded-md text-xs flex items-center">
+        <Pen size={15} />
+      </DialogTrigger>
+      <DialogContent className="max-w-[800px] border-amber-500/80 border-[1px]">
+        <DialogHeader className="bg-light p-3">
+          <DialogTitle>Update Code</DialogTitle>
+        </DialogHeader>
 
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-            <label htmlFor="">Code</label>
-            <input type="text" placeholder='Code' className={` input ${errors.code && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('code')} />
-            {errors.code && <p className=' text-[.6em] text-red-500'>{errors.code.message}</p>}
-            </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 text-xs flex flex-col gap-4">
+          <div className="flex flex-col gap-1 bg-light border border-amber-800 p-4 rounded-md">
+            <label>Code</label>
+            <input {...register('code')} className={`input ${errors.code && 'border-red-500'}`} />
+            {errors.code && <p className="text-red-500 text-[.6em]">{errors.code.message}</p>}
+          </div>
 
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-            <label htmlFor="" className=' text-sm'>Rewards</label>
+          <div className="flex flex-col gap-1 bg-light border border-amber-800 p-4 rounded-md">
+            <label>Rewards</label>
 
-            <label htmlFor="" className=''>Coins</label>
-              <input value={coins} onChange={(e) => setCoins(e.target.valueAsNumber)} type="number" placeholder='Coins' className={` input  text-xs `}  />
+            <label>Coins</label>
+            <input type="number" value={coins} onChange={e => setCoins(e.target.valueAsNumber)} className="input" />
 
-              <label htmlFor="" className=''>Exp</label>
-              <input value={emerald} onChange={(e) => setEmerald(e.target.valueAsNumber)} type="number" placeholder='Emerald' className={` input text-xs `} />
+            <label>Crystal</label>
+            <input type="number" value={crystal} onChange={e => setCrystal(e.target.valueAsNumber)} className="input" />
 
-              <label htmlFor="" className=''>Crystal</label>
-              <input value={crystal} onChange={(e) => setCrystal(e.target.valueAsNumber)} type="number" placeholder='Crystal' className={` input  text-xs `}  />
-            </div>
-
-              <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-                      <label htmlFor="">Select Item</label>
-                      <Select 
-                        value={itemreward[0]}
-                        onValueChange={(value) => {setItemReward([value]);
-                           const selectedItem = data?.data.items.find((item) => item.itemid === value);
-                            if (selectedItem) {
-                              setType(selectedItem.type);
-                            }
-
-                        }}
-                      >
-                        <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select Item" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {data?.data.items.map((item, index) => (
-                            <SelectItem onClick={() => setType(item.type)} value={item.itemid}>{item.name}</SelectItem>
-                            ))}
-
-                            
-                            
-                        </SelectContent>
-                        </Select>
-                      
-                    </div>
-
-
-            <div className=' w-full flex flex-col gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
-            <label htmlFor="">Expiration</label>
-            <input type="date" placeholder='Expiration' className={` input ${errors.expiration && 'border-[1px] focus:outline-none border-red-500'} `} {...register('expiration')} />
-            {errors.expiration && <p className=' text-[.6em] text-red-500'>{errors.expiration.message}</p>}
-            </div>
-
-          <div className=' w-full flex items-end justify-end gap-4 mt-6 text-white'>
-            <button disabled={isPending} className=' bg-yellow-500 text-black text-xs px-8 py-2 rounded-md flex items-center justify-center gap-1'>
-              {isPending && <Loader/>}
-              Save</button>
+            <label>EXP</label>
+            <input type="number" value={exp} onChange={e => setExp(e.target.valueAsNumber)} className="input" />
           </div>
 
 
-         </form>
-    </DialogContent>
+          <div className="bg-light border border-amber-800 p-4 flex flex-col gap-2 rounded-md">
+            <label>Select Item</label>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="bg-amber-800 text-xs px-3 py-1 rounded-sm flex items-center gap-1 w-fit">
+                <AlignCenter size={15} /> Type : {filter}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-amber-800">
+                <DropdownMenuLabel className='text-xs'>Select</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {['outfit','weapon','skills','item'].map(t => (
+                  <DropdownMenuItem key={t} className={`text-xs ${filter===t?'text-yellow-500':''}`} onClick={() => setFilter(t as any)}>
+                    {t.charAt(0).toUpperCase()+t.slice(1)}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {filter === 'outfit' ? (
+              <div className="flex gap-4">
+                <div className="flex-1 flex flex-col gap-1">
+                  <label>Male</label>
+                  <Select value={itemList[0]} onValueChange={v => handleItemChange(v, 'male')}>
+                    <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                    <SelectContent>{maleitems?.data.items.map(i => <SelectItem key={i.itemid} value={i.itemid}>{i.name}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="flex-1 flex flex-col gap-1">
+                  <label>Female</label>
+                  <Select value={itemList[1]} onValueChange={v => handleItemChange(v, 'female')}>
+                    <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                    <SelectContent>{femaleitems?.data.items.map(i => <SelectItem key={i.itemid} value={i.itemid}>{i.name}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-1">
+                <label>{filter?.charAt(0).toUpperCase() + filter?.slice(1)}</label>
+                <Select value={itemList[0]} onValueChange={v => handleItemChange(v)}>
+                  <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+                  <SelectContent>{others?.data.items.map(i => <SelectItem key={i.itemid} value={i.itemid}>{i.name}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-1 bg-light border border-amber-800 p-4 rounded-md">
+            <label>Expiration</label>
+            <input type="date" {...register('expiration')} className={`input ${errors.expiration && 'border-red-500'}`} />
+            {errors.expiration && <p className="text-red-500 text-[.6em]">{errors.expiration.message}</p>}
+          </div>
+
+          <div className="flex justify-end gap-4 mt-6">
+            <button type="submit" disabled={isPending} className="bg-yellow-500 text-black text-xs px-8 py-2 rounded-md flex items-center">
+              {isPending && <Loader />} Save
+            </button>
+          </div>
+
+        </form>
+      </DialogContent>
     </Dialog>
   )
 }

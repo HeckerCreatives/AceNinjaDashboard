@@ -273,7 +273,7 @@ export const battlepassSchema = z.object({
   status: z.string().min(1, "Status is required"),
   tiercount: z.number().min(1, "Tier count is required"),
   premcost: z.number().min(1, "Premium cost is required"),
-  grandreward: z.string().min(1, "Grand reward is required"),
+  // grandreward: z.string().min(1, "Grand reward is required"),
   season: z.number().min(1, "Season is required"),
 });
 
@@ -284,8 +284,8 @@ export const addStoreItemSchema = z.object({
 
 export const createShowcaseSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  itemid: z.string().min(1, "Item is required"),
-  itemtype: z.string().min(1, "Item type is required"),
+  // itemid: z.string().min(1, "Item is required"),
+  // itemtype: z.string().min(1, "Item type is required"),
 });
 
 

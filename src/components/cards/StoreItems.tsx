@@ -21,20 +21,48 @@ gender: string
 type: string
 tab: string
 editable: boolean,
-deletable: boolean
+deletable: boolean,
+crystal?: number,
+exp?: number,
+coins?: number,
 }
+
+const rarutyFilter = [
+  {name: 'All', value: 'all'},
+  {name: 'Basic', value: 'basic'},
+  {name: 'Fashion', value: 'common'},
+  {name: 'Drip', value: 'rare'},
+  {name: 'Epic', value: 'legendary'},
+]
+
 export default function StoreItems(data: Items) {
 
     const rarityColor = (data: string) => {
-        if(data === 'basic'){
+        if(data === 'Basic'){
           return 'text-yellow-300'
-        } else  if(data === 'common'){
+        } else  if(data === 'Fashion'){
           return 'text-blue-300'
-        } else  if(data === 'rare'){
+        } else  if(data === 'Drip'){
           return 'text-violet-300'
         } else {
           return 'text-pink-300'
     
+        }
+      }
+
+     let displayValue = data.itemprice;
+      let currencyType = data.currency;
+
+      if (displayValue === 0) {
+        if (data.crystal) {
+          displayValue = data.crystal;
+          currencyType = 'crystal';
+        } else if (data.exp) {
+          displayValue = data.exp;
+          currencyType = 'exp';
+        } else if (data.coins) {
+          displayValue = data.coins;
+          currencyType = 'coins';
         }
       }
 
@@ -83,7 +111,9 @@ export default function StoreItems(data: Items) {
             <div className=' flex '>
                 <div className=' flex flex-col w-full gap-1'>
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
-                    <p className=' text-sm font-semibold flex items-center gap-2'>{currencyImg(data.currency)}{data.itemprice.toLocaleString()}</p>
+                    {data.type !== 'freebie' && (
+                      <p className=' text-sm font-semibold flex items-center gap-2'>{currencyImg(data.currency)}{displayValue.toLocaleString()}</p>
+                    )}
                 </div>
             
                 <div className=' flex items-center gap-2'>

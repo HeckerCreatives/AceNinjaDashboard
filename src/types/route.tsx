@@ -17,47 +17,24 @@ export interface SuperadminRoute {
 export const superadminRoutes: SuperadminRoute[] = [
   { route: '/superadmin/dashboard', name: 'Dashboard', icon: <LayoutGrid size={15} />, subitems: [] },
   { route: '/superadmin/players', name: 'Manage Players', icon: <UsersRound size={15} />, subitems: [] },
-  { route: '/superadmin/grantcurrency', name: 'Grant Currency', icon: <Wallet size={15} />, subitems: [] },
-  
-  {
-    route: '/superadmin/',
-    name: 'Newsletter',
-    icon: <FaBullhorn size={15} />,
-    subitems: [
-      { route: '/superadmin/newsletter/subscribers', name: 'Subscribers', icon: <FaBullhorn size={15} />, subitems: [] },
-      { route: '/superadmin/newsletter/registered', name: 'Registered', icon: <FaBullhorn size={15} />, subitems: [] },
-    ],
-  },
-  
-  { route: '/superadmin/maintenance', name: 'Maintenance', icon: <GrVmMaintenance size={15} />, subitems: [] },
-  
-  {
-    route: '/superadmin/announcement',
-    name: 'Announcement',
-    icon: <FaBullhorn size={15} />,
-    subitems: [
-      { route: '/superadmin/announcement/message', name: 'Message', icon: <FaBullhorn size={15} />, subitems: [] },
-      { route: '/superadmin/announcement/update', name: 'Update', icon: <FaBullhorn size={15} />, subitems: [] },
-    ],
-  },
-  
   {
     route: '/superadmin/games',
     name: 'Games',
     icon: <RiGamepadFill size={15} />,
     subitems: [
+      { route: '/superadmin/games/general', name: 'General', icon: null, subitems: [] },
+      { route: '/superadmin/games/news', name: 'News & Showcase', icon: null, subitems: [] },
+      { route: '/superadmin/games/message', name: 'Messages', icon: <FaBullhorn size={15} />, subitems: [] },
+      { route: '/superadmin/games/battlepass', name: 'Battle Pass', icon: null, subitems: [] },
+      { route: '/superadmin/games/store', name: 'Store', icon: null, subitems: [] },
+      { route: '/superadmin/games/quest', name: 'Quest', icon: null, subitems: [] },
       { route: '/superadmin/games/ranktier', name: 'Rank Tier', icon: null, subitems: [] },
       { route: '/superadmin/games/pvp', name: 'PVP', icon: null, subitems: [] },
-      { route: '/superadmin/games/quest', name: 'Quest', icon: null, subitems: [] },
-      { route: '/superadmin/games/store', name: 'Store', icon: null, subitems: [] },
-      { route: '/superadmin/games/market', name: 'Market', icon: null, subitems: [] },
-      { route: '/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null, subitems: [] },
-      { route: '/superadmin/games/battlepass', name: 'Battle Pass', icon: null, subitems: [] },
-      { route: '/superadmin/games/news', name: 'News & Showcase', icon: null, subitems: [] },
-      { route: '/superadmin/games/general', name: 'General', icon: null, subitems: [] },
+
+      // { route: '/superadmin/games/market', name: 'Market', icon: null, subitems: [] },
+      // { route: '/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null, subitems: [] },
     ],
   },
-  
   {
     route: '/superadmin/rewards',
     name: 'Rewards',
@@ -67,14 +44,20 @@ export const superadminRoutes: SuperadminRoute[] = [
       { route: '/superadmin/rewards/weeklylogin', name: 'Weekly Login', icon: null, subitems: [] },
       { route: '/superadmin/rewards/dailyexpspin', name: 'Daily Exp Spin', icon: null, subitems: [] },
       { route: '/superadmin/rewards/monthlylogin', name: 'Monthly Login', icon: null, subitems: [] },
+      { route: '/superadmin/rewards/monthlylogin', name: 'Monthly Login', icon: null, subitems: [] },
+      { route: '/superadmin/rewards/redeemcodes', name: 'Redeem Codes', icon: null, subitems: [] },
+
     ],
   },
-  
-//   { route: '/superadmin/freebie', name: 'Freebie', icon: <GemIcon size={15} />, subitems: [] },
-  { route: '/superadmin/grant', name: 'Grant', icon: <Box size={15} />, subitems: [] },
-  
-  { route: '/superadmin/topuphistory', name: 'Topup History', icon: <List size={15} />, subitems: [] },
-  
+  {
+    route: '/superadmin/grant',
+    name: 'Grant',
+    icon: <FaBullhorn size={15} />,
+    subitems: [
+      { route: '/superadmin/grant/item', name: 'Item', icon: <Box size={15} />, subitems: [] },
+      { route: '/superadmin/grant/currency', name: 'Currency', icon: <FaMoneyBill size={15} />, subitems: [] },
+    ],
+  },
   {
     route: '/superadmin/website',
     name: 'Website',
@@ -85,8 +68,32 @@ export const superadminRoutes: SuperadminRoute[] = [
       { route: '/superadmin/website/socialmedia', name: 'Social Media', icon: null, subitems: [] },
     ],
   },
+  {
+    route: '/superadmin/',
+    name: 'Newsletter',
+    icon: <FaBullhorn size={15} />,
+    subitems: [
+      { route: '/superadmin/newsletter/subscribers', name: 'Subscribers', icon: <FaBullhorn size={15} />, subitems: [] },
+      { route: '/superadmin/newsletter/registered', name: 'Registered', icon: <FaBullhorn size={15} />, subitems: [] },
+    ],
+  },
+  { route: '/superadmin/maintenance', name: 'Maintenance', icon: <GrVmMaintenance size={15} />, subitems: [] },
+  { route: '/superadmin/topuphistory', name: 'Topup History', icon: <List size={15} />, subitems: [] },
+
   
-  { route: '/superadmin/seasons', name: 'Seasons', icon: <PiRanking size={15} />, subitems: [] },
+  // {
+  //   route: '/superadmin/announcement',
+  //   name: 'Announcement',
+  //   icon: <FaBullhorn size={15} />,
+  //   subitems: [
+  //     { route: '/superadmin/announcement/message', name: 'Message', icon: <FaBullhorn size={15} />, subitems: [] },
+  //     { route: '/superadmin/announcement/update', name: 'Update', icon: <FaBullhorn size={15} />, subitems: [] },
+  //   ],
+  // },
+  // {route: '/superadmin/grant', name: 'Grant', icon: <Box size={15} />, subitems: [] },
+  // { route: '/superadmin/grantcurrency', name: 'Grant Currency', icon: <Wallet size={15} />, subitems: [] },
+  // {route: '/superadmin/freebie', name: 'Freebie', icon: <GemIcon size={15} />, subitems: [] },
+  // { route: '/superadmin/seasons', name: 'Seasons', icon: <PiRanking size={15} />, subitems: [] },
 ];
 
 

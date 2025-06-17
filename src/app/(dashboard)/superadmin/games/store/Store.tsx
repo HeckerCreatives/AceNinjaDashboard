@@ -52,6 +52,14 @@ const rarities = [
 ]
 
 
+const rarutyFilter = [
+  {name: 'All', value: 'all'},
+  {name: 'Basic', value: 'basic'},
+  {name: 'Fashion', value: 'common'},
+  {name: 'Drip', value: 'rare'},
+  {name: 'Epic', value: 'legendary'},
+]
+
 const stores = [
   {name: 'Skins', data: "skins"},
   {name: 'Skills', data: "skills"},
@@ -164,7 +172,7 @@ export default function Store() {
         <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6'>
 
             {Object.values(data?.data || {}).map((item, index) => (
-              <StoreItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description} currency={item.currency} gender={item.gender} type={item.type} tab={tab} editable={false} deletable={deleteState(tab)}/>
+              <StoreItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={rarutyFilter.find((rarity) => rarity.value === item.rarity)?.name || ''} description={item.description} currency={item.currency} gender={item.gender} type={item.type} tab={tab} editable={false} deletable={deleteState(tab)} exp={item.exp} coins={item.coins} crystal={item.crystals}/>
             ))}
         </div>
         </>

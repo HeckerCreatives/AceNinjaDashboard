@@ -22,6 +22,9 @@ type Item = {
     imageUrl: string;
     currency: string
     gender:string
+    exp: number,
+    crystals: number,
+    coins: number
 };
 
 type ItemsData = Record<string, Item>;
@@ -68,6 +71,25 @@ interface ListAllItem {
   message: string;
   data: Data;
 }
+
+
+export interface GetSkillsResponse {
+  message: string;
+  data: {
+    skills: Skill[];
+  };
+}
+
+export interface Skill {
+  skillid: string;
+  name: string;
+  description: string;
+  category: string;
+  maxLevel: number;
+  prerequisites: string[];
+  type: 'skills'
+}
+
 
 
 
@@ -279,7 +301,7 @@ export const useGetAllItems = ( excludeType: string[]) => {
 };
 
 
-export const getAllSkills = async ( ): Promise<ListAllItem> => { 
+export const getAllSkills = async ( ): Promise<GetSkillsResponse> => { 
   const response = await axiosInstance.get(
     "/marketplace/getskills",
   );
