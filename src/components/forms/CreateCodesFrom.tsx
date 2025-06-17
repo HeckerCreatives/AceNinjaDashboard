@@ -53,7 +53,7 @@ export default function CreateQuestForm() {
     const {data, isLoading} = useGetAllItems(['chests','freebie'])
     const [type, setType] = useState('')
     const {data: skills} = useGetAllSkills()
-    const [filter, setFilter] = useState('outfit')
+    const [filter, setFilter] = useState('')
     const [item, setItem] = useState('')
     const [male, setMale] = useState('')
     const [itemlist, setItemlist] = useState<string[]>([])
@@ -77,7 +77,7 @@ export default function CreateQuestForm() {
     });
 
     const createRedeemcodes = async ( data: CreateCode) => {
-        if(filter !== 'outfit' && item === ''){
+        if(filter !== 'outfit' && item === '' && filter !== ''){
                 toast.error(`Please select an item.`);
             } else if(filter === 'outfit' && male === ''){
                 toast.error(`Please select a male ${filter}.`);
