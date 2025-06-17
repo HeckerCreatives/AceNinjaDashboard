@@ -62,7 +62,7 @@ export default function DailySpincard(prop: Props) {
                 </SelectTrigger>
                 <SelectContent>
                     <SelectItem value="coins">Coins</SelectItem>
-                    <SelectItem value="crystal">Crystals</SelectItem>
+                    {/* <SelectItem value="crystal">Crystals</SelectItem> */}
                 </SelectContent>
                 </Select>
 
