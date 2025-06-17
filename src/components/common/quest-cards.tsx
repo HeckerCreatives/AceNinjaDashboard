@@ -66,6 +66,7 @@ interface QuestProps {
   // **New prop**: Specify if mission is 'freeMissions' or 'premiumMissions' for API
   missionCategory: "freeMissions" | "premiumMissions";
   rewardtype?: string
+  timeleft?: number
 }
 
 export default function QuestCard({
@@ -82,7 +83,8 @@ export default function QuestCard({
   isEditable = false,
   bpid,
   missionCategory,
-  rewardtype
+  rewardtype,
+  timeleft
 }: QuestProps) {
   const [timeRemaining, setTimeRemaining] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -129,40 +131,40 @@ export default function QuestCard({
     }
   };
 
-useEffect(() => {
-  const calculateTimeRemaining = () => {
-    const now = new Date();
+function formatMilliseconds(ms: number): string {
+  if (ms <= 0) return "Refreshing...";
+  const hours = Math.floor(ms / (1000 * 60 * 60));
+  const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
 
-    // Set refresh time to 8:00 AM today
-    const refreshDate = new Date();
-    refreshDate.setHours(8, 0, 0, 0); // 8:00:00 AM
 
-    // If it's already past 8 AM, move to tomorrow
-    if (now >= refreshDate) {
-      refreshDate.setDate(refreshDate.getDate() + 1);
+ useEffect(() => {
+  if (typeof timeleft !== "number") {
+    setTimeRemaining("N/A");
+    return;
+  }
+
+  let remaining = timeleft;
+
+  const updateCountdown = () => {
+    setTimeRemaining(formatMilliseconds(remaining));
+    remaining -= 1000;
+
+    if (remaining <= 0) {
+      clearInterval(timer);
+      setTimeRemaining("Refreshing...");
     }
-
-    const diffMs = refreshDate.getTime() - now.getTime();
-
-    if (diffMs <= 0) return "Refreshing...";
-
-    const hours = Math.floor(diffMs / (1000 * 60 * 60));
-    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
-
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  setTimeRemaining(calculateTimeRemaining());
-
-  const timer = setInterval(() => {
-    setTimeRemaining(calculateTimeRemaining());
-  }, 1000);
+  updateCountdown(); // Initial render
+  const timer = setInterval(updateCountdown, 1000);
 
   return () => clearInterval(timer);
-}, [refreshTime]);
+}, [timeleft]);;
 
 
   const handleEditClick = () => {

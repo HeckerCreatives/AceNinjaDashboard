@@ -180,6 +180,7 @@ const handleMissionUpdate = (
                            id={quest._id}
                           isEditable={true} missiontype={'Free'} bpid={data?.data[0].id || ''} missionCategory={'freeMissions'} missiondata={data?.data[0].freeMissions || []}
                           rewardtype={quest.rewardtype}
+                          timeleft={quest.timer}
                           />
                       ))}
 
@@ -204,7 +205,9 @@ const handleMissionUpdate = (
                           missiondata={data?.data[0].premiumMissions || []}
                           isEditable={true} missiontype={'Premium'}  
                           bpid={data?.data[0].id || ''} missionCategory={'premiumMissions'}
-                          rewardtype={quest.rewardtype}     
+                          rewardtype={quest.rewardtype}   
+                          timeleft={quest.timer}
+
                           />
                       ))}
 
@@ -231,7 +234,7 @@ const handleMissionUpdate = (
                           currentPoints={0}
                           type={quest.daily ? 'Daily Quest' : 'Weekly Quest'}
                           isEditable={true} missiontype={'Daily'} rewardtype={quest.rewardtype}
-                          
+                          timeleft={quest.timer}
                           />
                       ))}
 

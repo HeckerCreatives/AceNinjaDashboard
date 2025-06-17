@@ -48,6 +48,8 @@ interface Mission {
   daily: boolean;
   _id: string;
   rewardtype: string
+  timer: number
+
 }
 
 interface Tier {
@@ -78,6 +80,7 @@ export interface Quest {
   xpReward: number
   createdAt: string
   rewardtype: string
+  timer: number
 }
 
 interface StatDetails {
