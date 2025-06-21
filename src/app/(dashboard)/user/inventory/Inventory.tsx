@@ -106,7 +106,7 @@ return (
                   itemname={entry.item?.details?.name || ''}
                   itemprice={entry.item?.details?.price || 0}
                   rarity={entry.item?.details?.rarity || ''}
-                  description={entry.item?.details?.description || ''} currency={entry.item?.details.currency || ''}                />
+                  description={entry.item?.details?.description || ''} currency={entry.item?.details.currency || ''} type={entry.type} />
               ))}
             </div>
 

@@ -135,44 +135,8 @@ export default function Purchase() {
         <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6'>
 
             {Object.values(data?.data || {}).map((item, index) => (
-              <MarketItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description} currency={item.currency}/>
+              <MarketItems key={item.itemId} imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${item.imageUrl}`} damage={item.stats.damage} defense={item.stats.defense} speed={item.stats.speed} itemid={item.itemId} itemname={item.name} itemprice={item.price} rarity={item.rarity} description={item.description} currency={item.currency} type={type}/>
         
-              // <div className=' w-full h-auto flex flex-col'>
-              //   <div className=' relative w-full h-[300px] bg-zinc-800'>
-              //     <div className=' flex flex-col gap-1 absolute p-4'>
-              //       {item.stats.damage > 0 && (
-              //         <div className='flex items-center'>
-              //           <p className='text-[.7rem] flex items-center gap-1'>
-              //             <MoveUp size={12} className='text-green-500' /> {item.stats.damage} damage
-              //           </p>
-              //         </div>
-              //       )}
-
-              //       {item.stats.defense > 0 && (
-              //         <div className='flex items-center'>
-              //           <p className='text-[.7rem] flex items-center gap-1'>
-              //             <MoveUp size={12} className='text-green-500' /> {item.stats.defense} defense
-              //           </p>
-              //         </div>
-              //       )}
-
-              //       {item.stats.speed > 0 && (
-              //         <div className='flex items-center'>
-              //           <p className='text-[.7rem] flex items-center gap-1'>
-              //             <MoveUp size={12} className='text-green-500' /> {item.stats.speed} speed
-              //           </p>
-              //         </div>
-              //       )}
-
-              //     </div>
-              //   </div>
-
-              //   <div className=' w-full flex flex-col gap-1 py-2'>
-              //     <p className=' text-[.8rem] whitespace-pre-wrap'>{item.name} <span className={` text-[.6rem] ${rarityColor(item.rarity)}`}>{item.rarity}</span></p>
-              //     <p className=' text-sm font-semibold'>{item.price.toLocaleString()}</p>
-              //   </div>
-              
-              // </div>
             ))}
         </div>
         </>
@@ -191,32 +155,6 @@ export default function Purchase() {
     {Object.values(data?.data || {}).length !== 0 && (
       <PaginitionComponent currentPage={currentPage} total={totalpage} onPageChange={handlePageChange }/>
     )}
-
-    
-
-    {/* <Table className=' text-xs'>
-      <TableCaption></TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="">Item Id</TableHead>
-          <TableHead>Item Name</TableHead>
-          <TableHead>Item Price</TableHead>
-          <TableHead>Item Currency</TableHead>
-          <TableHead>Buy Date</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Object.values(data?.data || {}).map((item, index) => (
-          <TableRow>
-          <TableCell className="">{item.name}</TableCell>
-          <TableCell>Paid</TableCell>
-          <TableCell>Credit Card</TableCell>
-          <TableCell className="text-right">$250.00</TableCell>
-        </TableRow>
-        ))}
-        
-      </TableBody>
-    </Table> */}
 
     </div>
   )

@@ -122,3 +122,22 @@ export const currencyCardImg = (data: string) => {
         return <p className=" text-4xl font-bold">$</p>
     } 
 }
+
+
+export const itemIcon = (data: string) => {
+        if(data === 'skins'){
+          return '/store/skins.png'
+        } else  if(data === 'skills'){
+          return '/store/skills.png'
+        } else if(data === 'chest'){
+          return '/store/chest.png'
+        } else if(data === 'freebie'){
+          return '/store/freebie.png'
+        } else if(data === 'crystalpacks'){
+          return '/store/crystalpack.png'
+        } else if(data === 'goldpacks'){
+          return '/store/goldpacks.png'
+        } else {
+          return '/store/skins.png'
+        }
+    }

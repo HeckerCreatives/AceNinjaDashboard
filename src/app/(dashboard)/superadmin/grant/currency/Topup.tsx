@@ -1,6 +1,6 @@
 'use client'
 import { Input } from '@/components/ui/input'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Select,
     SelectContent,
@@ -14,9 +14,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SendCurrency, sendCurrencySchema } from '@/validation/schema';
 import { useSendAmount } from '@/client_actions/superadmin/topup'
 import toast from 'react-hot-toast'
+import Loader from '@/components/common/Loader'
 
 export default function Topup() {
-    const {mutate: sendAmount} = useSendAmount()
+    const {mutate: sendAmount, isPending} = useSendAmount()
+    const [formattedValue, setFormattedValue] = useState('0')
+
     const {
         register,
         handleSubmit,
@@ -38,12 +41,28 @@ export default function Topup() {
                     amount: 0,
                     currency: ''
                     });
+
+                    setFormattedValue('0')
     
               },
            })
     };
 
     const currency = watch("currency")
+    const amount = watch('amount');
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const rawValue = e.target.value.replace(/,/g, '')
+        let numberValue = parseInt(rawValue, 10)
+
+        if (!isNaN(numberValue)) {
+        setFormattedValue(numberValue.toLocaleString())
+        setValue('amount', numberValue)
+        } else {
+        setFormattedValue('')
+        setValue('amount', 0)
+        }
+    }
 
     return (
         <div className='w-full h-full flex items-center justify-center mt-8'>
@@ -83,14 +102,17 @@ export default function Topup() {
                 <label className='text-xs mt-2'>Amount</label>
                 <Input 
                     placeholder='Amount' 
-                    type='number' 
+                    type='text' 
                     className='border-amber-400 bg-[#4C4106] text-white'  
-                    {...register('amount')}
+                    value={formattedValue}
+                    onChange={handleInputChange}
                 />
                 {errors.amount && <p className="text-red-500 text-xs">{errors.amount.message}</p>}
 
                 {/* Submit Button */}
-                <Button className='mt-6'>Send</Button>
+                <Button disabled={isPending} className='mt-6 flex items-center justify-center gap-2'>
+                    {isPending && <Loader/>}
+                    Send</Button>
             </form>
         </div>
     )

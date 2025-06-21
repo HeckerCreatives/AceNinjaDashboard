@@ -14,7 +14,7 @@ import { useBuyItem } from '@/client_actions/user/marketplace'
 import useCharacterStore from '@/hooks/character'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
-import { currencyImg } from '@/utils/findAsset'
+import { currencyImg, itemIcon} from '@/utils/findAsset'
   
 
 type Items = {
@@ -28,6 +28,7 @@ itemprice: number
 rarity: string
 description: string
 currency: string
+type: string
 }
 export default function MarketItems(data: Items) {
     const [open, setOpen] = useState(false)
@@ -60,8 +61,9 @@ export default function MarketItems(data: Items) {
   return (
     <div className=' w-full h-auto flex flex-col'>
         <div className=' relative w-full h-[300px] bg-zinc-800'>
-            <img src={data.imgUrl} alt="item" className=' object-cover w-full h-full opacity-70' />
-
+            {/* <img src={data.imgUrl} alt="item" className=' object-cover w-full h-full opacity-70' /> */}
+            <img src={itemIcon(data.type)} alt="item" className=' object-cover h-full opacity-50' />
+            
             <div className=' flex flex-col gap-1 top-2 left-2 absolute p-4'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>

@@ -92,7 +92,7 @@ export default function TopupHistory() {
                             
                             <TableCell>{item.username}</TableCell>
                             <TableCell>{item.currency}</TableCell>
-                            <TableCell>{item.value}</TableCell>
+                            <TableCell>{item.value.toLocaleString()}</TableCell>
                            
                         </TableRow>
                     ))}

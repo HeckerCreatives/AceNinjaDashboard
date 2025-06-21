@@ -64,6 +64,11 @@ export default function News() {
         return match ? match[1] : null;
     };
 
+     const truncateText = (text: string, maxLength = 300) => {
+        if (text.length <= maxLength) return text
+        return text.substring(0, maxLength) + "..."
+    }
+
   return (
     <div className=' w-full'>
 
@@ -89,8 +94,7 @@ export default function News() {
                 <TableHeader>
                     <TableRow>
                     <TableHead className=' w-[300px]'>Image / Video Link</TableHead>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Description</TableHead>
+                    <TableHead>Content</TableHead>
                     <TableHead>Action</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -112,8 +116,31 @@ export default function News() {
                                 
                             )}
                         </TableCell>
-                        <TableCell>{item.title}</TableCell>
-                        <TableCell>{item.content}</TableCell>
+                        <TableCell>
+                            <div className="space-y-2 ">
+                            <p className="text-sm text-muted-foreground leading-relaxed max-w-[700px]">{truncateText(item.content)}</p>
+                            
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                <Button
+                                    variant="link"
+                                    className="h-auto p-0 text-primary hover:underline"
+                                >
+                                    See more
+                                </Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[600px] max-h-[80vh] h-fit overflow-y-auto p-8">
+                                <DialogHeader>
+                                    <DialogTitle>{item.title}</DialogTitle>
+                                    <DialogDescription className=' text-xs mt-4'>Full news description</DialogDescription>
+                                </DialogHeader>
+                                <div className="mt-4">
+                                    <p className="text-sm leading-relaxed text-foreground">{item.content}</p>
+                                </div>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
+                        </TableCell>
                         <TableCell className=' flex items-center gap-2 h-[150px]'>
                             <EditNewsForm title={item.title} content={item.content} type={item.type} url={item.url} id={item.id}/>
                             <Dialog>

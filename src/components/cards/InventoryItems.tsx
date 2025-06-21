@@ -6,7 +6,7 @@ import useCharacterStore from '@/hooks/character'
 import toast from 'react-hot-toast'
 import SellItems from '@/app/(dashboard)/user/inventory/SellItem'
 import EquipItems from '@/app/(dashboard)/user/inventory/EquipItems'
-import { currencyImg } from '@/utils/findAsset'
+import { currencyImg, itemIcon } from '@/utils/findAsset'
 
 type Items = {
 imgUrl: string
@@ -19,6 +19,7 @@ itemprice: number
 rarity: string
 description: string
 currency: string
+type: string
 
 }
 
@@ -54,7 +55,8 @@ export default function InventoryItems(data: Items) {
   return (
     <div className=' w-full h-auto flex flex-col'>
         <div className=' relative w-full h-[300px] bg-zinc-800'>
-        <img src={`${process.env.NEXT_PUBLIC_API_URL}/${data.imgUrl}`} alt="item" className=' object-cover w-full h-full opacity-70' />
+            <img src={itemIcon(data.type)} alt="item" className=' object-cover h-full opacity-50' />
+        
             <div className=' flex flex-col gap-1 absolute top-2 left-2 p-4'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>

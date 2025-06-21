@@ -39,7 +39,7 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
   const { charactername, setCharactername} = useCharacterNameStore()
   const {isOpen, openDialog, closeDialog} = useDialogStore()
   const {playername} = usePlayerNameStore()
-    const { data: chardata } = useUserData(characterid)
+  const { data: chardata } = useUserData(characterid)
 
   //charcter id persist
  useEffect(() => {
@@ -49,7 +49,7 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
     }
     setCharactername(data[0].username);
   }
-}, [data, characterid, setCharacterid, setCharactername]);
+}, [data, characterid]);
 
 
 
