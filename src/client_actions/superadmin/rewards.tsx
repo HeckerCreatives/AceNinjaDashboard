@@ -31,9 +31,9 @@ export const useDailySpin = () => {
   return useQuery({
     queryKey: ["dailyspin"],
     queryFn: () => getDailySpin(),
-    staleTime: 5 * 60 * 1000,
-    refetchOnMount: false, 
-    refetchOnWindowFocus: false,
+    // staleTime: 5 * 60 * 1000,
+    // refetchOnMount: false, 
+    // refetchOnWindowFocus: false,
   });
 };
 

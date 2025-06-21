@@ -39,18 +39,13 @@ import DailySpincard from '@/components/common/DailySpincard'
 
   
 
-export default function Dailyspin() {
-    const [currentPage, setCurrentPage] = useState(0)
-    const [totalPage, setTotalPage] = useState(0)
-    const [open, setOpen] = useState(false)
-    const {data} = useDailySpin()
-    
-  //paginition
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
+export default function DailyspinRewards() {
+    const {data, error} = useDailySpin()
 
-  console.log(data)
+    if (error) return <p className="text-red-500 p-4">Failed to load daily spin rewards.</p>;
+    
+
+
 
   return (
     <div className=' w-full ~p-2/8'>
@@ -63,9 +58,17 @@ export default function Dailyspin() {
             </div>
 
             <div className=' w-full -full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] p-6 gap-4'>
-                {data?.data.map((item, index) => (
-                <DailySpincard amount={item.amount} type={item.type} slot={item.slot} chance={item.chance}/>
-                ))}
+             {Array.isArray(data?.data) && data.data.map((item, index) => (
+              <DailySpincard
+                key={item.id || index}
+                amount={item.amount}
+                type={item.type}
+                slot={item.slot}
+                chance={item.chance}
+              />
+            ))}
+
+                
                 
             </div>
 
