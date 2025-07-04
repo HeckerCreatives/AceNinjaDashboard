@@ -84,6 +84,8 @@ export default function UpdateBattlePass( prop: Props) {
     const {data: others} = useGetItemRewards('weapon', 'unisex')
     const {data: maleitems} = useGetItemRewards('outfit', 'male')
     const {data: femaleitems} = useGetItemRewards('outfit', 'female')
+
+    console.log(prop)
     
    
 
@@ -130,10 +132,8 @@ export default function UpdateBattlePass( prop: Props) {
         const items = prop.items;
 
         if (prop.itemtype === 'weapon') {
-          if (items.length > 0) {
             setItem(items[0].itemid);
             setItemlist([items[0].itemid]);
-          }
         } else if (prop.itemtype === 'outfit') {
           // male = items[0], female = items[1]
           const [maleItem, femaleItem] = items;

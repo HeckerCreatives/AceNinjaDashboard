@@ -29,25 +29,25 @@ export const titleAssets = (data: number) => {
     if(data === 0){
         return <p className=' text-xs'>No title equiped</p>
     } else  if(data === 1){
-        return <img src="/Titles/1-Ace Comp.gif" alt="titles" width={250}/>
+        return <img src="/Titles/1-Ace Comp.gif" alt="title" width={250}/>
     }else  if(data === 2){
-        return <img src="/Titles/2-Clan God Comp.gif" alt="badge" width={250} />
+        return <img src="/Titles/2-Clan God Comp.gif" alt="title" width={250} />
     }else  if(data === 3){
-        return <img src="/Titles/3-Final BOss Comp.gif" alt="badge" width={250}/>
+        return <img src="/Titles/3-Final BOss Comp.gif" alt="title" width={250}/>
     }else  if(data === 4){
-        return <img src="/Titles/4-Goat Comp.gif" alt="badge" width={250}/>
+        return <img src="/Titles/4-Goat Comp.gif" alt="title" width={250}/>
     }else  if(data === 5){
-        return <img src="/Titles/5-MasterMind Comp.gif" alt="badge" width={250}/>
+        return <img src="/Titles/5-MasterMind Comp.gif" alt="title" width={250}/>
     }else  if(data === 6){
-        return <img src="/Titles/6-Player Diff Comp.gif" alt="badge"width={250} />
+        return <img src="/Titles/6-Player Diff Comp.gif" alt="title"width={250} />
     }else  if(data === 7){
-        return <img src="/Titles/7-Stylish Comp.gif" alt="badge" width={250}/>
+        return <img src="/Titles/7-Stylish Comp.gif" alt="title" width={250}/>
     }else  if(data === 8){
-        return <img src="/Titles/8-Unkillable Comp.gif" alt="badge" width={250}/>
+        return <img src="/Titles/8-Unkillable Comp.gif" alt="title" width={250}/>
     }else  if(data === 9){
-        return <img src="/Titles/9-Vip_title_animation.gif" alt="badge" width={250}/>
+        return <img src="/Titles/9-Vip_title_animation.gif" alt="title" width={250}/>
     }else  if(data === 10){
-        return <img src="/Titles/10-void walker Comp.gif" alt="badge" width={250}/>
+        return <img src="/Titles/10-void walker Comp.gif" alt="title" width={250}/>
     }
 }
 

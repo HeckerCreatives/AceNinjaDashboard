@@ -21,6 +21,50 @@ export interface ApiResponse {
 }
 
 
+export interface TitleItem {
+  id: string
+  index: number
+  title: string
+  description: string
+}
+
+export interface TitleItemResponse {
+  message: string
+  data: TitleItem[]
+  pagination: {
+    currentPage: number
+    totalPages: number
+    totalItems: number
+    itemsPerPage: number
+    hasNext: boolean
+    hasPrev: boolean
+  }
+}
+
+
+export interface BadgeItem {
+  id: string
+  index: number
+  title: string
+  description: string
+}
+
+export interface BadgeItemResponse {
+  message: string
+  data: BadgeItem[]
+  pagination: {
+    currentPage: number
+    totalPages: number
+    totalItems: number
+    itemsPerPage: number
+    hasNext: boolean
+    hasPrev: boolean
+  }
+}
+
+
+
+
 
 export const getItemRewards = async ( itemType: string, genderType: string): Promise<ApiResponse> => { 
   const response = await axiosInstance.get(
@@ -40,6 +84,41 @@ export const useGetItemRewards = ( itemType: string, genderType: string) => {
     refetchOnWindowFocus: false,
   });
 };
+
+
+export const getTitleRewards = async (): Promise<TitleItemResponse> => { 
+  const response = await axiosInstance.get(
+    "/title/gettitles?page=0&limit=99999",
+  );
+  return response.data;
+};
+
+
+export const useGetTitleRewards = () => {
+  return useQuery({
+    queryKey: ["titlerewards" ],
+    queryFn: () => getTitleRewards(),
+   
+  });
+};
+
+
+export const getBadgeRewards = async (): Promise<BadgeItemResponse> => { 
+  const response = await axiosInstance.get(
+    "/badge/getbadges?page=0&limit=99999",
+  );
+  return response.data;
+};
+
+
+export const useGetBadgeRewards = () => {
+  return useQuery({
+    queryKey: ["badgerewards" ],
+    queryFn: () => getBadgeRewards(),
+   
+  });
+};
+
 
 
 

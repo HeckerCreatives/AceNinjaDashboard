@@ -157,7 +157,7 @@ export default function Battlepass() {
                         </TableCell>
                         <TableCell className="font-medium">{item.status}</TableCell>
                         <TableCell className="font-medium">
-                            <UpdateBattlePass seasonname={item.title} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.premiumCost} grandreward={item.grandreward.map(reward => reward._id)} id={item.id} season={Number(item.season)} rewarditems={data.grandrewarditems} itemtype={item.grandreward[0].inventorytype} 
+                            <UpdateBattlePass seasonname={item.title} start={item.startDate} end={item.endDate} status={item.status} tiercount={item.tierCount} premcost={item.premiumCost} grandreward={item.grandreward.map(reward => reward._id)} id={item.id} season={Number(item.season)} rewarditems={data.grandrewarditems} itemtype={item.grandreward[0]?.inventorytype} 
                             items={item.grandreward.map(item => ({
                             itemid: item._id,
                             itemtype: item.type

@@ -10,10 +10,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Coins, Zap, Gem, Edit, Save, X, Lock, Crown, Star } from "lucide-react"
 import { useUpdateBpTiers } from "@/client_actions/superadmin/battlepass"
 import toast from "react-hot-toast"
+import RewardSelector from "./RewardSelector"
+import { useGetBadgeRewards, useGetItemRewards, useGetTitleRewards } from "@/client_actions/superadmin/itemrewards"
 
 interface Reward {
-  type: "coins" | "exp" | "crystal" | string
-  amount: number
+  type: string
+  amount?: number
+  id?: string
+  fid?: string
+  maleSkin?: string
+  femaleSkin?: string
 }
 
 interface Tier {
@@ -46,20 +52,20 @@ export default function BattlePassTiers({
   const [editForm, setEditForm] = useState<Tier | null>(null)
   const {mutate: updateBpTiers} = useUpdateBpTiers()
 
+  const { data: weaponData } = useGetItemRewards("weapon", "unisex")
+const { data: skillItems } = useGetItemRewards("skills", "unisex")
+const { data: maleItems } = useGetItemRewards("outfit", "male")
+const { data: femaleItems } = useGetItemRewards("outfit", "female")
+
+ const {data: titleItems} = useGetTitleRewards()
+ const {data: badgeItems} = useGetBadgeRewards()
+
+  
+console.log('Badge',badgeItems)
+
   const handleEdit = (tier: Tier) => {
     setEditingId(tier._id)
     setEditForm({ ...tier })
-  }
-
-  const handleSave = () => {
-    if (editForm && editingId) {
-      const updatedTiers = tierData.map((tier) => (tier._id === editingId ? editForm : tier))
-      setTierData(updatedTiers)
-      setEditingId(null)
-      setEditForm(null)
-      onSave?.(updatedTiers)
-      updateBpTiersData()
-    }
   }
 
   const handleCancel = () => {
@@ -134,33 +140,112 @@ export default function BattlePassTiers({
     return Math.min(100, (currentProgress / tierXP) * 100)
   }
 
-  const updateBpTiersData = async () => {
-  updateBpTiers({
-    bpid: id,
-    tierid: editForm?._id,
-    tier: editForm
-   
-  }, {
-    onSuccess: () => {
-      toast.success(`Battle Pass Tier Rewards updated successfully.`);
+
+function transformPremiumReward(reward: Reward): Reward {
+  switch (reward.type) {
+    case "skin":
+      return {
+        type: reward.type,
+        id: reward.id ?? "",
+        fid: reward.fid ?? "",
+      }
+    case "weapon":
+    case "skill":
+    case "badge":
+    case "title":
+      return {
+        type: reward.type,
+        id: reward.id ?? "",
+      }
+    case "coins":
+    case "exp":
+    case "crystal":
+      return {
+        type: reward.type,
+        amount: reward.amount ?? 0,
+      }
+    default:
+      return {
+        type: reward.type,
+        amount: reward.amount ?? 0,
+      }
+  }
+}
+
+
+
+
+
+
+    const handleSave = () => {
+      if (!editForm || !editingId) return
+
+      const transformedReward = transformPremiumReward(editForm.premiumReward)
+
+      updateBpTiers(
+        {
+          bpid: id,
+          tierid: editForm._id,
+          tier: {
+            ...editForm,
+            premiumReward: transformedReward,
+          },
+        },
+        {
+          onSuccess: () => {
+            const updatedTiers = tierData.map((tier) =>
+              tier._id === editingId ? editForm : tier
+            )
+            setTierData(updatedTiers)
+            setEditingId(null)
+            setEditForm(null)
+            toast.success("Battle Pass Tier Rewards updated successfully.")
+            onSave?.(updatedTiers) 
+          },
+          onError: () => {
+            toast.error("Failed to update the tier. Please try again.")
+          },
+        }
+      )
     }
-  });
-};
+
+
+    function getItemName(type: string, id: string | undefined, fid?: string): string {
+      if (!id && !fid) return "Unknown"
+
+      switch (type) {
+        case "weapon":
+          return weaponData?.data?.items?.find((item) => item.itemid === id)?.name ?? "Unknown"
+        case "skill":
+          return skillItems?.data?.items?.find((item) => item.itemid === id)?.name ?? "Unknown"
+        case "skin": {
+          const maleName = maleItems?.data?.items?.find((item) => item.itemid === id)?.name 
+          const femaleName = femaleItems?.data?.items?.find((item) => item.itemid === fid)?.name
+          return `${maleName} & ${femaleName}`
+        }
+        case "badge":
+          return badgeItems?.data?.find((item) => item.id === id)?.title ?? "Unknown"
+        case "title":
+          return titleItems?.data?.find((item) => item.id === id)?.title ?? "Unknown"
+        default:
+          return "Unknown"
+      }
+    }
+
+
+    
+
 
   return (
     <div className="bg-gradient-to-br from-amber-950 via-amber-800 to-amber-500 p-6 h-full overflow-y-auto">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-white mb-2 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
             {title}
           </h1>
           <p className="text-slate-200 text-sm">Battle Pass Progression</p>
           <div className="mt-4 flex justify-center gap-4">
-            {/* <div className="inline-flex items-center gap-2 bg-slate-800/50 rounded-full px-4 py-2 border border-slate-700">
-              <Zap className="w-5 h-5 text-blue-400" />
-              <span className="text-white text-sm font-semibold">Current XP: {currentXP.toLocaleString()}</span>
-            </div> */}
+           
             {hasPremium && (
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full px-4 py-2">
                 <Crown className="w-5 h-5 text-white" />
@@ -170,8 +255,7 @@ export default function BattlePassTiers({
           </div>
         </div>
 
-        {/* Tiers Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
           {tierData.map((tier) => {
             const unlocked = isUnlocked(tier)
             const progress = getProgressToTier(tier)
@@ -179,13 +263,12 @@ export default function BattlePassTiers({
             return (
               <Card
                 key={tier._id}
-                className={`relative overflow-hidden transition-all duration-300 ${
+                className={`relative overflow-hidden transition-all duration-300 py-4 ${
                   unlocked
                     ? "bg-gradient-to-br from-green-900/50 to-green-800/50 border-green-600 shadow-lg shadow-green-500/20"
                     : "bg-slate-800/50 border-amber-600 hover:border-slate-600"
                 }`}
               >
-                {/* Tier Number Badge */}
                 <div className="absolute top-2 left-2 z-10">
                   <Badge
                     variant={unlocked ? "default" : "secondary"}
@@ -195,7 +278,6 @@ export default function BattlePassTiers({
                   </Badge>
                 </div>
 
-                {/* Edit Button */}
                 <div className="absolute top-2 right-2 z-10">
                   {editingId === tier._id ? (
                     <div className="flex gap-1">
@@ -241,46 +323,57 @@ export default function BattlePassTiers({
                 </CardHeader>
 
                 <CardContent className="space-y-3 pt-0">
-                  {/* Free Reward */}
                   <div className="bg-slate-700/50 rounded-lg p-3">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-slate-300 text-xs font-medium">Free</span>
                       {!unlocked && <Lock className="w-3 h-3 text-slate-500" />}
                     </div>
                     {editingId === tier._id ? (
-                      <div className="space-y-2">
-                        <Select
-                          value={editForm?.freeReward.type}
-                          onValueChange={(value) => updateEditForm("freeReward.type", value)}
-                        >
-                          <SelectTrigger className="bg-slate-600 border-slate-500 text-white text-xs">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="coins">Coins</SelectItem>
-                            <SelectItem value="exp">EXP</SelectItem>
-                            <SelectItem value="crystal">Crystal</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Input
-                          type="number"
-                          value={editForm?.freeReward.amount || 0}
-                          onChange={(e) => updateEditForm("freeReward.amount", e.target.value)}
-                          className="bg-slate-600 border-slate-500 text-white text-xs"
-                          placeholder="Amount"
+                      // <div className="space-y-2">
+                      //   <Select
+                      //     value={editForm?.freeReward.type}
+                      //     onValueChange={(value) => updateEditForm("freeReward.type", value)}
+                      //   >
+                      //     <SelectTrigger className="bg-slate-600 border-slate-500 text-white text-xs">
+                      //       <SelectValue />
+                      //     </SelectTrigger>
+                      //     <SelectContent>
+                            
+                      //       <SelectItem value="coins">Coins</SelectItem>
+                      //       <SelectItem value="exp">EXP</SelectItem>
+                      //       <SelectItem value="crystal">Crystal</SelectItem>
+                      //     </SelectContent>
+                      //   </Select>
+                      //   <Input
+                      //     type="number"
+                      //     value={editForm?.freeReward.amount || 0}
+                      //     onChange={(e) => updateEditForm("freeReward.amount", e.target.value)}
+                      //     className="bg-slate-600 border-slate-500 text-white text-xs"
+                      //     placeholder="Amount"
+                      //   />
+                      // </div>
+
+                      <>
+                      {editForm && (
+                        <RewardSelector
+                          reward={editForm.freeReward}
+                          onChange={(updated) => updateEditForm("freeReward", updated)}
                         />
-                      </div>
+                      )}
+                      </>
+
+                      
+
                     ) : (
                       <div className="flex items-center gap-2">
                         {getRewardIcon(tier.freeReward.type)}
                         <span className={`text-sm font-bold ${getRewardColor(tier.freeReward.type)}`}>
-                          {tier.freeReward.amount.toLocaleString()}
+                          {tier.freeReward.amount?.toLocaleString() ?? "0"}
                         </span>
                       </div>
                     )}
                   </div>
 
-                  {/* Premium Reward */}
                   <div className="bg-gradient-to-r from-yellow-900/30 to-orange-900/30 rounded-lg p-3 border border-yellow-600/30">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-1">
@@ -290,34 +383,27 @@ export default function BattlePassTiers({
                       {(!unlocked || !hasPremium) && <Lock className="w-3 h-3 text-slate-500" />}
                     </div>
                     {editingId === tier._id ? (
-                      <div className="space-y-2">
-                        <Select
-                          value={editForm?.premiumReward.type}
-                          onValueChange={(value) => updateEditForm("premiumReward.type", value)}
-                        >
-                          <SelectTrigger className="bg-slate-600 border-slate-500 text-white text-xs">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="coins">Coins</SelectItem>
-                            <SelectItem value="exp">EXP</SelectItem>
-                            <SelectItem value="crystal">Crystal</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Input
-                          type="number"
-                          value={editForm?.premiumReward.amount || 0}
-                          onChange={(e) => updateEditForm("premiumReward.amount", e.target.value)}
-                          className="bg-slate-600 border-slate-500 text-white text-xs"
-                          placeholder="Amount"
+                  
+
+                       <>
+                      {editForm && (
+                        <RewardSelector
+                          reward={editForm.premiumReward}
+                          onChange={(updated) => updateEditForm("premiumReward", updated)}
+                           isPremium
                         />
-                      </div>
+                      )}
+                      </>
                     ) : (
                       <div className="flex items-center gap-2">
                         {getRewardIcon(tier.premiumReward.type)}
-                        <span className={`text-sm font-bold ${getRewardColor(tier.premiumReward.type)}`}>
-                          {tier.premiumReward.amount.toLocaleString()}
+                       <span className={`text-sm font-bold ${getRewardColor(tier.premiumReward.type)}`}>
+                          {["coins", "exp", "crystal"].includes(tier.premiumReward.type)
+                            ? (tier.premiumReward.amount ?? 0).toLocaleString()
+                            : getItemName(tier.premiumReward.type, tier.premiumReward.id, tier.premiumReward.fid)}
                         </span>
+
+
                       </div>
                     )}
                   </div>
@@ -327,39 +413,7 @@ export default function BattlePassTiers({
           })}
         </div>
 
-        {/* Summary Stats */}
-        {/* <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-slate-800/50 border-slate-700 text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-white">{tierData.length}</div>
-              <div className="text-slate-400 text-sm">Total Tiers</div>
-            </CardContent>
-          </Card>
-          <Card className="bg-slate-800/50 border-slate-700 text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-green-400">
-                {tierData.filter((tier) => isUnlocked(tier)).length}
-              </div>
-              <div className="text-slate-400 text-sm">Unlocked</div>
-            </CardContent>
-          </Card>
-          <Card className="bg-slate-800/50 border-slate-700 text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-yellow-400">
-                {tierData[tierData.length - 1]?.xpRequired.toLocaleString() || 0}
-              </div>
-              <div className="text-slate-400 text-sm">Max XP</div>
-            </CardContent>
-          </Card>
-          <Card className="bg-slate-800/50 border-slate-700 text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-blue-400">
-                {Math.round((tierData.filter((tier) => isUnlocked(tier)).length / tierData.length) * 100)}%
-              </div>
-              <div className="text-slate-400 text-sm">Progress</div>
-            </CardContent>
-          </Card>
-        </div> */}
+      
       </div>
     </div>
   )

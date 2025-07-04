@@ -62,7 +62,10 @@ interface Tier {
 
 interface Reward {
   type: "coins" | "exp" | "crystal" | string;
-  amount: number;
+  amount?: number;
+  id?: string
+  fid?: string
+  maleSkin?: string, femaleSkin?: string
 }
 
 
