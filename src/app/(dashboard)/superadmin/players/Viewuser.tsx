@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Boxes, Check, Eye, List, Menu, Navigation, ShoppingBag, Ticket, Users } from 'lucide-react'
+import { Boxes, Check, Eye, List, ListCheck, Menu, Navigation, ShoppingBag, Ticket, Users } from 'lucide-react'
 import { GiWhirlpoolShuriken } from "react-icons/gi";
 import { TbSwords } from "react-icons/tb";
 import { PiPath } from "react-icons/pi";
@@ -32,6 +32,7 @@ import useCharacterStore from '@/hooks/character';
 import { useGetCharacters } from '@/client_actions/superadmin/dashboard';
 import useCharacterNameStore from '@/hooks/characterUsername';
 import TransactionHsitory from './viewuser/TransactionHsitory';
+import StoryHistory from './viewuser/Story';
   
 
 const viewnavigation = [
@@ -42,7 +43,8 @@ const viewnavigation = [
     {name: 'Skills', path: 'skills' , icon: <GiWhirlpoolShuriken size={20}/>},
     {name: 'Battle Pass', path: 'bp' , icon: <Ticket size={20}/>},
     {name: 'Friends', path: 'friends' , icon: <Users size={20}/>},
-    {name: 'Transaction History', path: 'history' , icon: <List size={20}/>},
+    {name: 'Story', path: 'story' , icon: <List size={20}/>},
+    {name: 'Transaction', path: 'history' , icon: <ListCheck size={20}/>},
 ]
 
 type Characters = {
@@ -84,7 +86,7 @@ export default function Viewuser( data: Props) {
           <DialogContent className=' flex flex-col items-center min-h-[90%] w-[90%] border-[1px] border-amber-500 overflow-y-auto'>
             <nav className="sticky hidden top-0 w-full bg-light lg:flex items-center justify-between gap-4 px-4 py-2 z-10">
                 <div className='flex items-center gap-4'>
-                    {viewnavigation.map((item, index) => (
+                    {/* {viewnavigation.map((item, index) => (
                     <React.Fragment key={index}>
                     {index > 0 && (
                         <div className="flex h-10">
@@ -96,7 +98,21 @@ export default function Viewuser( data: Props) {
                         {item.icon} {item.name}
                     </p>
                     </React.Fragment>
-                ))}
+                ))} */}
+
+                 <DropdownMenu>
+                <DropdownMenuTrigger className=' bg-amber-900 p-3 rounded-md'>
+                    <Menu size={20}/>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className=' translate-x-8'>
+                    <DropdownMenuLabel className=' text-sm'>Menu</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {viewnavigation.map((item, index) => (
+                    <DropdownMenuItem onClick={() => setTab(item.path)} className={`text-xs ${item.path === tab && ' text-yellow-500'}`}>{item.icon}{item.name}</DropdownMenuItem>
+                    ))}
+                   
+                </DropdownMenuContent>
+                </DropdownMenu>
 
                     <DropdownMenu>
                     <DropdownMenuTrigger className=" bg-white px-2 rounded-md">
@@ -140,8 +156,8 @@ export default function Viewuser( data: Props) {
             <nav className="sticky lg:hidden top-0 w-full bg-light flex items-center justify-between gap-4 px-4 py-2 z-10">
                 <div className='flex items-center gap-4'>
                 <DropdownMenu>
-                <DropdownMenuTrigger className=' bg-amber-900 p-1 rounded-md'>
-                    <Menu size={15}/>
+                <DropdownMenuTrigger className=' bg-amber-900 p-3 rounded-md'>
+                    <Menu size={20}/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className=' translate-x-8'>
                     <DropdownMenuLabel className=' text-sm'>Menu</DropdownMenuLabel>
@@ -225,8 +241,12 @@ export default function Viewuser( data: Props) {
                     <Purchase/>
                 )}
 
-                 {tab === 'history' && (
+                {tab === 'history' && (
                     <TransactionHsitory/>
+                )}
+
+                {tab === 'story' && (
+                    <StoryHistory/>
                 )}
 
                

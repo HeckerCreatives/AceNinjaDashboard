@@ -31,8 +31,6 @@ export const superadminRoutes: SuperadminRoute[] = [
       { route: '/superadmin/games/ranktier', name: 'Rank Tier', icon: null, subitems: [] },
       { route: '/superadmin/games/pvp', name: 'PVP', icon: null, subitems: [] },
 
-      // { route: '/superadmin/games/market', name: 'Market', icon: null, subitems: [] },
-      // { route: '/superadmin/games/redeemcodes', name: 'Redeem Codes', icon: null, subitems: [] },
     ],
   },
   {
@@ -79,20 +77,7 @@ export const superadminRoutes: SuperadminRoute[] = [
   { route: '/superadmin/maintenance', name: 'Maintenance', icon: <GrVmMaintenance size={15} />, subitems: [] },
   { route: '/superadmin/topuphistory', name: 'Topup History', icon: <List size={15} />, subitems: [] },
 
-  
-  // {
-  //   route: '/superadmin/announcement',
-  //   name: 'Announcement',
-  //   icon: <FaBullhorn size={15} />,
-  //   subitems: [
-  //     { route: '/superadmin/announcement/message', name: 'Message', icon: <FaBullhorn size={15} />, subitems: [] },
-  //     { route: '/superadmin/announcement/update', name: 'Update', icon: <FaBullhorn size={15} />, subitems: [] },
-  //   ],
-  // },
-  // {route: '/superadmin/grant', name: 'Grant', icon: <Box size={15} />, subitems: [] },
-  // { route: '/superadmin/grantcurrency', name: 'Grant Currency', icon: <Wallet size={15} />, subitems: [] },
-  // {route: '/superadmin/freebie', name: 'Freebie', icon: <GemIcon size={15} />, subitems: [] },
-  // { route: '/superadmin/seasons', name: 'Seasons', icon: <PiRanking size={15} />, subitems: [] },
+
 ];
 
 
@@ -104,6 +89,7 @@ export const userRoutes = [
     {name: 'Path', path: '/user/path' , icon: <PiPath size={20}/>},
     {name: 'Skills', path: '/user/skills' , icon: <GiWhirlpoolShuriken size={20}/>},
     {name: 'Battle Pass', path: '/user/bp' , icon: <Ticket size={20}/>},
+    {name: 'Story', path: '/user/story' , icon: <List size={20}/>},
     {name: 'Friends', path: '/user/friends' , icon: <Users size={20}/>},
     {name: 'Marketplace', path: '/user/purchase' , icon: <ShoppingBag size={20}/>},
     {name: 'Top Up', path: '/user/topup' , icon: <FaMoneyBill size={20}/>},

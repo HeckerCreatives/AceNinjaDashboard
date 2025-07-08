@@ -220,7 +220,7 @@ export default function UpdateBattlePass( prop: Props) {
             <div className=' w-full flex  gap-1 p-4 bg-light rounded-md border-amber-800 border-[1px]'>
                   <div className='w-full flex flex-col gap-1'>
                       <label htmlFor="">Premium Cost</label>
-                      <input type="text" placeholder='Premium Cost' className={` input ${errors.premcost && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('premcost')} />
+                      <input type="text" placeholder='Premium Cost' className={` input ${errors.premcost && 'border-[1px] focus:outline-none border-red-500'} text-xs `} {...register('premcost', {valueAsNumber: true})} />
                       {errors.premcost && <p className=' text-[.6em] text-red-500'>{errors.premcost.message}</p>}
                   </div>
 
