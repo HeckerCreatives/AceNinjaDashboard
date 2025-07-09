@@ -196,7 +196,8 @@ const handleSaveClick = () => {
     xpReward: newExp,
     requirements: newRequirements,
     daily: type === "Daily Quest" ? true : originalMission.daily,
-    rewardtype: editedRewardType || "exp", // ← ✅ add this line
+    rewardtype: editedRewardType && editedRewardType !== "none" ? editedRewardType : "exp",
+
   };
 
   // Replace mission in array
@@ -210,7 +211,6 @@ const handleSaveClick = () => {
     [missionCategory]: updatedMissionData,
   };
 
-  console.log("Payload to send:", updatePayload);
 
   updateBpMission(updatePayload, {
     onSuccess: () => {
