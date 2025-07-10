@@ -367,9 +367,13 @@ function transformPremiumReward(reward: Reward): Reward {
                     ) : (
                       <div className="flex items-center gap-2">
                         {getRewardIcon(tier.freeReward.type)}
-                        <span className={`text-sm font-bold ${getRewardColor(tier.freeReward.type)}`}>
-                          {tier.freeReward.amount?.toLocaleString() ?? "0"}
+                       <span className={`text-sm font-bold ${getRewardColor(tier.freeReward.type)}`}>
+                          {["coins", "exp", "crystal"].includes(tier.freeReward.type)
+                            ? (tier.freeReward.amount ?? 0).toLocaleString()
+                            : getItemName(tier.freeReward.type, tier.freeReward.id, tier.freeReward.fid)}
                         </span>
+
+
                       </div>
                     )}
                   </div>

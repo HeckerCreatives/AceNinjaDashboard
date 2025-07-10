@@ -31,25 +31,22 @@ import { useUserData } from "@/client_actions/user/dashboard/dashboard";
 
 export default function Userlayout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
-  const params = useSearchParams();
-  const router = useRouter();
-  const [isChecking, setIsChecking] = useState(true); 
   const {data,isLoading} = useGetCharacters()
   const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
   const { charactername, setCharactername} = useCharacterNameStore()
-  const {isOpen, openDialog, closeDialog} = useDialogStore()
-  const {playername} = usePlayerNameStore()
+
   const { data: chardata } = useUserData(characterid)
 
   //charcter id persist
  useEffect(() => {
   if (data && data.length > 0) {
-    if (!characterid) {
-      setCharacterid(data[0].id);
-    }
+    setCharacterid(data[0].id);
+    console.log('Data 0', data[0].id)
     setCharactername(data[0].username);
+    console.log('Data 1', data[0].username)
+
   }
-}, [data, characterid]);
+}, [data]);
 
 
 

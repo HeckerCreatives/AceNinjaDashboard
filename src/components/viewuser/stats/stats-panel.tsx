@@ -21,23 +21,6 @@ import StatItem from "./stats-item"
 import { useUserData, useUserStats } from "@/client_actions/user/dashboard/dashboard"
 import useCharacterStore from "@/hooks/character"
 
-const icons = [
-    {name: 'Health', img: '/manage/Health.png'},
-    {name: 'Energy', img: '/manage/Energy.png'},
-    {name: 'Armor', img: '/manage/Armor.png'},
-    {name: 'Magic Resist', img: '/manage/Magic Resist.png'},
-    {name: 'Speed', img: '/manage/Speed.png'},
-    {name: 'Lifesteal', img: '/manage/Lifesteal.png'},
-    {name: 'Omnivamp', img: '/manage/Omnivamp.png'},
-    {name: 'Attack Damage', img: '/manage/Attack Damage.png'},
-    {name: 'Magic Damage', img: '/manage/Magic Damage.png'},
-    {name: 'Armor Penetration', img: '/manage/Armor Penetration.png'},
-    {name: 'Magic Penetration', img: '/manage/Magic Penetration.png'},
-    {name: 'Critical Chance', img: '/manage/Critical Chance.png'},
-    {name: 'Heal and Shield Power', img: '/manage/Heal and Shield Power.png'},
-    {name: 'Critical Damage', img: '/manage/Critical Damage.png'},
-]
-
 const StatsPanel: FC = () => {
   const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
   const { data, isLoading } = useUserStats(characterid)

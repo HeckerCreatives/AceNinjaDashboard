@@ -123,6 +123,7 @@ export const useUserData = (characterid: string) => {
   return useQuery({
     queryKey: ["userdata", characterid],
     queryFn: () => getData(characterid),
+    enabled: !!characterid,
     // staleTime: 5 * 60 * 1000,
     // refetchOnMount: false, 
     // refetchOnWindowFocus: false,
@@ -143,6 +144,7 @@ export const useUserData = (characterid: string) => {
     return useQuery({
       queryKey: ["stats", characterid],
       queryFn: () => getStats(characterid),
+      enabled: !!characterid,
       // staleTime: 5 * 60 * 1000,
       // refetchOnMount: false, 
       // refetchOnWindowFocus: false,
@@ -163,6 +165,7 @@ export const getRank = async (characterid: string): Promise<CharacterRankRespons
     return useQuery({
       queryKey: ["rank"],
       queryFn: () => getRank(characterid),
+        enabled: !!characterid,
       // staleTime: 5 * 60 * 1000,
       // refetchOnMount: false, 
       // refetchOnWindowFocus: false,
@@ -183,6 +186,7 @@ export const getRank = async (characterid: string): Promise<CharacterRankRespons
       return useQuery({
         queryKey: ["payin"],
         queryFn: () => getTotalPayin(characterid),
+          enabled: !!characterid,
       });
       };
   

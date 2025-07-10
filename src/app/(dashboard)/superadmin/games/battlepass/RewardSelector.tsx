@@ -31,7 +31,7 @@ export default function RewardSelector({ reward, onChange, isPremium = false }: 
   const { data: weaponData } = useGetItemRewards("weapon", "unisex")
   const { data: maleItems } = useGetItemRewards("outfit", "male")
   const { data: femaleItems } = useGetItemRewards("outfit", "female")
-  const { data: skillItems } = useGetItemRewards("skills", "unisex")
+  const { data: skillItems } = useGetItemRewards("skills", "")
   const { data: titleItems } = useGetTitleRewards()
   const { data: badgeItems } = useGetBadgeRewards()
 
@@ -61,7 +61,7 @@ export default function RewardSelector({ reward, onChange, isPremium = false }: 
           <SelectValue placeholder="Select Reward Type" />
         </SelectTrigger>
         <SelectContent>
-          {isPremium && (
+          {/* {isPremium && (
             <>
               <SelectItem value="badge">Badge</SelectItem>
               <SelectItem value="title">Title</SelectItem>
@@ -69,7 +69,13 @@ export default function RewardSelector({ reward, onChange, isPremium = false }: 
               <SelectItem value="skill">Skill</SelectItem>
               <SelectItem value="skin">Skin</SelectItem>
             </>
-          )}
+          )} */}
+
+          <SelectItem value="badge">Badge</SelectItem>
+          <SelectItem value="title">Title</SelectItem>
+          <SelectItem value="weapon">Weapon</SelectItem>
+          <SelectItem value="skill">Skill</SelectItem>
+          <SelectItem value="skin">Skin</SelectItem>
           <SelectItem value="coins">Coins</SelectItem>
           <SelectItem value="exp">EXP</SelectItem>
           <SelectItem value="crystal">Crystal</SelectItem>
