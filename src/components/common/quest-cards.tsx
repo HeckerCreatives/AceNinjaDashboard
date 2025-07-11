@@ -289,6 +289,7 @@ const handleSaveClick = () => {
                     <option value="exp">EXP</option>
                     <option value="coins">Coins</option>
                     <option value="crystal">Crystal</option>
+                    <option value="battlepassexp">Battle Pass EXP</option>
                   </select>
                   <Input
                     id="exp-input"

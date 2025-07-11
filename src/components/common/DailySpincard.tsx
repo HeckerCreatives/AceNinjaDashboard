@@ -1,85 +1,122 @@
 import React, { useEffect, useState } from 'react'
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useUpdateDailySpin } from '@/client_actions/superadmin/rewards'
 import toast from 'react-hot-toast'
 import Loader from './Loader'
 
-  type Props = {
-    amount: number,
-    type: string,
-    slot: number,
-    chance: number
-  } 
+type Props = {
+  amount: number,
+  type: string,
+  slot: number,
+  chance: number
+}
 
 export default function DailySpincard(prop: Props) {
-    const [type, setType] = useState('')
-    const [amount, setAmount] = useState(0)
-    const [chance, setChance] = useState(0)
-    const {mutate: updateDailySpin, isPending} = useUpdateDailySpin()
+  const [type, setType] = useState('')
+  const [amount, setAmount] = useState('')
+  const [chance, setChance] = useState('')
+  const { mutate: updateDailySpin, isPending } = useUpdateDailySpin()
 
-    useEffect(() => {
-        setType(prop.type)
-        setAmount(prop.amount)
-        setChance(prop.chance)
-    },[prop])
+  useEffect(() => {
+    setType(prop.type)
+    setAmount(formatNumberWithCommas(prop.amount))
+    setChance(formatNumberWithCommas(prop.chance))
+  }, [prop])
 
+  const formatNumberWithCommas = (value: number | string) => {
+    const num = typeof value === 'string' ? parseInt(value.replace(/,/g, '')) : value
+    if (isNaN(num)) return ''
+    return new Intl.NumberFormat().format(num)
+  }
 
-      const updateData = async () => {
-            updateDailySpin(
-              {
-              slot: prop.slot,
-              amount: amount,
-              type: type,
-              chance: chance
-              },
-              {
-                onSuccess: async (response) => {
-                  toast.success(`Daily spin slot data updated successfully`);
-                },
-              }
-            );
-          };
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/,/g, '').replace(/[^\d]/g, '')
+    if (raw === '') {
+      setAmount('')
+      return
+    }
+    setAmount(formatNumberWithCommas(raw))
+  }
+
+  const handleChanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/,/g, '').replace(/[^\d]/g, '')
+    if (raw === '') {
+      setChance('')
+      return
+    }
+    setChance(formatNumberWithCommas(raw))
+  }
+
+  const updateData = async () => {
+    const numericAmount = parseInt(amount.replace(/,/g, '')) || 0
+    const numericChance = parseInt(chance.replace(/,/g, '')) || 0
+
+    updateDailySpin(
+      {
+        slot: prop.slot,
+        amount: numericAmount,
+        type: type,
+        chance: numericChance,
+      },
+      {
+        onSuccess: () => {
+          toast.success(`Daily spin slot data updated successfully`)
+        },
+      }
+    )
+  }
 
   return (
-    <div className=' flex flex-col bg-amber-900 h-auto'>
-              <div className=' p-2 bg-amber-950 w-full'>
-                <p className=' ~text-xs/sm'>Slot {prop.slot}</p>
-              </div>
+    <div className='flex flex-col bg-amber-900 h-auto'>
+      <div className='p-2 bg-amber-950 w-full'>
+        <p className='~text-xs/sm'>Slot {prop.slot}</p>
+      </div>
 
-              <div className=' w-full p-2 flex flex-col'>
-               <p className=' text-[.6rem] text-zinc-300 mt-2'>Reward</p>
-                <Select value={type} onValueChange={setType} >
-                <SelectTrigger className="bg-zinc-950 border-none">
-                    <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="coins">Coins</SelectItem>
-                    {/* <SelectItem value="crystal">Crystals</SelectItem> */}
-                </SelectContent>
-                </Select>
+      <div className='w-full p-2 flex flex-col'>
+        <p className='text-[.6rem] text-zinc-300 mt-2'>Reward</p>
+        <Select value={type} onValueChange={setType}>
+          <SelectTrigger className="bg-zinc-950 border-none">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="coins">Coins</SelectItem>
+            <SelectItem value="crystal">Crystals</SelectItem>
+          </SelectContent>
+        </Select>
 
-               <p className=' text-[.6rem] text-zinc-300 mt-4'>Amount</p>
-               <Input value={amount} onChange={(e) => setAmount(e.target.valueAsNumber)} placeholder='Amount' type='number' className=' placeholder:text-xs'/>
-               <p className=' text-[.6rem] text-zinc-300 mt-4'>Spin Chance (%)</p>
-               <Input value={chance} onChange={(e) => setChance(e.target.valueAsNumber)} placeholder='Chance' type='number' className=' placeholder:text-xs'/>
+        <p className='text-[.6rem] text-zinc-300 mt-4'>Amount</p>
+        <Input
+          value={amount}
+          onChange={handleAmountChange}
+          placeholder='Amount'
+          type='text'
+          inputMode='numeric'
+          className='placeholder:text-xs'
+        />
 
-              <Button disabled={isPending} onClick={updateData} className=' mt-4'>
-                 {isPending && <Loader/>}
-                Save</Button>
+        <p className='text-[.6rem] text-zinc-300 mt-4'>Spin Chance (%)</p>
+        <Input
+          value={chance}
+          onChange={handleChanceChange}
+          placeholder='Chance'
+          type='text'
+          inputMode='numeric'
+          className='placeholder:text-xs'
+        />
 
-
-              </div>
-
-
-              
-             </div>
+        <Button disabled={isPending} onClick={updateData} className='mt-4'>
+          {isPending && <Loader />}
+          Save
+        </Button>
+      </div>
+    </div>
   )
 }

@@ -204,7 +204,7 @@ export default function RewardSelector({ reward, onChange, isPremium = false }: 
         <>
           <Label className="text-xs">Amount</Label>
           <Input
-            type="number"
+            type="text"
             value={localReward.amount}
             onChange={(e) => handleChange("amount", e.target.value)}
             className="bg-slate-600 border-slate-500 text-white text-xs"

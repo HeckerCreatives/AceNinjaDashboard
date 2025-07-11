@@ -1,40 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
-import { useDeleteNewsletter, useGetNewsletter } from '@/client_actions/superadmin/newsletter'
-import Loader from '@/components/common/Loader'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import toast from 'react-hot-toast'
-import CreateRankTier from '@/components/forms/CreateRankTier'
-import { useDeleteRankTier, useGetTierlist } from '@/client_actions/superadmin/ranktier'
-import { Trash } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import EditRankTier from '@/components/forms/EditrankTier'
-import { tierImg } from '@/utils/findAsset'
-import { Input } from '@/components/ui/input'
 import { useDailySpin } from '@/client_actions/superadmin/rewards'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import DailySpincard from '@/components/common/DailySpincard'
 
   

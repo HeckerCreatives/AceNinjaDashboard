@@ -54,7 +54,12 @@ export default function DailyExpSpincard(prop: Props) {
                 <p className=' ~text-xs/sm'>Slot {prop.slot}</p>
               </div>
 
-              <div className=' w-full p-2 flex flex-col'>
+              <form 
+              onSubmit={(e) => {
+                  e.preventDefault(); 
+                  updateData(); 
+                }}
+              className=' w-full p-2 flex flex-col gap-1'>
                <p className=' text-[.6rem] text-zinc-300 mt-2'>Reward</p>
                 <Select value={type} onValueChange={setType} >
                 <SelectTrigger className="bg-zinc-950 border-none">
@@ -65,17 +70,17 @@ export default function DailyExpSpincard(prop: Props) {
                 </SelectContent>
                 </Select>
 
-               <p className=' text-[.6rem] text-zinc-300 mt-4'>Amount</p>
-               <Input value={amount} onChange={(e) => setAmount(e.target.valueAsNumber)} placeholder='Amount' type='number' className=' placeholder:text-xs'/>
+               <p className=' text-[.6rem] text-zinc-300 mt-4'>EXP Percentage (%)</p>
+               <Input max={100} min={1} value={amount} onChange={(e) => setAmount(e.target.valueAsNumber)} placeholder='Amount' type='number' className=' placeholder:text-xs'/>
                <p className=' text-[.6rem] text-zinc-300 mt-4'>Spin Chance (%)</p>
-               <Input value={chance} onChange={(e) => setChance(e.target.valueAsNumber)} placeholder='Chance' type='number' className=' placeholder:text-xs'/>
+               <Input min={1} max={100} value={chance} onChange={(e) => setChance(e.target.valueAsNumber)} placeholder='Chance' type='number' className=' placeholder:text-xs'/>
 
-              <Button disabled={isPending} onClick={updateData} className=' mt-4'>
-                 {isPending && <Loader/>}
-                Save</Button>
+              <Button type="submit" disabled={isPending} className='mt-4'>
+                {isPending && <Loader />}
+                Save
+              </Button>
 
-
-              </div>
+              </form>
 
 
               
