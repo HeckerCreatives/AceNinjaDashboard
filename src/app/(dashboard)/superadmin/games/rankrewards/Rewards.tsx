@@ -81,7 +81,8 @@ export default function RankRewardCards() {
             if (["coins", "exp", "crystal"].includes(r.rewardType?.toLowerCase())) {
               return { ...commonFields, amount: r.amount }
             } else if (r.rewardType?.toLowerCase() === "outfit") {
-              return { ...commonFields, id: r.reward.id, fid: r.reward.fid }
+              // Change 'outfit' to 'skin' for internal component state
+              return { rewardtype: "skin", id: r.reward.id, fid: r.reward.fid }
             } else {
               return { ...commonFields, id: r.reward?.id?.toString() }
             }
