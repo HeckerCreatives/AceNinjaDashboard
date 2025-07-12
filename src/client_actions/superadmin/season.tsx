@@ -24,6 +24,7 @@ export type CurrentSeasonResponse = {
     data: {
         title: string;
         timeleft: number
+        id: string
     };
 };
 

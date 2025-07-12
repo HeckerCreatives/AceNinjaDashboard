@@ -28,9 +28,10 @@ export const superadminRoutes: SuperadminRoute[] = [
       { route: '/superadmin/games/battlepass', name: 'Battle Pass', icon: null, subitems: [] },
       { route: '/superadmin/games/store', name: 'Store', icon: null, subitems: [] },
       { route: '/superadmin/games/quest', name: 'Quest', icon: null, subitems: [] },
+      { route: '/superadmin/games/leaderboards', name: 'Leaderboards', icon: null, subitems: [] },
       { route: '/superadmin/games/ranktier', name: 'Rank Tier', icon: null, subitems: [] },
+      { route: '/superadmin/games/rankrewards', name: 'Rank Rewards', icon: null, subitems: [] },
       { route: '/superadmin/games/pvp', name: 'PVP', icon: null, subitems: [] },
-
     ],
   },
   {
