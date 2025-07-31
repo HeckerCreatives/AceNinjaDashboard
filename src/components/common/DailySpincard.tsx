@@ -47,24 +47,29 @@ export default function DailySpincard(prop: Props) {
   }
 
   const handleChanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/,/g, '').replace(/[^\d]/g, '')
-    if (raw === '') {
-      setChance('')
-      return
-    }
-    setChance(formatNumberWithCommas(raw))
+  const rawValue = e.target.value
+
+  const cleaned = rawValue.replace(/[^0-9.]/g, '')
+
+  const parts = cleaned.split('.')
+  let sanitized = parts[0]
+  if (parts.length > 1) {
+    sanitized += '.' + parts[1].slice(0, 2)
   }
+
+  setChance(rawValue)
+}
 
   const updateData = async () => {
     const numericAmount = parseInt(amount.replace(/,/g, '')) || 0
-    const numericChance = parseInt(chance.replace(/,/g, '')) || 0
+  
 
     updateDailySpin(
       {
         slot: prop.slot,
         amount: numericAmount,
         type: type,
-        chance: numericChance,
+        chance: Number(chance),
       },
       {
         onSuccess: () => {
