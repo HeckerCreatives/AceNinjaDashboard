@@ -43,7 +43,7 @@ export default function EquipedItems() {
               .map((category) =>
                 category.items.map((item) => ( 
                   <TableRow key={item._id}>
-                    <TableCell>{item.details?.name}</TableCell>
+                    <TableCell>{item?.name}</TableCell>
                     <TableCell>{item.isEquipped ? "Yes" : "No"}</TableCell>
                     <TableCell>{new Date(item.acquiredAt).toLocaleDateString()}</TableCell>
                     <TableCell>{category.type}</TableCell> {/* ✅ Display category type */}
