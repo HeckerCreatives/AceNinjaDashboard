@@ -34,6 +34,8 @@ export default function ViewInventoryItems(data: Items) {
         }
       }
 
+      console.log(data)
+
 
   return (
     <div className=' w-full h-auto flex flex-col'>

@@ -68,7 +68,7 @@ return (
       
             ):(
               <>
-               {String(data?.data) ? (
+               {Object.values(data?.data || {}).length === 0 ? (
                 <div className=' w-full h-[200px] flex items-center justify-center'>
                   <p className=' text-xs text-zinc-400'>No items yet.</p>
                 </div>

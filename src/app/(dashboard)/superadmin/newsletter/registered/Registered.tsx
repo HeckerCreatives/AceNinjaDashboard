@@ -35,6 +35,7 @@ export default function Registered() {
     const {data, isLoading} = useGetNewsletter(currentPage, 10, 'registered')
     const {mutate: deleteNewsletter, isPending} = useDeleteNewsletter()
     
+    
   //paginition
   const handlePageChange = (page: number) => {
     setCurrentPage(page)

@@ -58,6 +58,7 @@ export default function CreateNewsForm() {
         onSuccess: () => {
           toast.success(`News created successfully`);
           setOpen(false)
+          reset()
         },
       })
      
@@ -97,7 +98,7 @@ export default function CreateNewsForm() {
 
         <div className=' flex flex-col gap-2 p-4 bg-light rounded-md border-amber-800 border-[1px] mt-4'>
           <label htmlFor="" className=''>Description</label>
-          <textarea placeholder='Title' className={` input h-[80px] ${errors.description && 'border-[1px] focus:outline-none border-red-500'}`} {...register('description')} />
+          <textarea placeholder='Description' className={` input h-[80px] ${errors.description && 'border-[1px] focus:outline-none border-red-500'}`} {...register('description')} />
           {errors.description && <p className=' text-[.6em] text-red-500'>{errors.description.message}</p>}
         </div>
 

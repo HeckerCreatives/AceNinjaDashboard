@@ -46,6 +46,7 @@ interface InventoryItem {
     currency: string
     type: string
   }
+  name: string
 }
 
 interface InventoryCategory {

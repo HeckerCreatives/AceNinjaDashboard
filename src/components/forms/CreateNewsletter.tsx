@@ -19,6 +19,7 @@ import emailjs from "@emailjs/browser";
 import { useGetSubscriber } from '@/client_actions/superadmin/subscribers'
 import { useGetSocialMedia } from '@/client_actions/superadmin/socialmedia'
 import { Item } from '@radix-ui/react-dropdown-menu'
+import { useGetUserList } from '@/client_actions/superadmin/manageplayer'
 
 
 const tabs = [
@@ -35,6 +36,7 @@ export default function CreateNewsletterForm(prop: Props) {
     const [open, setOpen] = useState(false)
     const {mutate: createNewsletter, isPending} = useCreateNewsletter()
     const { data: subscription, isLoading } = useGetSubscriber(0, 99999999999, '');
+    const {data: registered} = useGetUserList(0,99999999,'','')
     const {data: socials} = useGetSocialMedia()
 
 
@@ -69,28 +71,52 @@ export default function CreateNewsletterForm(prop: Props) {
     });
 
     //create news
+    const [isSending, setIsSending] = useState(false);
+
     const createWebsiteNews = async (data: CreateNewsLetter) => {
-        createNewsletter(
-          {
-            title: data.title,
-            description: data.description,
-            type: prop.type,
-            bannerimg: data.file,
-          },
-          {
-            onSuccess: async (response) => {
+      createNewsletter(
+        {
+          title: data.title,
+          description: data.description,
+          type: prop.type,
+          bannerimg: data.file,
+        },
+        {
+          onSuccess: async (response) => {
+            try {
+              setIsSending(true);
+
+              if (prop.type === "registered") {
+                await sendEmailToRegistered(
+                  response.data,
+                  data.title,
+                  data.description
+                );
+              }
+
+              if (prop.type === "subscriber") {
+                await sendEmailToSubscribers(
+                  response.data,
+                  data.title,
+                  data.description
+                );
+              }
+
               toast.success(`Newsletter created successfully`);
-      
-              // Send email to subscribers after successful creation
-              await sendEmailToSubscribers(response.data, data.title, data.description);
-      
               setOpen(false);
               setPreview(null);
               reset();
-            },
-          }
-        );
-      };
+            } catch (err) {
+              toast.error("Newsletter created, but failed to send emails.");
+              console.error(err);
+            } finally {
+              setIsSending(false);
+            }
+          },
+        }
+      );
+    };
+
 
     const sendEmailToSubscribers = async (banner: string, title: string, description: string) => {
         try {
@@ -100,6 +126,44 @@ export default function CreateNewsletterForm(prop: Props) {
           }
       
           const emailPromises = subscription.data.data.map((subscriber) =>
+            emailjs.send(
+              process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+              process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+              {
+                to_email: subscriber.email,
+                // to_name: subscriber.email,
+                from_name: "Ace",
+                subject: title,
+                content: description,
+                banner: `${process.env.NEXT_PUBLIC_API_URL}/${banner}`,
+                fb_link: findLink('Facebook'),
+                x_link: findLink('X'),
+                discord_link: findLink('Discord'),
+                ig_link: findLink('Instagram'),
+                tiktok_link: findLink('Tiktok'),
+                yt_link: findLink('Youtube'),
+              },
+              process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+            )
+          );
+      
+          await Promise.all(emailPromises);
+          toast.success("Newsletter sent to all subscribers!");
+      
+        } catch (error) {
+          console.error("Failed to send newsletter:", error);
+          toast.error("Failed to send newsletter.");
+        }
+      };
+
+       const sendEmailToRegistered = async (banner: string, title: string, description: string) => {
+        try {
+          if (!registered || registered.data.playerListData.length === 0) {
+            toast.error("No subscribers found.");
+            return;
+          }
+      
+          const emailPromises = registered?.data.playerListData.map((subscriber) =>
             emailjs.send(
               process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
               process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
@@ -122,7 +186,7 @@ export default function CreateNewsletterForm(prop: Props) {
           );
       
           await Promise.all(emailPromises);
-          toast.success("Newsletter sent to all subscribers!");
+          toast.success("Newsletter sent to registered players.!");
       
         } catch (error) {
           console.error("Failed to send newsletter:", error);
@@ -201,8 +265,8 @@ export default function CreateNewsletterForm(prop: Props) {
      
 
           <div className=' w-full flex items-end justify-end gap-4 mt-6 text-white'>
-            <button disabled={isPending} className=' bg-yellow-500 text-black text-xs px-8 py-2 rounded-md flex items-center justify-center gap-1'>
-                {isPending && <Loader/>}
+            <button disabled={isSending} className=' bg-yellow-500 text-black text-xs px-8 py-2 rounded-md flex items-center justify-center gap-1'>
+                {isSending && <Loader/>}
                 Save</button>
           </div>
 
