@@ -14,8 +14,10 @@ import { useGetCompanion } from "@/client_actions/superadmin/companion"
 interface Reward {
   type: string
   amount?: number
-  id?: string
+  id?: any
   fid?: string
+  name?: string
+  fname?: string
   maleSkin?: string
   femaleSkin?: string
 }

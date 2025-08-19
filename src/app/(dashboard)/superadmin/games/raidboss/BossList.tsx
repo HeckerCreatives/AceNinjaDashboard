@@ -43,6 +43,7 @@ export default function Bosslist() {
     const {data: boss, isLoading} = useGetBossList()
     const [viewRewards, setViewRewards] = useState<Reward[] | null>(null)
     const [bossId, setBossid] = useState('')
+    const [bossName, setBossName] = useState('')
     const [status, setStatus] = useState('')
     const { mutate: editBossStatus, isPending} = useEditBossStatus()
     
@@ -107,12 +108,12 @@ export default function Bosslist() {
                             </TableCell>
                             <TableCell className=' flex items-center gap-2'>
                                 <Dialog open={open} onOpenChange={setOpen}>
-                                    <DialogTrigger onClick={() => setStatus(item.id)} className=' bg-amber-800 text-white p-2 flex items-center gap-1 rounded-sm'><SquarePen size={15}/>Status</DialogTrigger>
+                                    <DialogTrigger onClick={() => {setStatus(item.id), setBossName(item.bossname)}} className=' bg-amber-800 text-white p-2 flex items-center gap-1 rounded-sm'><SquarePen size={15}/>Status</DialogTrigger>
                                     <DialogContent className=' max-w-sm h-fit p-6 bg-amber-950 border-[1px] border-amber-800'>
                                         <DialogHeader>
                                         <DialogTitle>Raid Boss</DialogTitle>
                                         <DialogDescription>
-                                           Set active {item.bossname} raid boss.
+                                           Set active <span className=' text-amber-500 capitalize'>{bossName}</span> raid boss.
                                         </DialogDescription>
                                         </DialogHeader>
 
