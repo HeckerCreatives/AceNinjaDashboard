@@ -32,6 +32,7 @@ export const superadminRoutes: SuperadminRoute[] = [
       { route: '/superadmin/games/ranktier', name: 'Rank Tier', icon: null, subitems: [] },
       { route: '/superadmin/games/rankrewards', name: 'Rank Rewards', icon: null, subitems: [] },
       { route: '/superadmin/games/pvp', name: 'PVP', icon: null, subitems: [] },
+      { route: '/superadmin/games/raidboss', name: 'Raid Boss', icon: null, subitems: [] },
     ],
   },
   {
