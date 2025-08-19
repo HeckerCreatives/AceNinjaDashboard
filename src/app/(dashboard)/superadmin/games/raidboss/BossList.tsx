@@ -96,7 +96,7 @@ export default function Bosslist() {
                 <TableBody>
                     {boss?.data.map((item, index) => (
                         <TableRow key={item.id}>
-                            <TableCell>{item.bossname}</TableCell>
+                            <TableCell className=' capitalize'>{item.bossname}</TableCell>
                             <TableCell> 
                                 <Button className=' bg-zinc-700 text-white' onClick={() => {setViewRewards(item.rewards), setBossid(item.id)}}><Eye size={15}/> Rewards</Button>
                             </TableCell>
