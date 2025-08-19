@@ -39,59 +39,96 @@ export default function RewardListManager({ initialRewards = [], onChange, id, o
 
   
 
- const transformRewardsForSubmit = (rewards: Reward[]) => {
-  const output: any[] = []
+    const transformRewardsForSubmit = (rewards: Reward[]) => {
+    const output: any[] = []
 
-  rewards.forEach((reward) => {
-    // Exp, coins, crystal → attach human-readable names
-    if (["exp", "coins", "crystal"].includes(reward.type)) {
-      if (reward.amount) {
-        const displayName =
-          reward.type === "exp"
-            ? "exp"
-            : reward.type === "coins"
-            ? "coins"
-            : "crystal"
+    rewards.forEach((reward) => {
+        if (["exp", "coins", "crystal"].includes(reward.type)) {
+        if (reward.amount) {
+            const displayName =
+            reward.type === "exp"
+                ? "exp"
+                : reward.type === "coins"
+                ? "coins"
+                : "crystal"
 
-        output.push({ type: reward.type, amount: reward.amount, name: displayName })
-      }
+            output.push({
+            type: reward.type,
+            amount: reward.amount,
+            name: displayName,
+            })
+        }
+        }
+
+        // Item
+        else if (reward.type === "item" && reward.id) {
+        const item = itemsRewards?.data.items.find((i) => i.itemid === reward.id)
+        if (item) {
+            output.push({
+            type: "item",
+            id: reward.id,
+            name: item.name,
+            gender: item.gender,
+            })
+        }
+        }
+
+        // Skin (male + female names)
+        else if (reward.type === "skin") {
+        const maleItem = reward.maleSkin
+            ? itemsRewards?.data.items.find((i) => i.itemid === reward.maleSkin)
+            : null
+        const femaleItem = reward.femaleSkin
+            ? itemsRewards?.data.items.find((i) => i.itemid === reward.femaleSkin)
+            : null
+
+        output.push({
+            type: "skin",
+            id: reward.maleSkin,
+            fid: reward.femaleSkin,
+            name: maleItem?.name || "Male Skin",   // 👈 male skin name
+            fname: femaleItem?.name || "Female Skin", // 👈 female skin name
+        })
+        }
+
+        // Title
+        else if (reward.type === "title" && reward.id) {
+        const title = titleItems?.data.find((i) => i.index === Number(reward.id))
+        if (title) {
+            output.push({
+            type: "title",
+            id: reward.id,
+            name: title.title,
+            })
+        }
+        }
+
+        // Badge
+        else if (reward.type === "badge" && reward.id) {
+        const badge = badgeItems?.data.find((i) => i.index === Number(reward.id))
+        if (badge) {
+            output.push({
+            type: "badge",
+            id: reward.id,
+            name: badge.title,
+            })
+        }
+        }
+
+        // Companion
+        else if (reward.type === "companion" && reward.id) {
+        const item = companionItems?.data.find((i) => i.id === reward.id)
+        output.push({
+            type: "companion",
+            id: reward.id,
+            name: item?.name || "Companion",
+        })
+        }
+    })
+
+    return output
     }
 
-    // Item
-    else if (reward.type === "item" && reward.id) {
-      const item = itemsRewards?.data.items.find((i) => i.itemid === reward.id)
-      if (item?.type === "skins") {
-        output.push({ type: "item", id: reward.id, gender: item.gender, name: item.name })
-      } else if (item) {
-        output.push({ type: "item", id: reward.id, name: item.name })
-      }
-    }
-
-    // Title
-    else if (reward.type === "title" && reward.id) {
-      const title = titleItems?.data.find((i) => i.index === Number(reward.id))
-      if (title) {
-        output.push({ type: "title", id: reward.id, name: title.title })
-      }
-    }
-
-    // Badge
-    else if (reward.type === "badge" && reward.id) {
-      const badge = badgeItems?.data.find((i) => i.index === Number(reward.id))
-      if (badge) {
-        output.push({ type: "badge", id: reward.id, name: badge.title })
-      }
-    }
-
-    // Companion (assuming same list as items?)
-    else if (reward.type === "companion" && reward.id) {
-      const item = companionItems?.data.find((i) => i.id === reward.id)
-      output.push({ type: "companion", id: reward.id, name: item?.name || "Companion" })
-    }
-  })
-
-  return output
-}
 
 
   const findItems = (data: string) => {
@@ -159,7 +196,7 @@ export default function RewardListManager({ initialRewards = [], onChange, id, o
         rewards: transformRewardsForSubmit(rewards), 
     }
 
-   editBossRewards({id: id, rewards: payload.rewards} , {
+   editBossRewards({id: id, rewards: rewards} , {
         onSuccess: () => {
           toast.success(`Raid boss rewards updated successfully.`);
          if (onClose) onClose()
@@ -168,6 +205,9 @@ export default function RewardListManager({ initialRewards = [], onChange, id, o
 
 
 }
+
+
+  console.log(rewards)
 
   return (
     <div className="space-y-4">
@@ -218,8 +258,15 @@ export default function RewardListManager({ initialRewards = [], onChange, id, o
               />
             ) : (
               <div className="text-sm text-white font-semibold">
-                {reward.type === 'item' && (
+                {(reward.type === 'skill' || reward.type === 'weapon') && (
                     <p>{findItems(reward.id || '',)?.name} <span className=" text-xs text-amber-600 capitalize">({findItems(reward.id || '',)?.type})</span></p>
+                )}
+
+                 {(reward.type === 'skin') && (
+                   <>
+                    <p>{findItems(reward.id || '',)?.name} <span className=" text-xs text-amber-600 capitalize">({findItems(reward.id || '',)?.type})</span></p>
+                    <p>{findItems(reward.fid || '',)?.name} <span className=" text-xs text-amber-600 capitalize">({findItems(reward.fid || '',)?.type})</span></p>
+                   </>
                 )}
 
                  {reward.type === 'title' && (
