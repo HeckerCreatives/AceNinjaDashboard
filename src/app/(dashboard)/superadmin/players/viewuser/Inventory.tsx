@@ -103,7 +103,7 @@ return (
             </div>
             )} */}
       
-          {(Object.values(data?.data || {}).length !== 0 && !String(data?.data)) && (
+          {Array(Object.values(data?.data || {}) && !String(data?.data)) && (
             <PaginitionComponent currentPage={currentPage} total={totalpage} onPageChange={handlePageChange }/>
           )}
 

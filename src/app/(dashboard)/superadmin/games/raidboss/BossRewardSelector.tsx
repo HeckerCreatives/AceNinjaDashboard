@@ -171,7 +171,7 @@ const handleChange = (field: keyof Reward, value: string | number) => {
           <SelectItem value="badge">Badge</SelectItem>
           <SelectItem value="title">Title</SelectItem>
           <SelectItem value="skin">Skin</SelectItem>
-          <SelectItem value="companion">Companion</SelectItem>
+          {/* <SelectItem value="companion">Companion</SelectItem> */}
           <SelectItem value="weapon">Weapon</SelectItem>
           <SelectItem value="skill">Skill</SelectItem>
           <SelectItem value="coins">Coins</SelectItem>
