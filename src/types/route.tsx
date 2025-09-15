@@ -45,6 +45,7 @@ export const superadminRoutes: SuperadminRoute[] = [
       { route: '/superadmin/rewards/weeklylogin', name: 'Weekly Login', icon: null, subitems: [] },
       { route: '/superadmin/rewards/monthlylogin', name: 'Monthly Login', icon: null, subitems: [] },
       { route: '/superadmin/rewards/redeemcodes', name: 'Redeem Codes', icon: null, subitems: [] },
+      { route: '/superadmin/rewards/chest', name: 'Chests', icon: null, subitems: [] },
 
     ],
   },

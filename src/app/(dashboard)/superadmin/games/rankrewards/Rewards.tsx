@@ -11,33 +11,40 @@ import { useGetBadgeRewards, useGetItemRewards, useGetTitleRewards } from "@/cli
 import { useEditRankRewards, useGetRankingRewards } from "@/client_actions/superadmin/rankrewards"
 import Image from "next/image"
 import toast from "react-hot-toast"
+import { useGetChestRewards } from "@/client_actions/superadmin/chest"
 
-// Component's internal RewardType
-type RewardType = "badge" | "title" | "weapon" | "skin" | "coins" | "exp" | "crystal" | "skill"
+type RewardType = "badge" | "title" | "weapon" | "skin" | "coins" | "exp" | "crystal" | "skill" | 'chest'
 
-// Component's internal Reward structure
 type Reward = {
   rewardtype: RewardType
-  id?: string // For badge, title, weapon, skill, male skin (stores option.index as string for badge/title)
-  fid?: string // For female skin (skin type only)
-  amount?: number // For coins, exp, crystal
+  id?: string 
+  fid?: string 
+  amount?: number
+  chance?: number 
 }
 
-// API's expected Reward type (corrected based on your provided API definition and the error)
 type ApiReward =
   | {
-      rewardtype: "coins" | "exp" | "crystal" // Changed to rewardtype
+      rewardtype: "coins" | "exp" | "crystal" 
       amount: number
     }
   | {
-      rewardtype: "title" | "badge" | "weapon" | "skill" // Changed to rewardtype
+      rewardtype: "title" | "badge" | "weapon" | "skill" 
       reward: {
-        id: number | string // Can be number for badge/title, string for weapon/skill
+        id: number | string 
         name: string
       }
     }
   | {
-      rewardtype: "outfit" // Changed to rewardtype
+      rewardtype:  "chest" 
+      reward: {
+        id:  string 
+        name: string
+        chance: number
+      }
+    }
+  | {
+      rewardtype: "outfit" 
       reward: {
         id: string
         name?: string
@@ -53,7 +60,7 @@ interface RankRewards {
 }
 
 const ranks = ["Rookie", "Veteran", "Shogun", "Ronin", "Elder", "Ace"]
-const rewardTypes = ["badge", "title", "weapon", "skin", "coins", "exp", "crystal", "skill"]
+const rewardTypes = ["badge", "title", "weapon", "skin", "coins", "exp", "crystal", "skill", "chest"]
 
 const ranktierImg = (rank: string) => {
   const src = `/manage/Rank-${rank.toUpperCase()} icon.png`
@@ -68,8 +75,10 @@ export default function RankRewardCards() {
   const { data: skillItems } = useGetItemRewards("skills", "")
   const { data: titleItems } = useGetTitleRewards()
   const { data: badgeItems } = useGetBadgeRewards()
+  const { data: chests } = useGetChestRewards()
   const { data: fetchedRewardsData } = useGetRankingRewards()
   const { mutate: editRankRewards } = useEditRankRewards()
+
 
   useEffect(() => {
     if (fetchedRewardsData?.data) {
@@ -77,19 +86,22 @@ export default function RankRewardCards() {
         const foundRankData = fetchedRewardsData.data.find((r: any) => r.rank === rankName)
         if (foundRankData) {
           const transformedRewards: Reward[] = foundRankData.rewards.map((r: any) => {
-            const commonFields = { rewardtype: r.rewardType?.toLowerCase() as RewardType } // Normalize type
+            const commonFields = { rewardtype: r.rewardType?.toLowerCase() as RewardType } 
             if (["coins", "exp", "crystal"].includes(r.rewardType?.toLowerCase())) {
               return { ...commonFields, amount: r.amount }
+            }else if (r.rewardType?.toLowerCase() === "chest") {
+             
+              return { rewardtype: "chest", id: r.reward.id, name: r.reward.name, chance: r.reward.chance }
             } else if (r.rewardType?.toLowerCase() === "outfit") {
-              // Change 'outfit' to 'skin' for internal component state
+             
               return { rewardtype: "skin", id: r.reward.id, fid: r.reward.fid }
             } else {
               return { ...commonFields, id: r.reward?.id?.toString() }
             }
           })
-          return { rank: rankName, rewards: transformedRewards, rankid: foundRankData.rankid } // Include rankid here
+          return { rank: rankName, rewards: transformedRewards, rankid: foundRankData.rankid } 
         }
-        return { rank: rankName, rewards: [] } // If no data for rank, keep empty
+        return { rank: rankName, rewards: [] } 
       })
       setRankRewards(transformedData)
     }
@@ -105,7 +117,7 @@ export default function RankRewardCards() {
         }
         return {
           ...r,
-          rewards: [...r.rewards, { rewardtype: "badge", id: "" }], // Default to badge
+          rewards: [...r.rewards, { rewardtype: "badge", id: "" }], 
         }
       }),
     )
@@ -151,34 +163,44 @@ export default function RankRewardCards() {
     const formattedRewards: ApiReward[] = rankData.rewards.map((reward) => {
       if (["coins", "exp", "crystal"].includes(reward.rewardtype)) {
         return {
-          rewardtype: reward.rewardtype as "coins" | "exp" | "crystal", // Changed to rewardtype
-          amount: reward.amount as number, // Assert as number after validation
+          rewardtype: reward.rewardtype as "coins" | "exp" | "crystal", 
+          amount: reward.amount as number, 
         }
       } else if (reward.rewardtype === "skin") {
         // Map 'skin' to 'outfit' for API
         const foundMaleSkin = maleItems?.data.items.find((item) => item.itemid === reward.id)
         const foundFemaleSkin = femaleItems?.data.items.find((item) => item.itemid === reward.fid)
         return {
-          rewardtype: "outfit", // Changed to rewardtype
+          rewardtype: "outfit", 
           reward: {
-            id: reward.id as string, // Assert as string after validation
-            name: foundMaleSkin?.name || "", // Include male name if found
-            fid: reward.fid as string, // Assert as string after validation
-            fname: foundFemaleSkin?.name || "", // Include female name if found
+            id: reward.id as string, 
+            name: foundMaleSkin?.name || "", 
+            fid: reward.fid as string, 
+            fname: foundFemaleSkin?.name || "", 
           },
         }
+      }else if (reward.rewardtype === "chest") {
+        const foundChest = chests?.data.find((item) => item.id === reward.id);
+
+        return {
+          rewardtype: "chest",
+          reward: {
+            id: reward.id as string,
+            name: foundChest?.name || "",
+            chance: reward.chance || 0, 
+          },
+        };
       } else {
-        // badge, title, weapon, skill
         let rewardName = ""
         let rewardId: string | number = reward.id || ""
         if (reward.rewardtype === "badge") {
           const foundBadge = badgeItems?.data.find((item) => item.index.toString() === reward.id)
           rewardName = foundBadge?.title || ""
-          rewardId = foundBadge?.index || "" // Use the numeric index for badge
+          rewardId = foundBadge?.index || "" 
         } else if (reward.rewardtype === "title") {
           const foundTitle = titleItems?.data.find((item) => item.index.toString() === reward.id)
           rewardName = foundTitle?.title || ""
-          rewardId = foundTitle?.index || "" // Use the numeric index for title
+          rewardId = foundTitle?.index || "" 
         } else if (reward.rewardtype === "weapon") {
           const foundWeapon = weaponItems?.data.items.find((item) => item.itemid === reward.id)
           rewardName = foundWeapon?.name || ""
@@ -189,35 +211,32 @@ export default function RankRewardCards() {
           rewardId = foundSkill?.itemid || ""
         }
         return {
-          rewardtype: reward.rewardtype as "title" | "badge" | "weapon" | "skill", // Changed to rewardtype
+          rewardtype: reward.rewardtype as "title" | "badge" | "weapon" | "skill",
           reward: {
-            id: rewardId, // This will be number for badge/title, string for weapon/skill
+            id: rewardId, 
             name: rewardName,
           },
         }
       }
     })
 
-    // Validate rewards before submitting
     const invalidRewards = formattedRewards.filter((reward) => {
-      // Type narrowing for amount-based rewards
       if (reward.rewardtype === "coins" || reward.rewardtype === "exp" || reward.rewardtype === "crystal") {
         return !reward.amount || reward.amount <= 0
       }
-      // Type narrowing for outfit reward
       if (reward.rewardtype === "outfit") {
         return !reward.reward?.id || !reward.reward?.fid
       }
-      // Type narrowing for other rewards (title, badge, weapon, skill)
       if (
         reward.rewardtype === "title" ||
         reward.rewardtype === "badge" ||
         reward.rewardtype === "weapon" ||
-        reward.rewardtype === "skill"
+        reward.rewardtype === "skill" ||
+        reward.rewardtype === "chest" 
       ) {
         return !reward.reward?.id
       }
-      return false // Should not reach here if all types are covered
+      return false 
     })
 
     if (invalidRewards.length > 0) {
@@ -387,6 +406,43 @@ export default function RankRewardCards() {
               </SelectContent>
             </Select>
           </div>
+        </div>
+      )
+    }
+
+     if (reward.rewardtype === "chest") {
+      return (
+        <div className="space-y-2">
+          <Label htmlFor={`select-${rank}-${index}`}>
+            {reward.rewardtype.charAt(0).toUpperCase() + reward.rewardtype.slice(1)}
+          </Label>
+          
+          <Select value={reward.id || ""} onValueChange={(val) => handleRewardChange(rank, index, { id: val })}>
+            <SelectTrigger id={`select-${rank}-${index}`}>
+              <SelectValue placeholder={`Select ${reward.rewardtype}`} />
+            </SelectTrigger>
+            <SelectContent>
+              {chests?.data.map((option) => (
+                <SelectItem key={option.id} value={`${option.id}`}>
+                  {option.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+           <Input
+            id={`amount-${rank}-${index}`}
+            placeholder="Chance(%)"
+            type="number"
+            min="1"
+            className="bg-[#4C4106] border-[1px] border-yellow-500"
+            value={reward.chance?.toString() || ""}
+            onChange={(e) =>
+              handleRewardChange(rank, index, {
+                chance: Number(e.target.value),
+              })
+            }
+          />
         </div>
       )
     }

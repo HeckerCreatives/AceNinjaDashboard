@@ -16,19 +16,27 @@ export interface RankReward {
 }
 
 type Reward =
-  | {
-      rewardType: "coins" | "exp" | "crystal";
+   | {
+      rewardtype: "coins" | "exp" | "crystal";
       amount: number;
     }
   | {
-      rewardType: "title" | "badge" | "weapon" | "skill"
+      rewardtype: "title" | "badge" | "weapon" | "skill";
       reward: {
         id: number | string;
         name: string;
       };
     }
   | {
-      rewardType: "outfit";
+      rewardtype: "chest";
+      reward: {
+        id: string;
+        name: string;
+        chance: number;
+      };
+    }
+  | {
+      rewardtype: "outfit";
       reward: {
         id: string;
         name?: string;
@@ -44,10 +52,18 @@ type RewardEdit =
       amount: number;
     }
   | {
-      rewardtype: "title" | "badge" | "weapon" | "skill"
+      rewardtype: "title" | "badge" | "weapon" | "skill";
       reward: {
         id: number | string;
         name: string;
+      };
+    }
+  | {
+      rewardtype: "chest";
+      reward: {
+        id: string;
+        name: string;
+        chance: number;
       };
     }
   | {
@@ -59,6 +75,7 @@ type RewardEdit =
         fname?: string;
       };
     };
+
 
 
 
