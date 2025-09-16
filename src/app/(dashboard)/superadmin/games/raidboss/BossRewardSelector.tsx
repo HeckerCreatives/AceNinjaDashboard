@@ -10,6 +10,7 @@ import {
   useGetTitleRewards,
 } from "@/client_actions/superadmin/itemrewards"
 import { useGetCompanion } from "@/client_actions/superadmin/companion"
+import { useGetChestRewards } from "@/client_actions/superadmin/chest"
 
 interface Reward {
   type: string
@@ -30,10 +31,6 @@ interface RewardSelectorProps {
 export default function BossRewardSelector({ reward, onChange }: RewardSelectorProps) {
   const [localReward, setLocalReward] = useState<Reward>(reward)
 
-//   const { data: weaponData } = useGetItemRewards("weapon", "unisex")
-//   const { data: maleItems } = useGetItemRewards("item", "male")
-//   const { data: femaleItems } = useGetItemRewards("item", "female")
-//   const { data: skillItems } = useGetItemRewards("skills", "")
   const { data: titleItems } = useGetTitleRewards()
   const { data: badgeItems } = useGetBadgeRewards()
   const { data: itemsRewards } = useGetItemRewards("", "")
@@ -43,6 +40,8 @@ export default function BossRewardSelector({ reward, onChange }: RewardSelectorP
   const { data: maleItems } = useGetItemRewards("outfit", "male")
   const { data: femaleItems } = useGetItemRewards("outfit", "female")
   const { data: skillItems } = useGetItemRewards("skills", "")
+  const {data: chests} = useGetChestRewards()
+  
 
   
 
@@ -59,7 +58,6 @@ export default function BossRewardSelector({ reward, onChange }: RewardSelectorP
 
 const handleChange = (field: keyof Reward, value: string | number) => {
   setLocalReward((prev) => {
-    // 🟢 Skin (male & female)
     if (prev.type === "skin") {
       if (field === "id" || field === "fid") {
         const maleItem =
@@ -81,7 +79,6 @@ const handleChange = (field: keyof Reward, value: string | number) => {
       }
     }
 
-      // 🟢 Badge
     if (prev.type === "badge" && field === "id") {
       const item = badgeItems?.data.find((i) => String(i.index) === String(value))
       return {
@@ -91,7 +88,6 @@ const handleChange = (field: keyof Reward, value: string | number) => {
       }
     }
 
-    // 🟢 Title
     if (prev.type === "title" && field === "id") {
       const item = titleItems?.data.find((i) => String(i.index) === String(value))
       return {
@@ -101,7 +97,6 @@ const handleChange = (field: keyof Reward, value: string | number) => {
       }
     }
 
-    // 🟢 Weapon
     if (prev.type === "weapon" && field === "id") {
       const item = weaponData?.data.items.find((i) => i.itemid === value)
       return {
@@ -111,7 +106,6 @@ const handleChange = (field: keyof Reward, value: string | number) => {
       }
     }
 
-    // 🟢 Skill
     if (prev.type === "skill" && field === "id") {
       const item = skillItems?.data.items.find((i) => i.itemid === value)
       return {
@@ -121,7 +115,6 @@ const handleChange = (field: keyof Reward, value: string | number) => {
       }
     }
 
-    // 🟢 Companion
     if (prev.type === "companion" && field === "id") {
       const item = companionItems?.data.find((i) => i.id === value)
       return {
@@ -131,7 +124,15 @@ const handleChange = (field: keyof Reward, value: string | number) => {
       }
     }
 
-    // 🟢 Exp, Coins, Crystal → always assign name = type
+    if (prev.type === "chest" && field === "id") {
+      const item = chests?.data.find((i) => i.id === value)
+      return {
+        ...prev,
+        id: value,
+        name: item?.name,
+      }
+    }
+
     if (
       prev.type === "exp" ||
       prev.type === "coins" ||
@@ -140,11 +141,10 @@ const handleChange = (field: keyof Reward, value: string | number) => {
       return {
         ...prev,
         [field]: field === "amount" ? Number(value) : value,
-        name: prev.type, // name = exp / coins / crystal
+        name: prev.type,
       }
     }
 
-    // 🟢 Default
     return {
       ...prev,
       [field]: field === "amount" ? Number(value) : value,
@@ -177,6 +177,7 @@ const handleChange = (field: keyof Reward, value: string | number) => {
           <SelectItem value="coins">Coins</SelectItem>
           <SelectItem value="exp">EXP</SelectItem>
           <SelectItem value="crystal">Crystal</SelectItem>
+          <SelectItem value="chest">Chest</SelectItem>
         </SelectContent>
       </Select>
 
@@ -327,6 +328,25 @@ const handleChange = (field: keyof Reward, value: string | number) => {
             </SelectTrigger>
             <SelectContent>
               {companionItems?.data?.map((item) => (
+                <SelectItem key={item.id} value={String(item.id)}>
+                  {item.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      ) : localReward.type === "chest" ? (
+        <div>
+          <Label className="text-xs">Select Chest</Label>
+          <Select
+            value={localReward.id || ""}
+            onValueChange={(value) => handleChange("id", value)}
+          >
+            <SelectTrigger className="bg-slate-600 border-slate-500 text-white text-xs">
+              <SelectValue placeholder="Select chest" />
+            </SelectTrigger>
+            <SelectContent>
+              {chests?.data?.map((item) => (
                 <SelectItem key={item.id} value={String(item.id)}>
                   {item.name}
                 </SelectItem>

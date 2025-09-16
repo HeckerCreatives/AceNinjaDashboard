@@ -19,11 +19,7 @@ export interface Chest {
 // client_actions/superadmin/chest.ts
 
 export type ChestReward = {
-  rewardtype: string
-  id?: string
-  fid?: string
-  name?: string
-  fname?: string
+  rewardType: "coins" | "exp" | "crystal" | "weapon" | "skill" | "badge" | "title" | "outfit"
   amount?: number
   probability?: number
   reward?: {
@@ -33,6 +29,19 @@ export type ChestReward = {
     fname?: string
   }
 }
+
+export type ChestRewardUpdate = {
+  rewardtype: "coins" | "exp" | "crystal" | "weapon" | "skill" | "badge" | "title" | "outfit"
+  amount?: number
+  probability?: number
+  reward?: {
+    id?: string
+    name?: string
+    fid?: string
+    fname?: string
+  }
+}
+
 
 
 
@@ -57,7 +66,7 @@ export const useGetChestRewards = () => {
 };
 
 
- export const updateChestRewards = async (chestid: string, rewards: ChestReward[]) => { 
+ export const updateChestRewards = async (chestid: string, rewards: ChestRewardUpdate[]) => { 
   const response = await axiosInstance.post("/chest/editchestreward", {chestid, rewards});
   return response.data;
 };
@@ -65,8 +74,28 @@ export const useGetChestRewards = () => {
 export const useUpdateChestRewards = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ chestid, rewards }: { chestid: string, rewards: ChestReward[]}) =>
+    mutationFn: ({ chestid, rewards }: { chestid: string, rewards: ChestRewardUpdate[]}) =>
       updateChestRewards(chestid, rewards),
+      onError: (error) => {
+          handleApiError(error);
+      },
+      onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["chestrewards"] });
+      }
+  });
+};
+
+
+ export const updateChest = async (chestid: string, amount: number, currency: string) => { 
+  const response = await axiosInstance.post("/chest/editchest", {chestid, amount, currency});
+  return response.data;
+};
+
+export const useUpdateChest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ chestid, amount, currency }: {chestid: string, amount: number, currency: string}) =>
+      updateChest(chestid, amount, currency),
       onError: (error) => {
           handleApiError(error);
       },

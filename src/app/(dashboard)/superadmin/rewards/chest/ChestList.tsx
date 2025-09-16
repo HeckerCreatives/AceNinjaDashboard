@@ -14,6 +14,7 @@ import Loader from '@/components/common/Loader'
 import { tierImg } from '@/utils/findAsset'
 import { useGetChestRewards } from '@/client_actions/superadmin/chest'
 import EditChestRewards from './EditChestRewards'
+import EditChest from './EditChest'
 
   
 
@@ -50,6 +51,7 @@ export default function Chestlist() {
                     <TableHead>Currency</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead>Rewards</TableHead>
+                    <TableHead>Actiion</TableHead>
                  
                     </TableRow>
                 </TableHeader>
@@ -61,7 +63,10 @@ export default function Chestlist() {
                             <TableCell>{item.currency}</TableCell>
                             <TableCell>{item.amount.toLocaleString()}</TableCell>
                             <TableCell>
-                                <EditChestRewards chestid={item.id} rewards={item.rewards}/>
+                                <EditChestRewards chestid={item.id} rewards={item.rewards} chest={item}/>
+                            </TableCell>
+                            <TableCell>
+                                <EditChest chestid={item.id} data={item}/>
                             </TableCell>
                           
                         </TableRow>

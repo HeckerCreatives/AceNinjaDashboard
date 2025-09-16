@@ -9,6 +9,7 @@ import {
   useGetItemRewards,
   useGetTitleRewards,
 } from "@/client_actions/superadmin/itemrewards"
+import { useGetChestRewards } from "@/client_actions/superadmin/chest"
 
 interface Reward {
   type: string
@@ -34,6 +35,8 @@ export default function RewardSelector({ reward, onChange, isPremium = false }: 
   const { data: skillItems } = useGetItemRewards("skills", "")
   const { data: titleItems } = useGetTitleRewards()
   const { data: badgeItems } = useGetBadgeRewards()
+  const {data: chests} = useGetChestRewards()
+
 
   useEffect(() => {
     setLocalReward(reward)
@@ -79,6 +82,7 @@ export default function RewardSelector({ reward, onChange, isPremium = false }: 
           <SelectItem value="coins">Coins</SelectItem>
           <SelectItem value="exp">EXP</SelectItem>
           <SelectItem value="crystal">Crystal</SelectItem>
+          <SelectItem value="chest">Chest</SelectItem>
         </SelectContent>
       </Select>
 
@@ -194,6 +198,25 @@ export default function RewardSelector({ reward, onChange, isPremium = false }: 
               {badgeItems?.data?.map((item) => (
                 <SelectItem key={item.id} value={item.id}>
                   {item.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      ) : localReward.type === "chest" ? (
+        <div>
+          <Label className="text-xs">Select Chest</Label>
+          <Select
+            value={localReward.id || ""}
+            onValueChange={(value) => handleChange("id", value)}
+          >
+            <SelectTrigger className="bg-slate-600 border-slate-500 text-white text-xs">
+              <SelectValue placeholder="Select chest" />
+            </SelectTrigger>
+            <SelectContent>
+              {chests?.data?.map((item) => (
+                <SelectItem key={item.id} value={item.id}>
+                  {item.name}
                 </SelectItem>
               ))}
             </SelectContent>

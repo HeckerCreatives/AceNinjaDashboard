@@ -40,7 +40,7 @@ type ApiReward =
       reward: {
         id:  string 
         name: string
-        chance: number
+        // chance: number
       }
     }
   | {
@@ -91,7 +91,7 @@ export default function RankRewardCards() {
               return { ...commonFields, amount: r.amount }
             }else if (r.rewardType?.toLowerCase() === "chest") {
              
-              return { rewardtype: "chest", id: r.reward.id, name: r.reward.name, chance: r.reward.chance }
+              return { rewardtype: "chest", id: r.reward.id, name: r.reward.name}
             } else if (r.rewardType?.toLowerCase() === "outfit") {
              
               return { rewardtype: "skin", id: r.reward.id, fid: r.reward.fid }
@@ -167,7 +167,6 @@ export default function RankRewardCards() {
           amount: reward.amount as number, 
         }
       } else if (reward.rewardtype === "skin") {
-        // Map 'skin' to 'outfit' for API
         const foundMaleSkin = maleItems?.data.items.find((item) => item.itemid === reward.id)
         const foundFemaleSkin = femaleItems?.data.items.find((item) => item.itemid === reward.fid)
         return {
@@ -187,7 +186,7 @@ export default function RankRewardCards() {
           reward: {
             id: reward.id as string,
             name: foundChest?.name || "",
-            chance: reward.chance || 0, 
+            // chance: reward.chance || 0, 
           },
         };
       } else {
@@ -430,7 +429,7 @@ export default function RankRewardCards() {
             </SelectContent>
           </Select>
 
-           <Input
+           {/* <Input
             id={`amount-${rank}-${index}`}
             placeholder="Chance(%)"
             type="number"
@@ -442,7 +441,7 @@ export default function RankRewardCards() {
                 chance: Number(e.target.value),
               })
             }
-          />
+          /> */}
         </div>
       )
     }

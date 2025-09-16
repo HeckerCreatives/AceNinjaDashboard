@@ -12,6 +12,7 @@ import { useUpdateBpTiers } from "@/client_actions/superadmin/battlepass"
 import toast from "react-hot-toast"
 import RewardSelector from "./RewardSelector"
 import { useGetBadgeRewards, useGetItemRewards, useGetTitleRewards } from "@/client_actions/superadmin/itemrewards"
+import { useGetChestRewards } from "@/client_actions/superadmin/chest"
 
 interface Reward {
   type: string
@@ -59,9 +60,9 @@ const { data: femaleItems } = useGetItemRewards("outfit", "female")
 
  const {data: titleItems} = useGetTitleRewards()
  const {data: badgeItems} = useGetBadgeRewards()
+ const {data: chests} = useGetChestRewards()
 
   
-console.log('Badge',badgeItems)
 
   const handleEdit = (tier: Tier) => {
     setEditingId(tier._id)
@@ -153,6 +154,7 @@ function transformPremiumReward(reward: Reward): Reward {
     case "skill":
     case "badge":
     case "title":
+    case "chest":
       return {
         type: reward.type,
         id: reward.id ?? "",
@@ -227,6 +229,8 @@ function transformPremiumReward(reward: Reward): Reward {
           return badgeItems?.data?.find((item) => item.id === id)?.title ?? "Unknown"
         case "title":
           return titleItems?.data?.find((item) => item.id === id)?.title ?? "Unknown"
+          case "chest":
+          return chests?.data?.find((item) => item.id === id)?.name ?? "Unknown"
         default:
           return "Unknown"
       }

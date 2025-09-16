@@ -11,6 +11,7 @@ import { Button } from '../ui/button'
 import { useUpdateWeeklylogin } from '@/client_actions/superadmin/rewards'
 import toast from 'react-hot-toast'
 import Loader from './Loader'
+import { useGetChestRewards } from '@/client_actions/superadmin/chest';
 
 type Props = {
   amount: number,
@@ -21,12 +22,19 @@ type Props = {
 export default function Weeklylogincard(prop: Props) {
   const [type, setType] = useState('');
   const [amount, setAmount] = useState(''); // changed to string
-  const [chance, setChance] = useState(0);
+  const [chance, setChance] = useState('');
+  const [chest, setChest] = useState('')
   const { mutate: updateWeeklylogin, isPending } = useUpdateWeeklylogin();
+  const { data: chests } = useGetChestRewards()
+  
 
   useEffect(() => {
     setType(prop.type);
-    setAmount(formatNumberWithCommas(prop.amount));
+    if(prop.type !== 'chest'){
+      setAmount(formatNumberWithCommas(prop.amount))
+      } else {
+        setChest(prop.amount as any)
+      }
   }, [prop]);
 
   const formatNumberWithCommas = (value: number | string) => {
@@ -39,20 +47,21 @@ export default function Weeklylogincard(prop: Props) {
     const raw = e.target.value.replace(/,/g, '').replace(/[^\d]/g, '');
     if (raw === '') {
       setAmount('');
+      setChance('')
       return;
     }
     setAmount(formatNumberWithCommas(raw));
+    setChance(formatNumberWithCommas(raw));
   };
 
   const updateData = async () => {
     const numericAmount = parseInt(amount.replace(/,/g, '')) || 0;
-
-    updateWeeklylogin(
-      {
-        day: prop.day,
-        amount: numericAmount,
-        type: type,
-      },
+    const finalPayload = {
+       day: prop.day,
+      amount: type !== 'chest' ? numericAmount : chest,
+      type: type,
+    }
+    updateWeeklylogin(finalPayload,
       {
         onSuccess: () => {
           toast.success(`Weekly login data updated successfully`);
@@ -77,18 +86,43 @@ export default function Weeklylogincard(prop: Props) {
             <SelectItem value="coins">Coins</SelectItem>
             <SelectItem value="crystal">Crystals</SelectItem>
             <SelectItem value="exp">Exp</SelectItem>
+            <SelectItem value="chest">Chest</SelectItem>
           </SelectContent>
         </Select>
 
-        <p className='text-[.6rem] text-zinc-300 mt-4'>Amount</p>
-        <Input
-          value={amount}
-          onChange={handleAmountChange}
-          placeholder='Amount'
-          type='text'
-          inputMode="numeric"
-          className='placeholder:text-xs'
-        />
+        
+
+        {type === 'chest' ? (
+         <div className=' space-y-1'>
+          <p className='text-[.6rem] text-zinc-300 mt-4'>Chest</p>
+
+          <Select value={chest} onValueChange={setChest}>
+          <SelectTrigger className="bg-zinc-950 border-none">
+            <SelectValue placeholder="Select" />
+          </SelectTrigger>
+          <SelectContent>
+            {chests?.data.map((item, index) => (
+            <SelectItem key={index} value={item.id}>{item.name}</SelectItem>
+            ))}
+          
+          </SelectContent>
+        </Select>
+
+        
+         </div>
+        ) : (
+         <div className=' space-y-1'>
+          <p className='text-[.6rem] text-zinc-300 mt-4'>Amount</p>
+          <Input
+            value={amount}
+            onChange={handleAmountChange}
+            placeholder='Amount'
+            type='text'
+            inputMode="numeric"
+            className='placeholder:text-xs'
+          />
+         </div>
+        )}
 
         <Button disabled={isPending} onClick={updateData} className='mt-4'>
           {isPending && <Loader />}

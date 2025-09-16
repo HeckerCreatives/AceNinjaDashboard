@@ -63,7 +63,7 @@ type RewardEdit =
       reward: {
         id: string;
         name: string;
-        chance: number;
+        // chance: number;
       };
     }
   | {

@@ -8,7 +8,7 @@ interface Dailyspindata {
   id: string,
   slot: number,
   type: string,
-  amount: number,
+  amount: any,
   chance: number,
   day: any
 }
@@ -16,6 +16,7 @@ interface DailySpin {
     message: string,
     data: Dailyspindata[]
 }
+
 
 
 //spin
@@ -115,16 +116,16 @@ export const useGetWeeklylogin = () => {
   });
 };
 
- export const updateWeeklylogin = async ( day: number, amount: number, type: string) => { 
-     const response = await axiosInstance.post("/rewards/editweeklylogin", { day, amount, type,});
+ export const updateWeeklylogin = async ( day: number,  type: string,amount: number | string, reward?:{id?: string, probability?: number}) => { 
+     const response = await axiosInstance.post("/rewards/editweeklylogin", { day, type, amount, reward});
      return response.data;
  };
   
 export const useUpdateWeeklylogin = () => {
      const queryClient = useQueryClient();
      return useMutation({
-       mutationFn: ({  day, amount, type,}: {day: number, amount: number, type: string}) =>
-        updateWeeklylogin( day, amount, type),
+       mutationFn: ({  day, type,amount, reward,}: {day: number,  type: string,amount: number | string, reward?:{id?: string, probability?: number}}) =>
+        updateWeeklylogin( day, type, amount, reward),
          onError: (error) => {
              handleApiError(error);
          },
@@ -145,7 +146,7 @@ export const getMonthlylogin = async (): Promise<DailySpin> => {
 
 export const useGetMonthlylogin = () => {
   return useQuery({
-    queryKey: ["login"],
+    queryKey: ["monthlylogin"],
     queryFn: () => getMonthlylogin(),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 
@@ -153,7 +154,7 @@ export const useGetMonthlylogin = () => {
   });
 };
 
- export const updateMonthlylogin = async ( day: string, amount: number, type: string) => { 
+ export const updateMonthlylogin = async ( day: string | number, amount: number | string, type: string) => { 
      const response = await axiosInstance.post("/rewards/editmonthlylogin", { day, amount, type,});
      return response.data;
  };
@@ -161,13 +162,13 @@ export const useGetMonthlylogin = () => {
 export const useUpdateMonthlylogin = () => {
      const queryClient = useQueryClient();
      return useMutation({
-       mutationFn: ({  day, amount, type,}: {day: string, amount: number, type: string}) =>
+       mutationFn: ({  day, amount, type,}: {day: string | number, amount: number | string, type: string}) =>
         updateMonthlylogin( day, amount, type),
          onError: (error) => {
              handleApiError(error);
          },
          onSuccess: () => {
-             queryClient.invalidateQueries({ queryKey: ["login"] });
+             queryClient.invalidateQueries({ queryKey: ["monthlylogin"] });
          }
      });
 };

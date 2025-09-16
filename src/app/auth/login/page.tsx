@@ -63,11 +63,11 @@ export default function Page() {
       }
 
       if (response.data.data.auth === "player") {
-        router.push("/user/dashboard");
+        router.replace("/user/dashboard");
       }
 
       if (response.data.data.auth === "superadmin") {
-        router.push("/superadmin/dashboard");
+        router.replace("/superadmin/dashboard");
       }
     } catch (error) {
       handleApiError(error);

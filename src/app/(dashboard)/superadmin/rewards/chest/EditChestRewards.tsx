@@ -17,19 +17,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Eye, Plus, X } from "lucide-react"
 
 import { useGetBadgeRewards, useGetItemRewards, useGetTitleRewards } from "@/client_actions/superadmin/itemrewards"
-import { useGetChestRewards, ChestReward, useUpdateChestRewards } from "@/client_actions/superadmin/chest"
+import { useGetChestRewards, ChestReward, useUpdateChestRewards, ChestRewardUpdate, Chest } from "@/client_actions/superadmin/chest"
 import toast from "react-hot-toast"
+import Loader from "@/components/common/Loader"
 
 type Props = {
   chestid: string
-  rewards: ChestReward[]
+  rewards: ChestReward[],
+  chest: Chest
 }
 
 type RewardType = "coins" | "exp" | "crystal" | "weapon" | "skill" | "badge" | "title" | "outfit"
 
 const rewardTypes: RewardType[] = ["coins", "exp", "crystal", "weapon", "skill", "badge", "title", "outfit"]
 
-export default function EditChestRewards({ chestid, rewards }: Props) {
+export default function EditChestRewards({ chestid, rewards, chest }: Props) {
   const { data: weaponItems } = useGetItemRewards("weapon", "unisex")
   const { data: maleItems } = useGetItemRewards("outfit", "male")
   const { data: femaleItems } = useGetItemRewards("outfit", "female")
@@ -38,47 +40,88 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
   const { data: badgeItems } = useGetBadgeRewards()
 
   const [data, setData] = useState<ChestReward[]>([])
-  const {mutate: updateChestRewards} = useUpdateChestRewards()
+  const {mutate: updateChestRewards, isPending} = useUpdateChestRewards()
+
+  console.log('Final', data)
 
    useEffect(() => {
-    if (rewards) {
-        const normalized = rewards.map(r => ({
-        ...r,
-        rewardtype: r.rewardtype || (r as any).rewardType || "coins",
-        id: r.id ? r.id.toString() : "",
-        fid: r.fid ? r.fid.toString() : "",
-        amount: r.amount ?? 0,
-        probability: r.probability ?? 0,
+      if (rewards) {
+        const normalized = rewards.map((r) => ({
+          rewardType: r.rewardType,
+          amount: r.amount ?? 0,
+          probability: r.probability ?? 0,
+          reward: r.reward
+            ? {
+                id: r.reward.id ?? "",
+                name: r.reward.name ?? "",
+                fid: r.reward.fid ?? "",
+                fname: r.reward.fname ?? "",
+              }
+            : undefined,
         }))
-        console.log('Normalized', normalized)
+        console.log("Normalized", normalized)
         setData(normalized)
-    }
+      }
     }, [rewards])
 
 
 
 
-  const handleAddReward = () => {
-    if (data.length >= 6) return
-    setData((prev) => [...prev, { rewardtype: "coins", amount: 0, probability: 0 } as any])
-  }
 
-  const handleRewardChange = (index: number, updated: Partial<ChestReward>) => {
+  const handleAddReward = () => {
+  setData((prev) => [
+    ...prev,
+    {
+      rewardType: "coins",
+      amount: 0,
+      probability: 0,
+    },
+  ])
+}
+
+
+ const handleRewardChange = (index: number, updated: Partial<ChestReward>) => {
   setData((prev) => {
     const updatedData = [...prev]
-    updatedData[index] = { ...updatedData[index], ...updated }
+    updatedData[index] = {
+      ...updatedData[index],
+      ...updated,
+      reward: {
+        ...updatedData[index].reward,
+        ...updated.reward,
+      },
+    }
     return updatedData
   })
 }
+
 
   const handleDeleteReward = (index: number) => {
     setData((prev) => prev.filter((_, i) => i !== index))
   }
 
   const handleSave = () => {
+
+      const transformedRewards: ChestRewardUpdate[] = data.map(({ rewardType, reward, ...rest }) => {
+        const type = rewardType.toLowerCase() as ChestRewardUpdate["rewardtype"]
+
+        if (type === "coins" || type === "exp" || type === "crystal") {
+          return {
+            ...rest,
+            rewardtype: type,
+          }
+        }
+
+        return {
+          ...rest,
+          rewardtype: type,
+          reward,
+        }
+      })
+
    
       updateChestRewards(
-        { chestid: chestid, rewards: data},
+        { chestid: chestid, rewards: transformedRewards},
         {
           onSuccess: () => {
             toast.success(`Rewards  updated successfully.`)
@@ -91,8 +134,10 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
       )
     }
 
-  const renderRewardInputs = (reward: ChestReward, index: number) => {
-    const isAmountType = ["coins", "exp", "crystal"].includes(reward.rewardtype)
+  const renderRewardInputs = (reward: any, index: number) => {
+    const isAmountType = ["coins", "exp", "crystal"].includes(reward.rewardType)
+
+    console.log('Inputs', reward)
 
     if (isAmountType) {
       return (
@@ -118,11 +163,17 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
       )
     }
 
-    if (reward.rewardtype === "badge") {
+    if (reward.rewardType === "badge") {
       return (
         <div className="space-y-2">
           <Label>Badge</Label>
-          <Select value={reward.id || ""} onValueChange={(val) => handleRewardChange(index, { id: val })}>
+          <Select value={reward.reward.id || ""} 
+          onValueChange={(val) =>
+            handleRewardChange(index, {
+              reward: { id: val },
+            })
+          }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select badge" />
             </SelectTrigger>
@@ -147,11 +198,17 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
       )
     }
 
-    if (reward.rewardtype === "title") {
+    if (reward.rewardType === "title") {
       return (
         <div className="space-y-2">
           <Label>Title</Label>
-          <Select value={reward.id?.toString() || ""} onValueChange={(val) => handleRewardChange(index, { id: val })}>
+          <Select value={reward.reward.id?.toString() || ""} 
+          onValueChange={(val) =>
+            handleRewardChange(index, {
+              reward: { id: val },
+            })
+          }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select title" />
             </SelectTrigger>
@@ -176,12 +233,18 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
       )
     }
 
-    if (reward.rewardtype === "weapon") {
+    if (reward.rewardType === "weapon") {
 
       return (
         <div className="space-y-2">
           <Label>Weapon</Label>
-          <Select  value={reward.id?.toString() || ''} onValueChange={(val) => handleRewardChange(index, { id: val })}>
+          <Select  value={reward.reward.id?.toString() || ''} 
+          onValueChange={(val) =>
+            handleRewardChange(index, {
+              reward: { id: val },
+            })
+          }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select weapon" />
             </SelectTrigger>
@@ -206,11 +269,17 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
       )
     }
 
-    if (reward.rewardtype === "skill") {
+    if (reward.rewardType === "skill") {
       return (
         <div className="space-y-2">
           <Label>Skill</Label>
-          <Select value={reward.id?.toString() || ""} onValueChange={(val) => handleRewardChange(index, { id: val })}>
+          <Select value={reward.reward.id?.toString() || ""} 
+            onValueChange={(val) =>
+            handleRewardChange(index, {
+              reward: { id: val },
+            })
+          }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select skill" />
             </SelectTrigger>
@@ -235,12 +304,18 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
       )
     }
 
-    if (reward.rewardtype === "outfit") {
+    if (reward.rewardType === "outfit") {
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>Male Skin</Label>
-            <Select value={reward.id?.toString() || ""} onValueChange={(val) => handleRewardChange(index, { id: val })}>
+            <Select value={reward.reward?.id?.toString() || ""} 
+              onValueChange={(val) =>
+            handleRewardChange(index, {
+              reward: { id: val },
+            })
+          }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select male skin" />
               </SelectTrigger>
@@ -255,7 +330,13 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
           </div>
           <div className="space-y-2">
             <Label>Female Skin</Label>
-            <Select value={reward.fid?.toString() || ""} onValueChange={(val) => handleRewardChange(index, { fid: val })}>
+            <Select value={reward.reward?.fid?.toString() || ""} 
+              onValueChange={(val) =>
+            handleRewardChange(index, {
+              reward: { fid: val },
+            })
+          }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select female skin" />
               </SelectTrigger>
@@ -288,13 +369,13 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
   return (
     <Dialog>
       <DialogTrigger className="flex items-center gap-1 bg-amber-700 rounded-md px-3 py-1">
-        <Eye size={20} />
+        <Eye size={15} />
         Rewards
       </DialogTrigger>
       <DialogContent className="h-fit max-h-[90%] w-full max-w-[700px] overflow-y-auto bg-amber-950 p-6">
         <DialogHeader>
-          <DialogTitle>Edit Chest Rewards</DialogTitle>
-          <DialogDescription>Configure rewards for this chest</DialogDescription>
+          <DialogTitle>Edit Chest Rewards ({chest.name})</DialogTitle>
+          <DialogDescription>Manage chest rewards data.</DialogDescription>
         </DialogHeader>
 
         <Card className="bg-amber-950 border-amber-800 border-2">
@@ -321,15 +402,12 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
                 <div className="space-y-2">
                   <Label>Reward Type</Label>
                   <Select
-                    value={reward.rewardtype}
-                    onValueChange={(val: RewardType) =>
-                      handleRewardChange(i, {
-                        rewardtype: val,
-                        id: "",
-                        fid: "",
-                        amount: undefined,
-                      })
-                    }
+                    value={reward.rewardType}
+                    onValueChange={(val) =>
+                    handleRewardChange(i, {
+                      rewardType: val as RewardType,
+                    })
+  }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select Reward Type" />
@@ -353,6 +431,7 @@ export default function EditChestRewards({ chestid, rewards }: Props) {
         {data.length > 0 && (
           <div className="flex justify-end pt-4">
             <Button onClick={handleSave}>
+               {isPending && <Loader/>}
               Submit
             </Button>
           </div>

@@ -10,6 +10,7 @@ import { useGetBadgeRewards, useGetItemRewards, useGetTitleRewards } from "@/cli
 import { useEditBossRewards } from "@/client_actions/superadmin/raidboss"
 import Loader from "@/components/common/Loader"
 import { useGetCompanion } from "@/client_actions/superadmin/companion"
+import { useGetChestRewards } from "@/client_actions/superadmin/chest"
 
 interface Reward {
   type: string
@@ -37,6 +38,8 @@ export default function RewardListManager({ initialRewards = [], onChange, id, o
     const { data: badgeItems } = useGetBadgeRewards()
     const {mutate: editBossRewards, isPending} = useEditBossRewards()
     const {data: companionItems} = useGetCompanion(0,99999)
+    const { data: chests } = useGetChestRewards()
+    
     
 
   
@@ -126,6 +129,16 @@ export default function RewardListManager({ initialRewards = [], onChange, id, o
             name: item?.name || "Companion",
         })
         }
+
+         // Chest
+        else if (reward.type === "chest" && reward.id) {
+        const item = chests?.data.find((i) => i.id === reward.id)
+        output.push({
+            type: "chests",
+            id: reward.id,
+            name: item?.name ,
+        })
+        }
     })
 
     return output
@@ -153,6 +166,12 @@ export default function RewardListManager({ initialRewards = [], onChange, id, o
 
   const findCompanion = (data: string) => {
     const itemData = companionItems?.data.find((item) => item.id === data)
+    return itemData
+    
+  }
+
+  const findChest = (data: string) => {
+    const itemData = chests?.data.find((item) => item.id === data)
     return itemData
     
   }
@@ -209,7 +228,6 @@ export default function RewardListManager({ initialRewards = [], onChange, id, o
 }
 
 
-  console.log(rewards)
 
   return (
     <div className="space-y-4">
@@ -281,6 +299,10 @@ export default function RewardListManager({ initialRewards = [], onChange, id, o
 
                 {reward.type === 'companion' && (
                     <p>{findCompanion(reward.id || '')?.name} <span className=" text-xs text-amber-600 capitalize">(Companion)</span></p>
+                )}
+
+                {reward.type === 'chest' && (
+                    <p>{findChest(reward.id || '')?.name} <span className=" text-xs text-amber-600 capitalize">(Chest)</span></p>
                 )}
 
                 {(reward.type === 'exp' || reward.type === 'crystal' || reward.type === 'coins') && (
