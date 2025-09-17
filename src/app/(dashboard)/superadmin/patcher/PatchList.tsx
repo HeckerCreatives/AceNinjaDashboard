@@ -67,8 +67,8 @@ export default function PatchList() {
 
 
     <Table className=' bg-zinc-900 mt-6'>
-       {!patch?.data && (
-                 <TableCaption className=' text-xs'>No Data</TableCaption>
+       {patch?.data.files.length === 0 && (
+                 <TableCaption className=' text-xs'>No files</TableCaption>
                  )}
                  {isPending && (
                  <TableCaption className=' text-xs'><div className=' loader'></div></TableCaption>

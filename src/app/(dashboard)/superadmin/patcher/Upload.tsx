@@ -192,8 +192,8 @@ export function PatchUploadDialog() {
         if (!isOpen) resetState() // reset when closed
       }}
     >
-      <DialogTrigger>
-        <Button><Plus size={15}/>Add Patch</Button>
+      <DialogTrigger className=" w-fit px-3 py-2 bg-yellow-500 text-black flex items-center gap-2 text-xs rounded-md">
+        <Plus size={15}/>Add Patch
       </DialogTrigger>
       <DialogContent className="max-w-lg mx-h-[80%] h-fit p-6 bg-zinc-900 border-zinc-600 overflow-x-hidden">
         <DialogHeader>
@@ -239,7 +239,7 @@ export function PatchUploadDialog() {
                   {getStatusIcon(fileItem.status)}
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium">{fileItem.file.name}</p>
+                    <p className="text-sm font-medium truncate">{fileItem.file.name}</p>
                     <p className="text-xs text-muted-foreground">
                       {formatFileSize(fileItem.file.size)}
                     </p>
@@ -301,10 +301,10 @@ export function PatchUploadDialog() {
 
 
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+            {/* <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button> */}
             <Button disabled={loading} onClick={uploadAllFiles}>
                 {loading && <Loader/>}
-                Upload Files</Button>
+                {loading ? 'Uploading' : 'Upload'}</Button>
           </div>
         </div>
 
