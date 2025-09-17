@@ -98,7 +98,6 @@ export function PatchUploadDialog() {
   }
 
   const uploadFile = async (fileItem: FileUploadItem) => {
-    setLoading(true)
     const formData = new FormData()
     formData.append("addressableFile", fileItem.file)
     formData.append("platform", platform)
@@ -141,17 +140,17 @@ export function PatchUploadDialog() {
       )
       
 
-      toast.success('File uploaded successfully')
-      setLoading(false)
-      setTimeout(() => {
-         queryClient.invalidateQueries({
-            queryKey: ["patchfile", platform, ''],
-          })
-        setOpen(false)
-        resetState()
-    }, 3000)
+    //   toast.success('File uploaded successfully')
+    //   setLoading(false)
+    //   setTimeout(() => {
+    //      queryClient.invalidateQueries({
+    //         queryKey: ["patchfile", platform, ''],
+    //       })
+    //     setOpen(false)
+    //     resetState()
+    // }, 3000)
     } catch (err) {
-      setLoading(false)
+    //   setLoading(false)
 
       setFiles((prev) =>
         prev.map((f) =>
@@ -162,12 +161,26 @@ export function PatchUploadDialog() {
   }
 
   const uploadAllFiles = async () => {
+    setLoading(true)
+
     for (const fileItem of files) {
-      if (fileItem.status === "pending") {
+        if (fileItem.status === "pending") {
         await uploadFile(fileItem)
-      }
+        }
     }
-  }
+
+    setLoading(false)
+
+    const allCompleted = files.every((f) => f.status === "completed")
+    const allFailed = files.every((f) => f.status === "error")
+
+        toast.success("All files uploaded successfully")
+        setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["patchfile", platform, ""] })
+        setOpen(false)
+        resetState()
+        }, 3000)
+    }
 
 
 
@@ -232,7 +245,7 @@ export function PatchUploadDialog() {
                     </p>
 
                     {fileItem.status !== 'error' && (
-                        <Progress value={fileItem.progress} className="mt-1 h-1 bg-zinc-500" />
+                        <Progress value={fileItem.progress} className="mt-1 h-1 bg-zinc-500 [&>div]:bg-green-500" />
                     )}
 
 
