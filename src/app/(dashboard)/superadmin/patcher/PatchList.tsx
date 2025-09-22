@@ -9,40 +9,31 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-import PaginitionComponent from '@/components/common/Pagination'
-import useCharacterStore from '@/hooks/character'
-import { useGetAllTopupHistory, useGetTopupHistory } from '@/client_actions/superadmin/topup'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { PatchUploadDialog } from './Upload'
 import { useGetPatchFileList } from '@/client_actions/gamepatch/patch'
 import DeletePatchFile from './DeletePatch'
 import Link from 'next/link'
+import { Progress } from '@/components/ui/progress'
+
+export type FileUploadItem = {
+    id: string
+    file: File
+    progress: number
+    status: "pending" | "uploading" | "completed" | "error"
+    error?: string
+}
   
 
 export default function PatchList() {
-  const [currentPage, setCurrentPage] = useState(0)
-  const [totalPage, setTotalPage] = useState(0)
   const [filter, setFilter] = useState('StandaloneWindows64')
   const {data: patch, isPending} = useGetPatchFileList(filter,'')
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-
-
-  
-  //paginition
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
-
-
-  //   useEffect(() => {
-  //   setTotalPage(data?.pagination.totalPages || 0)
-  //   console.log('pagination',data?.pagination)
-
-  // },[data])
+  const [open, setOpen] = useState(false) 
+  const [files, setFiles] = useState<FileUploadItem[]>([])
+  const [overallProgress, setOverallProgress] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
 
   return (
@@ -51,7 +42,7 @@ export default function PatchList() {
       <p className=' text-xl font-semibold mb-6'>Patch</p>
 
       <div className=' flex items-center justify-between'>
-        <PatchUploadDialog/>
+        <PatchUploadDialog files={files} setFiles={setFiles} open={open} setOpen={setOpen} overallProgress={overallProgress} setOverallProgress={setOverallProgress} loading={loading} setLoading={setLoading} uploading={uploading} setUploading={setUploading}/>
 
          <Select value={filter} onValueChange={setFilter}>
                   <SelectTrigger className="w-fit">
@@ -64,6 +55,23 @@ export default function PatchList() {
                   </SelectContent>
                 </Select>
       </div>
+
+      {(!open && uploading) && (
+        <div className=' flex flex-col gap-2 max-w-sm mt-6'>
+          <p className=' text-xs text-zinc-300'>Uploading files ({files.filter((item) => item.status === 'completed').length}/{files.length})...</p>
+          <Progress value={overallProgress} className="h-2 [&>div]:bg-green-500" />
+           {files.some((f) => f.status === "uploading") && (
+                <p className="text-xs text-green-500">
+                    Uploading{" "}
+                    {files
+                    .filter((f) => f.status === "uploading")
+                    .map((f) => f.file.name)
+                    .join(", ")}
+                </p>
+                )}
+
+        </div>
+      )}
 
 
     <Table className=' bg-zinc-900 mt-6'>

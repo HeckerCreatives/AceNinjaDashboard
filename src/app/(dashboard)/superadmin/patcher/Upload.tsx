@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
@@ -13,24 +13,32 @@ import { DialogTrigger } from "@radix-ui/react-dialog"
 import toast from "react-hot-toast"
 import { useQueryClient } from "@tanstack/react-query"
 import Loader from "@/components/common/Loader"
+import { FileUploadItem } from "./PatchList"
+import { io, Socket } from "socket.io-client";
+import { useSocket } from "@/utils/SocketConfig"
 
-interface FileUploadItem {
-  id: string
-  file: File
-  progress: number
-  status: "pending" | "uploading" | "completed" | "error"
-  error?: string
+
+type Props = {
+  setFiles: React.Dispatch<React.SetStateAction<FileUploadItem[]>>
+  files: FileUploadItem[]
+  open: boolean,
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  uploading: boolean,
+  setUploading: React.Dispatch<React.SetStateAction<boolean>>
+  overallProgress: number
+  setOverallProgress: React.Dispatch<React.SetStateAction<number>>
+  loading: boolean,
+  setLoading:React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export function PatchUploadDialog() {
-  const [files, setFiles] = useState<FileUploadItem[]>([])
+export function PatchUploadDialog({setFiles, files, open, setOpen, overallProgress, setOverallProgress, loading, setLoading, uploading, setUploading}: Props) {
   const [isDragOver, setIsDragOver] = useState(false)
-  const [overallProgress, setOverallProgress] = useState(0)
-  const [open, setOpen] = useState(false) 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [platform, setPlatform] = useState('StandaloneWindows64')
   const queryClient = useQueryClient()
-  const [loading, setLoading] = useState(false)
+  const socketRef = useSocket();
+
+ 
 
   const resetState = () => {
     setFiles([])
@@ -101,6 +109,7 @@ export function PatchUploadDialog() {
     const formData = new FormData()
     formData.append("addressableFile", fileItem.file)
     formData.append("platform", platform)
+    formData.append("socketId", socketRef.current?.id || '')
 
     try {
       setFiles((prev) =>
@@ -126,7 +135,7 @@ export function PatchUploadDialog() {
             const totalProgress = updatedFiles.reduce((acc, f) => acc + f.progress, 0)
             const avgProgress = Math.round(totalProgress / updatedFiles.length)
 
-            setOverallProgress(avgProgress)
+            setOverallProgress(Number(avgProgress))
 
             return updatedFiles
             })
@@ -135,22 +144,13 @@ export function PatchUploadDialog() {
         },
       })
 
+    
+
       setFiles((prev) =>
         prev.map((f) => (f.id === fileItem.id ? { ...f, status: "completed", progress: 100 } : f))
       )
-      
-
-    //   toast.success('File uploaded successfully')
-    //   setLoading(false)
-    //   setTimeout(() => {
-    //      queryClient.invalidateQueries({
-    //         queryKey: ["patchfile", platform, ''],
-    //       })
-    //     setOpen(false)
-    //     resetState()
-    // }, 3000)
+    
     } catch (err) {
-    //   setLoading(false)
 
       setFiles((prev) =>
         prev.map((f) =>
@@ -162,35 +162,61 @@ export function PatchUploadDialog() {
 
   const uploadAllFiles = async () => {
     setLoading(true)
+    setUploading(true)
+
+    const socket = io(process.env.NEXT_PUBLIC_API_URL as string, {
+      transports: ["websocket"],
+    });
+    
 
     for (const fileItem of files) {
+      console.log(fileItem)
+
+      socket.emit('game:patchstatus', {fileItem});
+      console.log('emitted')
         if (fileItem.status === "pending") {
         await uploadFile(fileItem)
         }
     }
 
     setLoading(false)
+    setUploading(false)
+    toast.success("All files uploaded successfully")
+    setTimeout(() => {
+    queryClient.invalidateQueries({ queryKey: ["patchfile", platform, ""] })
+    setOpen(false)
+    resetState()
+    }, 3000)
+  }
 
-    const allCompleted = files.every((f) => f.status === "completed")
-    const allFailed = files.every((f) => f.status === "error")
+  useEffect(() => {
 
-        toast.success("All files uploaded successfully")
-        setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["patchfile", platform, ""] })
-        setOpen(false)
-        resetState()
-        }, 3000)
-    }
+     const socket = socketRef.current;
+    if (!socket) return;
+
+    socket.on("connect", () => {
+      console.log("✅ Connected:", socket.id);
+    });
+
+
+    socket.on("fileUploadStatus", (data) => {
+      console.log("✅Progress:", data);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [socketRef]);
 
 
 
   return (
     <Dialog
       open={open}
-      onOpenChange={(isOpen) => {
-        setOpen(isOpen)
-        if (!isOpen) resetState() // reset when closed
-      }}
+      onOpenChange={setOpen}
+      // onOpenChange={(isOpen) => {
+      //   setOpen(isOpen)
+      //   if (!isOpen) resetState() 
+      // }}
     >
       <DialogTrigger className=" w-fit px-3 py-2 bg-yellow-500 text-black flex items-center gap-2 text-xs rounded-md">
         <Plus size={15}/>Add Patch
