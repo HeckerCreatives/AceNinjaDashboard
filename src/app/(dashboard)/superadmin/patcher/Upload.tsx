@@ -119,29 +119,29 @@ export function PatchUploadDialog({setFiles, files, open, setOpen, overallProgre
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/patchnotefilemanager/upload`, formData, {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.total) {
-            const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        // onUploadProgress: (progressEvent) => {
+        //   if (progressEvent.total) {
+        //     const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
 
-            setFiles((prev) =>
-              prev.map((f) => (f.id === fileItem.id ? { ...f, progress: percent } : f))
-            )
+        //     setFiles((prev) =>
+        //       prev.map((f) => (f.id === fileItem.id ? { ...f, progress: percent } : f))
+        //     )
 
-            setFiles((prev) => {
-            const updatedFiles = prev.map((f) =>
-                f.id === fileItem.id ? { ...f, progress: percent } : f
-            )
+        //     setFiles((prev) => {
+        //     const updatedFiles = prev.map((f) =>
+        //         f.id === fileItem.id ? { ...f, progress: percent } : f
+        //     )
 
-            const totalProgress = updatedFiles.reduce((acc, f) => acc + f.progress, 0)
-            const avgProgress = Math.round(totalProgress / updatedFiles.length)
+        //     const totalProgress = updatedFiles.reduce((acc, f) => acc + f.progress, 0)
+        //     const avgProgress = Math.round(totalProgress / updatedFiles.length)
 
-            setOverallProgress(Number(avgProgress))
+        //     setOverallProgress(Number(avgProgress))
 
-            return updatedFiles
-            })
+        //     return updatedFiles
+        //     })
 
-          }
-        },
+        //   }
+        // },
       })
 
     
@@ -175,6 +175,7 @@ export function PatchUploadDialog({setFiles, files, open, setOpen, overallProgre
       socket.emit('game:patchstatus', {fileItem});
       console.log('emitted')
         if (fileItem.status === "pending") {
+
         await uploadFile(fileItem)
         }
     }
@@ -200,12 +201,26 @@ export function PatchUploadDialog({setFiles, files, open, setOpen, overallProgre
 
 
     socket.on("fileUploadStatus", (data) => {
+      
+      setFiles((prev) =>
+        prev.map((f) => (f.file.name === data.name ? { ...f, progress: data.progress, status: data.staus } : f))
+       )
       console.log("✅Progress:", data);
     });
     return () => {
       socket.disconnect();
     };
   }, [socketRef]);
+
+  useEffect(() => {
+     const updatedFiles = files.map((f) =>
+        f.status === 'completed' ? {...f} : f
+    )
+    const totalProgress = updatedFiles.reduce((acc, f) => acc + f.progress, 0)
+    const avgProgress = Math.round(totalProgress / updatedFiles.length)
+    setOverallProgress(Number(avgProgress))
+  },[files])
+
 
 
 
