@@ -59,20 +59,20 @@ pagination: {
 
 
 
-export const getTopuphistory = async (page: number, limit: number): Promise<PayinHistoryResponse> => { 
+export const getTopuphistory = async (page: number, limit: number, currency: string): Promise<PayinHistoryResponse> => { 
   const response = await axiosInstance.get(
     "/payin/getpayinhistorysuperadmin",
-    {params:{page, limit}}
+    {params:{page, limit, currency}}
    
   );
   return response.data
 };
 
 
-export const useGetTopuphistory = (page: number, limit: number) => {
+export const useGetTopuphistory = (page: number, limit: number, currency: string) => {
   return useQuery({
-    queryKey: ["topup",page, limit],
-    queryFn: () => getTopuphistory(page, limit),
+    queryKey: ["topup",page, limit, currency],
+    queryFn: () => getTopuphistory(page, limit, currency),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 
     refetchOnWindowFocus: false,

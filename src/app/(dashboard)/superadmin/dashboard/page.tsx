@@ -16,8 +16,6 @@ export default function Home() {
   const {data: currentSeason} = useGetCurrentSeason()
   const {data: sales, isLoading: salesLoading} = useGetSales()
 
-  console.log(sales)
-
 
 
   return (

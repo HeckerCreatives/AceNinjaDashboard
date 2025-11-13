@@ -50,6 +50,8 @@ export default function InventoryItems(data: Items) {
               },})
       }
 
+      console.log(data.type)
+
 
 
   return (

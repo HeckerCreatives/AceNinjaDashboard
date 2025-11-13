@@ -21,21 +21,38 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Trash } from 'lucide-react'
+import {ListFilter, Trash, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import toast from 'react-hot-toast'
 import EditNewsletterForm from '@/components/forms/EditNewsletter'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useGetTopuphistory } from '@/client_actions/superadmin/topup'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
+
+const typesItem = [
+  {name: 'All', data: "all"},
+  {name: 'Coins', data: "coins"},
+  {name: 'Crystal', data: "crystal"},
+  {name: 'Credit', data: "topupcredit"},
+ 
+]
   
 
 export default function TopupHistory() {
     const [currentPage, setCurrentPage] = useState(0)
     const [totalPage, setTotalPage] = useState(0)
     const [open, setOpen] = useState(false)
+    const [type, setType] = useState('all')
     const [id, setId] = useState('')
-    const {data, isLoading} = useGetTopuphistory(currentPage, 10)
+    const {data, isLoading} = useGetTopuphistory(currentPage, 10, type === 'all' ? '' : type)
     const {mutate: deleteNewsletter, isPending} = useDeleteNewsletter()
     
   //paginition
@@ -64,8 +81,19 @@ export default function TopupHistory() {
 
         <div className=' w-full flex flex-col border-[1px] border-amber-900 bg-zinc-950 rounded-md'>
             <div className=' w-full bg-light p-3'>
-                <p className=' text-lg font-semibold'>Topup (History)</p>
+                <p className=' text-lg font-semibold'>History</p>
             </div>
+
+            <DropdownMenu>
+                <DropdownMenuTrigger className=' text-[.7rem] w-fit flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm mt-2 ml-2 capitalize'><ListFilter size={15}/>Type: {type}</DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel className=' text-xs'>Type</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {typesItem.map((item, index) => (
+                  <DropdownMenuItem onClick={() => setType(item.data)} key={index} className=' text-[.7rem] cursor-pointer'>{item.name === type && <Check size={10} className=' text-green-500'/>}{item.name}</DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
 
 
             <div className=' flex flex-col gap-4 p-4'>

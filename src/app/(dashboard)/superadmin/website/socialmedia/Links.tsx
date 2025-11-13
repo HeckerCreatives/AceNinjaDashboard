@@ -25,7 +25,7 @@ export default function Links() {
                 <Cardlinks image={<img src="/Discord Image.svg" alt="discord" height={100} width={120} className=' mb-4' />} title={'Discord'} type={'dc'}/>
                 <Cardlinks image={<img src="/IG Image.svg" alt="ig" height={100} width={120} className=' mb-4' />} title={'Instagram'} type={'ig'} />
                 <Cardlinks image={<img src="/Tiktok Image.svg" alt="tiktok" height={100} width={120} className=' mb-4' />} title={'Tiktok'} type={'tk'} />
-                <Cardlinks image={<img src="/Yt image.svg" alt="yt" height={100} width={120} className=' mb-4' />} title={'Youtube'} type={'yt'}/>
+                <Cardlinks image={<img src="/YT image.svg" alt="yt" height={100} width={120} className=' mb-4' />} title={'Youtube'} type={'yt'}/>
             </div>
         
         </div>

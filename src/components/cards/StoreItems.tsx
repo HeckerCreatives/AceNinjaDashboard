@@ -70,14 +70,13 @@ export default function StoreItems(data: Items) {
       }
 
 
-      console.log(data)
 
       const itemIcon = () => {
         if(data.itemtype === 'skins'){
           return '/store/skins.png'
         } else  if(data.itemtype === 'skills'){
           return '/store/skills.png'
-        } else if(data.itemtype === 'chest'){
+        } else if(data.itemtype === 'chests'){
           return '/store/chest.png'
         } else if(data.itemtype === 'freebie'){
           return '/store/freebie.png'

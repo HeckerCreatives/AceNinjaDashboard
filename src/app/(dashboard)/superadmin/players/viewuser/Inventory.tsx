@@ -87,6 +87,7 @@ return (
                         itemprice={entry.item?.details?.price || 0} 
                         rarity={entry.item?.details?.rarity || ''} 
                         description={entry.item?.details?.description || ''} 
+                        type={entry.type}
                       />
                     ))}
     

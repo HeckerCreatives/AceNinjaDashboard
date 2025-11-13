@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import SellItems from '@/app/(dashboard)/user/inventory/SellItem'
 import EquipItems from '@/app/(dashboard)/user/inventory/EquipItems'
+import { itemIcon } from '@/utils/findAsset'
 
 type Items = {
 imgUrl: string
@@ -15,6 +16,7 @@ itemname: string
 itemprice: number
 rarity: string
 description: string
+type: string
 
 }
 
@@ -34,13 +36,13 @@ export default function ViewInventoryItems(data: Items) {
         }
       }
 
-      console.log(data)
 
 
   return (
     <div className=' w-full h-auto flex flex-col'>
         <div className=' relative w-full h-[300px] bg-zinc-800'>
-        <img src={`${process.env.NEXT_PUBLIC_API_URL}/${data.imgUrl}`} alt="item" className=' object-cover w-full h-full opacity-70' />
+            <img src={itemIcon(data.type)} alt="item" className=' object-cover h-full opacity-50' />
+        
             <div className=' flex flex-col gap-1 absolute p-4 top-2 left-2'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>

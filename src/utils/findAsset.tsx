@@ -129,7 +129,7 @@ export const itemIcon = (data: string) => {
           return '/store/skins.png'
         } else  if(data === 'skills'){
           return '/store/skills.png'
-        } else if(data === 'chest'){
+        } else if(data === 'chests'){
           return '/store/chest.png'
         } else if(data === 'freebie'){
           return '/store/freebie.png'

@@ -35,7 +35,7 @@ export default function TopupHistory() {
     const [totalPage, setTotalPage] = useState(0)
     const [open, setOpen] = useState(false)
     const [id, setId] = useState('')
-    const {data, isLoading} = useGetTopuphistory(currentPage, 10)
+    const {data, isLoading} = useGetTopuphistory(currentPage, 10,'')
     const {mutate: deleteNewsletter, isPending} = useDeleteNewsletter()
     
   //paginition

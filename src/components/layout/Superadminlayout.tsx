@@ -58,7 +58,6 @@ const matchedSubitem = matchedRoute?.subitems
 
 
 
-console.log('Text',path, matchedRoute?.route, matchedSubitem?.subitems)
 
   return (
     <div className="flex min-h-screen w-full overflow-hidden">
