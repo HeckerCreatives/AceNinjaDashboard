@@ -1,5 +1,4 @@
 import React from 'react'
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Countdown from 'react-countdown';
 
@@ -28,9 +27,9 @@ export default function Card(prop:Props){
 
         <div className=' w-full flex flex-col gap-2'>
           {prop.isLoading === false ? (
-            <SkeletonTheme baseColor="#202020" highlightColor="#444" height={35} width={180}>
-              <Skeleton/>
-            </SkeletonTheme>
+            <div className=' bg-amber-950 w-[70%] h-8 rounded-md animate-pulse duration-1000'>
+
+            </div>
           ): (
             <p className=' text-4xl font-semibold'>{prop.isAmount === true && '$'}{prop.value?.toLocaleString()}</p>
 

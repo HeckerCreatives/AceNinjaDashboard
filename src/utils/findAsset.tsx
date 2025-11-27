@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 export const badgeImg = (data: number) => {
     if(data === 0){
         return <p className=' text-xs'>No badge equiped</p>
@@ -54,50 +56,50 @@ export const titleAssets = (data: number) => {
 
 export const companionImg = (data: string) => {
     if(data === 'Viper'){
-        return <img src="/companions/Viper.png" alt="companion" />
+        return <img src="/companions/Viper.webp" alt="companion" loading="lazy" />
     } else if (data === 'Terra'){
-        return <img src="/companions/Terra.png" alt="companion" />
+        return <img src="/companions/Terra.webp" alt="companion" loading="lazy" />
     }else if (data === 'Gale'){
-        return <img src="/companions/Gale.png" alt="companion" />
+        return <img src="/companions/Gale.webp" alt="companion" loading="lazy" />
     }else if (data === 'Shade'){
-        return <img src="/companions/Shade.png" alt="companion" />
+        return <img src="/companions/Shade.webp" alt="companion" loading="lazy" />
     }else if (data === 'Blaze'){
-        return <img src="/companions/Blaze.png" alt="companion" />
+        return <img src="/companions/Blaze.webp" alt="companion" loading="lazy" />
     }
 }
 
 
 export const tierImg = (data: string) => {
     if(data === 'Rookie'){
-        return <img src="/manage/Rank-ROOKIE icon.png" alt="tier" width={60}/>
+        return <Image src="/manage/Rank-ROOKIE icon.webp" alt="tier" width={60} height={60} loading="lazy"/>
     } else if (data === 'Veteran'){
-        return <img src="/manage/Rank-VETERAN icon.png" alt="tier" width={60}/>
+        return <Image src="/manage/Rank-VETERAN icon.webp" alt="tier" width={60} height={60} loading="lazy"/>
     } else if (data === 'Shogun'){
-        return <img src="/manage/Rank-SHOGUN icon.png" alt="tier" width={60}/>
+        return <Image src="/manage/Rank-SHOGUN icon.webp" alt="tier" width={60} height={60} loading="lazy"/>
     } else if (data === 'Ronin'){
-        return <img src="/manage/Rank-RONIN icon.png" alt="tier" width={60}/>
+        return <Image src="/manage/Rank-RONIN icon.webp" alt="tier" width={60} height={60} loading="lazy"/>
     } else if (data === 'Elder'){
-        return <img src="/manage/Rank-ELDER icon.png" alt="tier" width={60}/>
+        return <Image src="/manage/Rank-ELDER icon.webp" alt="tier" width={60} height={60} loading="lazy"/>
     } else if (data === 'Ace'){
-        return <img src="/manage/Rank-ACE icon.png" alt="tier" width={60}/>
+        return <Image src="/manage/Rank-ACE icon.webp" alt="tier" width={60} height={60} loading="lazy"/>
     } 
 }
 
 export const rankImg = (data: string) => {
     if(data === 'Rookie'){
-        return <img src="/manage/Rank-ROOKIE icon.png" alt="tier" width={80}/>
+        return <Image src="/manage/Rank-ROOKIE icon.webp" alt="tier" height={80} width={80} loading="lazy"/>
     } else if (data === 'Veteran'){
-        return <img src="/manage/Rank-VETERAN icon.png" alt="tier" width={80}/>
+        return <Image src="/manage/Rank-VETERAN icon.webp" alt="tier" height={80} width={80} loading="lazy"/>
     } else if (data === 'Shogun'){
-        return <img src="/manage/Rank-SHOGUN icon.png" alt="tier" width={80}/>
+        return <Image src="/manage/Rank-SHOGUN icon.webp" alt="tier" height={80} width={80} loading="lazy"/>
     } else if (data === 'Ronin'){
-        return <img src="/manage/Rank-RONIN icon.png" alt="tier" width={80}/>
+        return <Image src="/manage/Rank-RONIN icon.webp" alt="tier" height={80} width={80} loading="lazy"/>
     } else if (data === 'Elder'){
-        return <img src="/manage/Rank-ELDER icon.png" alt="tier" width={80}/>
+        return <Image src="/manage/Rank-ELDER icon.webp" alt="tier" height={80} width={80} loading="lazy"/>
     } else if (data === 'Ace'){
-        return <img src="/manage/Rank-ACE icon.png" alt="tier" width={80}/>
+        return <Image src="/manage/Rank-ACE icon.webp" alt="tier" height={80} width={80} loading="lazy"/>
     } else if (data === 'Unranked') {
-       return <img src="/manage/Rank-ROOKIE icon.png" alt="tier" width={80} className=" filter grayscale opacity-50"/>
+       return <Image src="/manage/Rank-ROOKIE icon.webp" alt="tier" height={80} width={80} loading="lazy" className=" filter grayscale opacity-50"/>
     }
 }
 
@@ -106,7 +108,7 @@ export const currencyImg = (data: string) => {
     if(data === 'coins'){
         return <img src="/Coins.png" alt="currency" width={20}/>
     } else if (data === 'crystal'){
-        return <img src="/Emeralds.png" alt="currency" width={20}/>
+        return <img src="/Emeralds.webp" alt="currency" width={20}/>
     } else if (data === 'topupcredit'){
         return '$'
     } 
@@ -115,9 +117,9 @@ export const currencyImg = (data: string) => {
 
 export const currencyCardImg = (data: string) => {
     if(data === 'coins'){
-        return <img src="/Coins.png" alt="currency" width={40}/>
+        return <Image src="/Coins.png" alt="currency" width={40} height={40} loading="lazy"/>
     } else if (data === 'crystal'){
-        return <img src="/Emeralds.png" alt="currency" width={40}/>
+        return <Image src="/Emeralds.webp" alt="currency" width={40} height={40} loading="lazy"/>
     } else if (data === 'topupcredit'){
         return <p className=" text-4xl font-bold">$</p>
     } 
@@ -126,18 +128,18 @@ export const currencyCardImg = (data: string) => {
 
 export const itemIcon = (data: string) => {
         if(data === 'skins'){
-          return '/store/skins.png'
+          return '/store/skins.webp'
         } else  if(data === 'skills'){
-          return '/store/skills.png'
+          return '/store/skills.webp'
         } else if(data === 'chests'){
-          return '/store/chest.png'
+          return '/store/chest.webp'
         } else if(data === 'freebie'){
-          return '/store/freebie.png'
+          return '/store/freebie.webp'
         } else if(data === 'crystalpacks'){
-          return '/store/crystalpack.png'
+          return '/store/crystalpack.webp'
         } else if(data === 'goldpacks'){
-          return '/store/goldpacks.png'
+          return '/store/goldpacks.webp'
         } else {
-          return '/store/skins.png'
+          return '/store/skins.webp'
         }
     }

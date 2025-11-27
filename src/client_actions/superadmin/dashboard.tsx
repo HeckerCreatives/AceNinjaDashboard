@@ -75,8 +75,15 @@ export const useGetCounts = () => {
   return useQuery({
     queryKey: ["usercounts"],
     queryFn: () => getCounts(),
-    staleTime: 5 * 60 * 1000,
-    refetchOnMount: false, 
+   
+    initialData:{
+        "message": "success",
+        "data": {
+            "totalUsers": 0,
+            "totalActiveUsers": 0,
+            "totalInactiveUsers": 0
+        }
+    },
     refetchOnWindowFocus: false,
   });
   };

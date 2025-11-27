@@ -18,6 +18,7 @@ import DeleteStoreItems from '../forms/DeleteStoreItems'
 import { useDeleteStoreItem } from '@/client_actions/superadmin/store'
 import UpdateStoreItems from '../forms/UpdateStoreItem'
 import { currencyImg, itemIcon } from '@/utils/findAsset'
+import Image from 'next/image'
   
 
 type Items = {
@@ -60,7 +61,7 @@ export default function GrantCard(data: Items) {
         style={{backgroundImage: `url('${data.imgUrl}')`, backgroundRepeat:'no-repeat', backgroundSize:'cover'}}
         >
 
-            <img src={itemIcon(data.type)} alt="item" className=' object-cover h-full opacity-50' />
+            <Image src={itemIcon(data.type)} alt="item" fill loading='lazy' className=' object-cover h-full opacity-50' />
             <div className=' flex flex-col gap-1 absolute left-2 top-2 p-4'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>

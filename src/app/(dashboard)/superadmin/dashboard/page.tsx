@@ -1,13 +1,14 @@
 'use client'
-import { useGetCounts, useGetGraph, useGetSales } from "@/client_actions/superadmin/dashboard";
-import { useGetCurrentSeason } from "@/client_actions/superadmin/season";
+import { getCounts, getSales, useGetCounts, useGetGraph, useGetSales } from "@/client_actions/superadmin/dashboard";
+import { getCurrentSeason, useGetCurrentSeason } from "@/client_actions/superadmin/season";
 import Card from "@/components/cards/Card";
 import Barchart from "@/components/charts/Barchart";
 import Linechart from "@/components/charts/Linechart";
 import Superadminlayout from "@/components/layout/Superadminlayout";
 import axios from "axios";
 import { ArrowUpRight, DollarSign, LaptopMinimal, TabletSmartphone, UserRoundCheck, UserRoundX, UsersRound } from "lucide-react";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export default function Home() {
@@ -19,8 +20,8 @@ export default function Home() {
 
 
   return (
-    <Superadminlayout>
-    <div className='p-6 top-0 left-0 w-full flex flex-col gap-8 justify-between h-auto max-w-[1625px]'>
+   <Superadminlayout>
+     <div className='p-6 top-0 left-0 w-full flex flex-col gap-8 justify-between h-auto max-w-[1625px]'>
 
       <div className=" relative w-full flex flex-col items-center justify-center gap-8 ~px-2/8">
 
@@ -46,12 +47,10 @@ export default function Home() {
 
       <div className=' w-full grid grid-cols-1 gap-8 bg-[#330F0D] border-t-2 border-amber-900/50 rounded-md ~p-2/8'>
         <Linechart/>
-        {/* <Barchart/> */}
-        
       </div>
       
     </div>
+   </Superadminlayout>
  
-  </Superadminlayout>
   );
 }

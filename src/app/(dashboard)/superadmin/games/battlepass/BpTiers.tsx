@@ -158,6 +158,7 @@ function transformPremiumReward(reward: Reward): Reward {
       return {
         type: reward.type,
         id: reward.id ?? "",
+        amount: reward.amount ?? 0
       }
     case "coins":
     case "exp":
@@ -183,6 +184,8 @@ function transformPremiumReward(reward: Reward): Reward {
       if (!editForm || !editingId) return
 
       const transformedReward = transformPremiumReward(editForm.premiumReward)
+
+      console.log(transformPremiumReward)
 
       updateBpTiers(
         {

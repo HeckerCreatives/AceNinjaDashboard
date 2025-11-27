@@ -79,7 +79,7 @@ export const superadminRoutes: SuperadminRoute[] = [
   },
   { route: '/superadmin/maintenance', name: 'Maintenance', icon: <GrVmMaintenance size={15} />, subitems: [] },
   { route: '/superadmin/topuphistory', name: 'Topup History', icon: <List size={15} />, subitems: [] },
-  { route: '/superadmin/patcher', name: 'Patcher', icon: <Settings2 size={15} />, subitems: [] },
+  // { route: '/superadmin/patcher', name: 'Patcher', icon: <Settings2 size={15} />, subitems: [] },
 ];
 
 

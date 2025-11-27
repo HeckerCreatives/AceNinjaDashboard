@@ -5,6 +5,7 @@ import DeleteStoreItems from '../forms/DeleteStoreItems'
 import UpdateStoreItems from '../forms/UpdateStoreItem'
 import { currencyImg } from '@/utils/findAsset'
 import EditFreebieForm from '../forms/store/EditFreebieData'
+import Image from 'next/image'
   
 
 type Items = {
@@ -73,17 +74,17 @@ export default function StoreItems(data: Items) {
 
       const itemIcon = () => {
         if(data.itemtype === 'skins'){
-          return '/store/skins.png'
+          return '/store/skins.webp'
         } else  if(data.itemtype === 'skills'){
-          return '/store/skills.png'
+          return '/store/skills.webp'
         } else if(data.itemtype === 'chests'){
-          return '/store/chest.png'
+          return '/store/chest.webp'
         } else if(data.itemtype === 'freebie'){
-          return '/store/freebie.png'
+          return '/store/freebie.webp'
         } else if(data.itemtype === 'crystalpacks'){
-          return '/store/crystalpack.png'
+          return '/store/crystalpack.webp'
         } else if(data.itemtype === 'goldpacks'){
-          return '/store/goldpacks.png'
+          return '/store/goldpacks.webp'
         }
       }
 
@@ -95,7 +96,7 @@ export default function StoreItems(data: Items) {
         // style={{backgroundImage: `url('${data.imgUrl}')`, backgroundRepeat:'no-repeat', backgroundSize:'cover'}}
         >
 
-            <img src={itemIcon()} alt="item" className=' object-cover h-full opacity-50' />
+            <Image src={itemIcon() || ''} alt="item" fill className=' object-cover w-full opacity-50' loading='lazy' />
             <div className=' flex flex-col gap-1 absolute left-2 top-2 p-4'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>

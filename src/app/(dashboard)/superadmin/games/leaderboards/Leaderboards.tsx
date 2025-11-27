@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import LeaderboardHistory from './History'
+import Image from 'next/image'
 
 export default function Leaderboards() {
      const [currentPage, setCurrentPage] = useState(0)
@@ -61,11 +62,11 @@ export default function Leaderboards() {
 
       const topRanking = (data: number) => {
         if(data === 1){
-            return <img src="/leaderboard/number_Icon_1.png" alt="rank badge" width={35} height={35} />
+            return <img src="/leaderboard/number_Icon_1.webp" alt="rank badge" width={35} height={35} />
         } else if(data === 2){
-            return <img src="/leaderboard/number_Icon_2.png" alt="rank badge" width={35} height={35} />
+            return <img src="/leaderboard/number_Icon_2.webp" alt="rank badge" width={35} height={35} />
         } else if(data === 3){
-            return <img src="/leaderboard/number_Icon_3.png" alt="rank badge" width={35} height={35} />
+            return <img src="/leaderboard/number_Icon_3.webp" alt="rank badge" width={35} height={35} />
         } else{
             return <p className=' w-[35px] text-center  font-bold'>{data}</p>
         }
@@ -73,17 +74,17 @@ export default function Leaderboards() {
 
     const ranktierImg = (data: string) => {
         if(data === 'Rookie'){
-            return <img src="/manage/Rank-ROOKIE icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-ROOKIE icon.webp" alt="tier" width={40}/>
         } else if (data === 'Veteran'){
-            return <img src="/manage/Rank-VETERAN icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-VETERAN icon.webp" alt="tier" width={40}/>
         } else if (data === 'Shogun'){
-            return <img src="/manage/Rank-SHOGUN icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-SHOGUN icon.webp" alt="tier" width={40}/>
         } else if (data === 'Ronin'){
-            return <img src="/manage/Rank-RONIN icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-RONIN icon.webp" alt="tier" width={40}/>
         } else if (data === 'Elder'){
-            return <img src="/manage/Rank-ELDER icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-ELDER icon.webp" alt="tier" width={40}/>
         } else if (data === 'Ace'){
-            return <img src="/manage/Rank-ACE icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-ACE icon.webp" alt="tier" width={40}/>
         } 
     }
 
@@ -96,15 +97,13 @@ export default function Leaderboards() {
         setTotalPage(ranking?.pagination.totalPages || 0)
     },[ranking])
 
-    console.log(resetList)
-
     
   return (
     <div className=' w-full grid lg:grid-cols-2 gap-4 '>
         <div className=' grid gap-4'>
             <div className=' w-full bg-amber-950 h-auto flex flex-col items-center justify-center gap-4 rounded-md border-2 border-amber-900 p-4 relative'>
             <div className=' flex items-center gap-4'>
-                <img src="/leaderboard/Trophy_in_PVP_ICON.png" alt="trophy" width={70} height={70} />
+                <Image src="/leaderboard/Trophy_in_PVP_ICON.webp" alt="trophy" width={70} height={70} loading='lazy' />
                 <div className=' flex flex-col gap-2'>
                     <div className=' flex items-center gap-2'>
                         <h2 className=' text-2xl'>{currentSeason?.data.title} <span className=' text-sm text-amber-500'>(Rankings)</span></h2>
@@ -174,12 +173,12 @@ export default function Leaderboards() {
 
                                 <div className=' h-full w-[110px] md:w-[175px] absolute right-0 flex items-center justify-center gap-4 '
                                 style={{
-                                    backgroundImage: "url('/leaderboard/right-tab.png')",
+                                    backgroundImage: "url('/leaderboard/right-tab.webp')",
                                     backgroundSize: "cover",
                                     backgroundPosition: "bottom",
                                 }}
                                 >
-                                    <img src="/leaderboard/Trophy_in_PVP_ICON.png" alt="trophy" width={35} height={35} />
+                                    <Image src="/leaderboard/Trophy_in_PVP_ICON.webp" alt="trophy" loading='lazy' width={35} height={35} />
                                     <p className=' text-sm font-semibold '>{item.mmr.toLocaleString()}</p>                        
                                 
                                 </div>

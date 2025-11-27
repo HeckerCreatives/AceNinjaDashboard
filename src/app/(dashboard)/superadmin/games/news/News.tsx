@@ -48,7 +48,6 @@ export default function News() {
         }
     },[data])
 
-    console.log(data?.totalPages)
 
     const deleteNewsData = (id: string) => {
         deleteNews({id: id},{
@@ -103,13 +102,14 @@ export default function News() {
                         <TableRow key={item.id}>
                         <TableCell>
                             {item.type === 'image' ? (
-                                <img src={`${process.env.NEXT_PUBLIC_API_URL}/${item.url}`} alt="img" width={200}/>
+                                <img src={`${process.env.NEXT_PUBLIC_API_URL}/${item.url}`} alt="img" width={200} loading='lazy' className=' aspect-video'/>
                             ): (
                                 <a href={item.url} target='_blank'>
                                     <img 
                                         src={`https://img.youtube.com/vi/${extractVideoId(item.url)}/hqdefault.jpg`} 
                                         alt="video thumbnail" 
                                         width={200}
+                                        className=' aspect-video' loading='lazy'
                                         
                                     />
                                 </a>

@@ -135,8 +135,14 @@ export const useGetCurrentSeason = () => {
     return useQuery({
       queryKey: ["season"],
       queryFn: () => getCurrentSeason(),
-      refetchOnMount: false, 
-      refetchOnWindowFocus: false,
+      initialData:{
+        "message": "success",
+        "data": {
+            "title": "Season 1",
+            "timeleft": 3041912011,
+            "id": "68df7c8dbb75514a1986d24c"
+        }
+    }
     });
 };
 

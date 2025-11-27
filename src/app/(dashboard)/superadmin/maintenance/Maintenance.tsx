@@ -22,28 +22,28 @@ export default function Maintenance() {
             <div className=' w-full h-auto flex flex-col gap-4 p-8'>
 
                 <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4'>
-                    <MaintenanceCard name={'Full Game'} img={'/maintenance/Full Game TAB.png'} value={false} type={'fullgame'}/>
+                    <MaintenanceCard name={'Full Game'} img={'/maintenance/Full Game TAB.webp'} value={false} type={'fullgame'}/>
                 </div>
 
                 <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4'>
-                    <MaintenanceCard name={'Store'} img={'/maintenance/Store TAB.png'} value={false} type={'store'}/>
-                    <MaintenanceCard name={'Market'} img={'/maintenance/Market TAB.png'} value={false} type={'market'}/>
-                    <MaintenanceCard name={'Battle Pass'} img={'/maintenance/Battle Pass TAB.png'} value={false} type={'battlepass'}/>
-                    <MaintenanceCard name={'Quest'} img={'/maintenance/Quest TAB.png'} value={false} type={'quest'}/>
+                    <MaintenanceCard name={'Store'} img={'/maintenance/Store TAB.webp'} value={false} type={'store'}/>
+                    <MaintenanceCard name={'Market'} img={'/maintenance/Market TAB.webp'} value={false} type={'market'}/>
+                    <MaintenanceCard name={'Battle Pass'} img={'/maintenance/Battle Pass TAB.webp'} value={false} type={'battlepass'}/>
+                    <MaintenanceCard name={'Quest'} img={'/maintenance/Quest TAB.webp'} value={false} type={'quest'}/>
                 </div>
 
                 <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4'>
-                    <MaintenanceCard name={'Daily Spin'} img={'/maintenance/Daily Spin TAB.png'} value={false} type={'dailyspin'}/>
-                    <MaintenanceCard name={'Daily Exp Spin'} img={'/maintenance/Daily EXP Spin.png'} value={false} type={'dailyxpspin'}/>
-                    <MaintenanceCard name={'Weekly Login'} img={'/maintenance/Weekly Login TAB.png'} value={false} type={'weeklylogin'}/>
-                    <MaintenanceCard name={'Monthly Login'} img={'/maintenance/Monthly Login TAB.png'} value={false} type={'monthlylogin'}/>
-                    <MaintenanceCard name={'Chest'} img={'/maintenance/Chest TAB.png'} value={false} type={'chest'}/>
+                    <MaintenanceCard name={'Daily Spin'} img={'/maintenance/Daily Spin TAB.webp'} value={false} type={'dailyspin'}/>
+                    <MaintenanceCard name={'Daily Exp Spin'} img={'/maintenance/Daily EXP Spin.webp'} value={false} type={'dailyxpspin'}/>
+                    <MaintenanceCard name={'Weekly Login'} img={'/maintenance/Weekly Login TAB.webp'} value={false} type={'weeklylogin'}/>
+                    <MaintenanceCard name={'Monthly Login'} img={'/maintenance/Monthly Login TAB.webp'} value={false} type={'monthlylogin'}/>
+                    <MaintenanceCard name={'Chest'} img={'/maintenance/Chest TAB.webp'} value={false} type={'chest'}/>
                 </div>
 
                 <div className=' w-full grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4'>
-                    <MaintenanceCard name={'PVP'} img={'/maintenance/PVP TAB.png'} value={false} type={'pvp'}/>
-                    <MaintenanceCard name={'Clan'} img={'/maintenance/Clan TAB.png'} value={false} type={'clan'}/>
-                    <MaintenanceCard name={'Raid Boss'} img={'/maintenance/Raid Boss TAB.png'} value={false} type={'raidboss'}/>
+                    <MaintenanceCard name={'PVP'} img={'/maintenance/PVP TAB.webp'} value={false} type={'pvp'}/>
+                    <MaintenanceCard name={'Clan'} img={'/maintenance/Clan TAB.webp'} value={false} type={'clan'}/>
+                    <MaintenanceCard name={'Raid Boss'} img={'/maintenance/Raid Boss TAB.webp'} value={false} type={'raidboss'}/>
                 </div>
 
             </div>

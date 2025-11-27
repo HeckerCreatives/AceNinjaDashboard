@@ -27,14 +27,7 @@ import {
 import { ArrowLeft, ChevronRight, CircleUser, Home, Menu, User, Users } from 'lucide-react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { superadminRoutes } from '@/types/route';
-
-
-interface SuperadminRoute {
-  route: string;
-  name: string;
-  icon: JSX.Element | null;
-  subitems: SuperadminRoute[];
-}
+import Image from 'next/image';
 
 
 export default function Superadminlayout({
@@ -66,12 +59,27 @@ const matchedSubitem = matchedRoute?.subitems
         className={`hidden md:block w-[250px] relative`}>
 
           <div className="flex h-full max-h-screen flex-col gap-2 bg-zinc-950 border-r-[1px] border-zinc-800"
-          style={{backgroundImage:"url('/dashboard/Side Panel.png')", backgroundSize:'cover', backgroundPosition:'right'}}
+          // style={{backgroundImage:"url('/dashboard/Side Panel.webp')", backgroundSize:'cover', backgroundPosition:'right'}}
           >
-             <div className=' flex items-center justify-center h-auto py-4'>
-                <img src="/dashboard/LOGO.png" alt="" width={130} height={130} />
+              <Image
+            src={`/dashboard/Side Panel.webp`}
+            alt={'panel'}
+            fill 
+            fetchPriority='high'          
+            className="w-full h-auto object-cover object-top-right "
+            priority
+          />
+             <div className=' flex items-center justify-center h-auto py-4 relative z-50'>
+                {/* <img src="/dashboard/LOGO.webp" alt="" width={130} height={130} /> */}
+                 <Image
+                  src={`/dashboard/LOGO.webp`}
+                  alt={'panel'}
+                  width={100}
+                  height={100} 
+                  fetchPriority='high'
+                />
              </div>
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto relative z-50">
               <nav className=" flex flex-col gap-2 px-2 text-sm font-medium lg:px-4">
 
                 {superadminRoutes.map((item, index) => (
@@ -129,7 +137,7 @@ const matchedSubitem = matchedRoute?.subitems
         
         <div className=" w-screen relative h-screen flex flex-col overflow-y-auto">
           <header className=" sticky top-0 z-40 flex items-center justify-between gap-4 bg-zinc-950 p-4 py-3"
-          style={{backgroundImage:"url('/dashboard/Header TAB.png')", backgroundSize:'cover', backgroundPosition:'bottom'}}
+          style={{backgroundImage:"url('/dashboard/Header TAB.webp')", backgroundSize:'cover', backgroundPosition:'bottom'}}
           
           >
             <div className=' w-8 bg-gradient-to-r from-red-950 to-red-950/0 absolute left-0 h-full'>
@@ -188,7 +196,7 @@ const matchedSubitem = matchedRoute?.subitems
                 </button>
               </SheetTrigger>
               <SheetContent side="left" className="flex flex-col bg-zinc-950 border-r-2 border-zinc-800 "
-            style={{backgroundImage:"url('/dashboard/Side Panel.png')", backgroundSize:'cover', backgroundPosition:'right'}}
+            style={{backgroundImage:"url('/dashboard/Side Panel.webp')", backgroundSize:'cover', backgroundPosition:'right'}}
               
               >
                 <div className=' flex items-center justify-center gap-2 text-white p-4'>
@@ -253,7 +261,7 @@ const matchedSubitem = matchedRoute?.subitems
                     <p className=' text-xs'>Superadmin</p>
 
                   </div>
-                  <img src="/dashboard/small LOGO.png" alt="user" width={60} height={60} />
+                  <img src="/dashboard/small LOGO.webp" alt="user" width={60} height={60} />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

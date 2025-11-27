@@ -63,7 +63,7 @@ const ranks = ["Rookie", "Veteran", "Shogun", "Ronin", "Elder", "Ace"]
 const rewardTypes = ["badge", "title", "weapon", "skin", "coins", "exp", "crystal", "skill", "chest"]
 
 const ranktierImg = (rank: string) => {
-  const src = `/manage/Rank-${rank.toUpperCase()} icon.png`
+  const src = `/manage/Rank-${rank.toUpperCase()} icon.webp`
   return <Image src={src || "/placeholder.svg"} alt={rank} width={32} height={32} className="w-8 h-8 object-contain" />
 }
 

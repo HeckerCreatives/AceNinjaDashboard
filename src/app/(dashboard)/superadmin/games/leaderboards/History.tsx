@@ -34,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import Image from 'next/image'
 
 export default function LeaderboardHistory() {
      const [currentPage, setCurrentPage] = useState(0)
@@ -50,11 +51,11 @@ export default function LeaderboardHistory() {
 
       const topRanking = (data: number) => {
         if(data === 1){
-            return <img src="/leaderboard/number_Icon_1.png" alt="rank badge" width={35} height={35} />
+            return <img src="/leaderboard/number_Icon_1.webp" alt="rank badge" width={35} height={35} />
         } else if(data === 2){
-            return <img src="/leaderboard/number_Icon_2.png" alt="rank badge" width={35} height={35} />
+            return <img src="/leaderboard/number_Icon_2.webp" alt="rank badge" width={35} height={35} />
         } else if(data === 3){
-            return <img src="/leaderboard/number_Icon_3.png" alt="rank badge" width={35} height={35} />
+            return <img src="/leaderboard/number_Icon_3.webp" alt="rank badge" width={35} height={35} />
         } else{
             return <p className=' w-[35px] text-center  font-bold'>{data}</p>
         }
@@ -62,17 +63,17 @@ export default function LeaderboardHistory() {
 
     const ranktierImg = (data: string) => {
         if(data === 'Rookie'){
-            return <img src="/manage/Rank-ROOKIE icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-ROOKIE icon.webp" alt="tier" width={40}/>
         } else if (data === 'Veteran'){
-            return <img src="/manage/Rank-VETERAN icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-VETERAN icon.webp" alt="tier" width={40}/>
         } else if (data === 'Shogun'){
-            return <img src="/manage/Rank-SHOGUN icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-SHOGUN icon.webp" alt="tier" width={40}/>
         } else if (data === 'Ronin'){
-            return <img src="/manage/Rank-RONIN icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-RONIN icon.webp" alt="tier" width={40}/>
         } else if (data === 'Elder'){
-            return <img src="/manage/Rank-ELDER icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-ELDER icon.webp" alt="tier" width={40}/>
         } else if (data === 'Ace'){
-            return <img src="/manage/Rank-ACE icon.png" alt="tier" width={40}/>
+            return <img src="/manage/Rank-ACE icon.webp" alt="tier" width={40}/>
         } 
     }
 
@@ -131,7 +132,7 @@ export default function LeaderboardHistory() {
                     <TableCell>{item.level}</TableCell>
                     <TableCell className="">
                         <div className=' flex items-center gap-1'>
-                            <img src="/leaderboard/Trophy_in_PVP_ICON.png" alt="trophy" width={35} height={35} />
+                            <Image src="/leaderboard/Trophy_in_PVP_ICON.webp" alt="trophy"  width={35} height={35} loading='lazy' />
                             {item.mmr.toLocaleString()}
                         </div>
                         </TableCell>
