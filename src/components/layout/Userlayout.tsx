@@ -56,13 +56,13 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
         <header
           className="sticky flex flex-col gap-4 top-0 z-40 py-4 bg-zinc-950 px-8"
           style={{
-            backgroundImage: "url('/dashboard/Header TAB.png')",
+            backgroundImage: "url('/dashboard/Header TAB.webp')",
             backgroundSize: "cover",
             backgroundPosition: "bottom",
           }}
         >
           <div className="flex h-14 items-center justify-between gap-4">
-            <img src="/dashboard/LOGO.png" alt="Logo" width={100} />
+            <img src="/dashboard/LOGO.webp" loading="lazy" alt="Logo" width={100} />
 
             <DropdownMenu>
               <DropdownMenuTrigger className="lg:block hidden">
@@ -119,7 +119,7 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
                 <div className="flex items-center gap-2 text-white p-4">
                   <img src="/logo.webp" alt="" width={50} />
                   <div className="flex flex-col">
-                    <img src="/logo.png" alt="" width={80} />
+                    <img src="/logo.webp" alt="" width={80} />
                   </div>
                 </div>
                 <nav className="grid gap-2 text-lg font-medium">
