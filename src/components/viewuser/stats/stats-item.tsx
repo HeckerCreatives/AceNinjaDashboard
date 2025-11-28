@@ -33,7 +33,7 @@ export default function StatItem( prop: StatItemProps) {
         {/* <div className="flex h-8 w-8 items-center justify-center rounded-full bg-black/40">{prop.icon}</div> */}
         <span className="text-xs font-medium text-white">{prop.label}:</span>
       </div>
-      <span className="font-bold text-sm text-white">{prop.value}</span>
+      <span className="font-bold text-sm text-white">{Number(prop.value).toLocaleString()}</span>
     </div>
   )
 }

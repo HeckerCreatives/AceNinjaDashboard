@@ -88,7 +88,7 @@ export default function Purchase() {
 
     
       {/* <button className=' py-2 px-4 bg-yellow-500 text-black text-xs w-fit rounded-r-md flex items-center gap-2'>All <ChevronDown size={15}/></button> */}
-      <div className=' w-full flex items-center justify-between'>
+      <div className=' w-full flex flex-wrap gap-2 items-center justify-between'>
         <div className=' flex items-center gap-2'>
           <DropdownMenu>
             <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm uppercase'><ListFilter size={15}/>Type: {type}</DropdownMenuTrigger>

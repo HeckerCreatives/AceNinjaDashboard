@@ -31,9 +31,10 @@ export default function TopupHistory() {
 
     useEffect(() => {
     setTotalPage(data?.pagination.totalPages || 0)
-    console.log('pagination',data?.pagination)
 
   },[data])
+
+  console.log(data?.pagination.totalPages)
 
 
   return (

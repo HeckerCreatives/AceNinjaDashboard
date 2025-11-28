@@ -27,6 +27,7 @@ import useDialogStore from "@/hooks/globals";
 import ChangePasswordUser from "../forms/ChangePassword";
 import usePlayerNameStore from "@/hooks/player";
 import { useUserData } from "@/client_actions/user/dashboard/dashboard";
+import Image from "next/image";
 
 
 export default function Userlayout({ children }: { children: React.ReactNode }) {
@@ -111,15 +112,15 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
                 side="left"
                 className="flex flex-col bg-zinc-950 border-r-2 border-zinc-900"
                 style={{
-                  backgroundImage: "url('/dashboard/Side Panel.png')",
+                  backgroundImage: "url('/dashboard/Side Panel.webp')",
                   backgroundSize: "cover",
                   backgroundPosition: "right",
                 }}
               >
                 <div className="flex items-center gap-2 text-white p-4">
-                  <img src="/logo.webp" alt="" width={50} />
+                  {/* <img src="/logo.webp" alt="" width={50} /> */}
                   <div className="flex flex-col">
-                    <img src="/logo.webp" alt="" width={80} />
+                    <Image src="/logo.webp" alt="logo" height={80} width={80} loading="lazy" />
                   </div>
                 </div>
                 <nav className="grid gap-2 text-lg font-medium">
