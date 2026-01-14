@@ -16,13 +16,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useUpdatePassword } from "@/client_actions/user/password";
 import toast from "react-hot-toast";
 import Loader from "../common/Loader";
+import usePasswordChangeStore from "@/hooks/change-password";
 
 export default function ChangePasswordUser() {
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: updatePassword, isPending} = useUpdatePassword()
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
-
+  const {isOpen, setIsOpen} = usePasswordChangeStore()
+ 
 //   const handleSubmit = (e: React.FormEvent) => {
 
 
@@ -44,13 +46,13 @@ export default function ChangePasswordUser() {
         onSuccess: () => {
             toast.success("Password updated successfully");
             reset()
-
+            setIsOpen(false)
           },
        })
    };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
       <DialogTrigger className="flex items-center text-xs gap-2">
         <Settings size={14} /> Change Password
       </DialogTrigger>
@@ -61,7 +63,7 @@ export default function ChangePasswordUser() {
           <DialogDescription className=" text-sm">Update your password securely.</DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 text-sm">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 text-sm">
           {/* Old Password */}
           <label htmlFor="" className=" text-xs text-zinc-400">Old Password</label>
           <div className="relative">

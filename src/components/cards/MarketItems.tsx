@@ -15,6 +15,7 @@ import useCharacterStore from '@/hooks/character'
 import toast from 'react-hot-toast'
 import Loader from '../common/Loader'
 import { currencyImg, itemIcon} from '@/utils/findAsset'
+import Image from 'next/image'
   
 
 type Items = {
@@ -60,9 +61,9 @@ export default function MarketItems(data: Items) {
 
   return (
     <div className=' w-full h-auto flex flex-col'>
-        <div className=' relative w-full h-[300px] bg-zinc-800'>
+        <div className=' relative w-full h-[300px]   overflow-hidden'>
             {/* <img src={data.imgUrl} alt="item" className=' object-cover w-full h-full opacity-70' /> */}
-            <img src={itemIcon(data.type)} alt="item" className=' w-full opacity-50' />
+            <Image src={itemIcon(data.type)} fill priority fetchPriority='high' alt="item" className=' object-cover z-50 w-full opacity-50' />
             
             <div className=' flex flex-col gap-1 top-2 left-2 absolute p-4'>
                 {data.damage > 0 && (
@@ -95,9 +96,9 @@ export default function MarketItems(data: Items) {
                 <p className=' text-[.7rem] text-zinc-300'>{data.description}</p>
 
             </div>
-        </div>
+        </div> 
 
-        <div className=' w-full flex flex-col gap-1 py-2'>
+        <div className=' w-full flex flex-col gap-1 p-2'>
             <div className=' flex '>
                 <div className=' flex flex-col w-full gap-1'>
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>

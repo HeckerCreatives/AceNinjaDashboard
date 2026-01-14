@@ -55,6 +55,9 @@ export default function UpdateRedeemCode(prop: Props) {
   setExp(prop.emerald) // assuming `emerald` is actually EXP in this context
   setFilter(prop.type)
   setItemList(prop.itemreward.map(i => i._id))
+  if(!prop.type){
+    setFilter('weapon')
+  }
 }, [prop, reset])
 
 
@@ -70,11 +73,11 @@ export default function UpdateRedeemCode(prop: Props) {
   }
 
   const onSubmit = (data: CreateCode) => {
-    if (filter === 'outfit') {
-      if (!itemList[0] || !itemList[1]) return toast.error('Please select both male and female outfit.')
-    } else {
-      if (!itemList[0]) return toast.error('Please select an item.')
-    }
+    // if (filter === 'outfit') {
+    //   if (!itemList[0] || !itemList[1]) return toast.error('Please select both male and female outfit.')
+    // } else {
+    //   if (!itemList[0]) return toast.error('Please select an item.')
+    // }
 
     updateCode({
       id: prop.id,
@@ -91,6 +94,8 @@ export default function UpdateRedeemCode(prop: Props) {
       }
     })
   }
+
+  console.log(prop.type)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

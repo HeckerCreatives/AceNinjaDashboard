@@ -67,7 +67,7 @@ export default function Dashboard() {
 
             <div className=' w-full max-w-[365px] shadow-md'>
                 <Card name={"Total Purchased"} value={payin?.data.totalpayin || 0} isAmount={false} icon={<PiRanking size={20} />} isLoading={true} bg={"bg-[#531414]"} border={true}/>
-            {/* <ViewCard name={'Total Purchase'} value={9999} isAmount={false} icon={<ShoppingBag size={20}/>} isLoading={true} bg={''} border={true}/> */}
+                
 
             </div>
 

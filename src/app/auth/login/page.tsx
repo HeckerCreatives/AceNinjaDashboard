@@ -1,12 +1,13 @@
 'use client';
 import axiosInstance from "@/lib/axiosInstance";
 import { handleApiError } from "@/lib/errorHandler";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { EyeOff, Eye } from "lucide-react";
 import { decryptData, encryptData } from "@/utils/cryptoHelper";
 import Image from "next/image";
+import usePasswordChangeStore from "@/hooks/change-password";
 
 interface Login {
   username: string;
@@ -20,6 +21,8 @@ export default function Loginpage() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const {setIsOpen} = usePasswordChangeStore()
+ 
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
@@ -35,35 +38,56 @@ export default function Loginpage() {
   }, [router]);
 
   const authLogin = async (data: Login) => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get("/auth/login", { params: data });
+  setLoading(true);
+  try {
+    const response = await axiosInstance.get("/auth/login", { params: data });
 
-      if (response.data.message === "success") {
-        toast.success("Successfully logged in");
+    if (response.data.message === "success") {
+      toast.success("Successfully logged in");
 
-        if (rememberMe) {
-          localStorage.setItem("rememberMe_username", encryptData(username));
-          localStorage.setItem("rememberMe_password", encryptData(password));
-        } else {
-          localStorage.removeItem("rememberMe_username");
-          localStorage.removeItem("rememberMe_password");
+      // Handle Remember Me
+      if (rememberMe) {
+        localStorage.setItem("rememberMe_username", encryptData(username));
+        localStorage.setItem("rememberMe_password", encryptData(password));
+      } else {
+        localStorage.removeItem("rememberMe_username");
+        localStorage.removeItem("rememberMe_password");
+      }
+
+      const authType = response.data.data.auth;
+      const redirect = localStorage.getItem("redirect")
+
+
+      if (authType === "player") {
+
+        if (redirect === "change_password") {
+          localStorage.removeItem("redirect");
+          setIsOpen(true)
+          router.replace("/user/dashboard");
+          return;
         }
+
+        if (redirect === "buy_credits") {
+          localStorage.removeItem("redirect");
+          router.replace("/user/topup");
+          return;
+        }
+
+        router.replace("/user/dashboard");
+        return;
       }
 
-      if (response.data.data.auth === "player") {
-        router.push("/user/dashboard");
+      if (authType === "superadmin") {
+        router.replace("/superadmin/dashboard");
       }
-
-      if (response.data.data.auth === "superadmin") {
-        router.push("/superadmin/dashboard");
-      }
-    } catch (error) {
-      handleApiError(error);
-    } finally {
-      setLoading(false);
     }
+  } catch (error) {
+    handleApiError(error);
+  } finally {
+    setLoading(false);
+  }
   };
+
 
   return (
     <div className="w-full h-screen bg-zinc-100 flex items-center justify-center">

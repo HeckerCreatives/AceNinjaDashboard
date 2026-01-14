@@ -32,14 +32,14 @@ export default function BattlePass() {
     <div className=' w-full flex flex-col gap-8 overflow-hidden p-8'>
 
       {data?.data.hasPremium ? (
-         <div className=' w-fit  bg-amber-500 border-4 border-amber-900 p-3 rounded-sm'>
+         <div className=' w-fit bg-amber-500 border-4 border-amber-900 p-3 rounded-sm'>
           <div className=' flex flex-col md:flex-row items-start md:items-center justify-center gap-6 bg-yellow-300 p-8 rounded-sm'>
             <Image src="/manage/Icon.webp" alt="battlepass" width={180} height={180} loading='lazy' />
             <h2 className=' text-[3.2rem] w-[200px] leading-none bp-shadow font-black font-sans '>Pass Active</h2>
           </div>
         </div>
       ) : (
-        <div className=' w-fit  bg-amber-500 border-4 border-amber-900 p-3 rounded-sm'>
+        <div className=' w-fit bg-amber-500 border-4 border-amber-900 p-3 rounded-sm'>
           <div className=' flex flex-col md:flex-row items-start md:items-center justify-center gap-6 bg-yellow-300 p-8 rounded-sm'>
             <Image src="/manage/Icon.webp" alt="battlepass" width={180} height={180} loading='lazy' />
             <h2 className=' text-[3.2rem] w-[200px] leading-none bp-shadow font-black font-sans '>Pass Not Active</h2>

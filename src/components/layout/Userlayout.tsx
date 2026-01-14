@@ -28,6 +28,9 @@ import ChangePasswordUser from "../forms/ChangePassword";
 import usePlayerNameStore from "@/hooks/player";
 import { useUserData } from "@/client_actions/user/dashboard/dashboard";
 import Image from "next/image";
+import usePasswordChangeStore from "@/hooks/change-password";
+import { handleApiError } from "@/lib/errorHandler";
+import axiosInstance from "@/lib/axiosInstance";
 
 
 export default function Userlayout({ children }: { children: React.ReactNode }) {
@@ -35,6 +38,9 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
   const {data,isLoading} = useGetCharacters()
   const { characterid, setCharacterid, clearCharacterid } = useCharacterStore();
   const { charactername, setCharactername} = useCharacterNameStore()
+  const {isOpen} = usePasswordChangeStore()
+  const [open, setOpen] = useState(false)
+  const router = useRouter()
 
   const { data: chardata } = useUserData(characterid)
 
@@ -47,7 +53,23 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
     console.log('Data 1', data[0].username)
 
   }
+
+  setOpen(isOpen)
 }, [data]);
+
+ const logout = async () => {
+  try {
+    const response = await axiosInstance.get("/auth/logout");
+
+    toast.success('Logging out...')
+    router.replace('/auth/login')
+
+   
+  } catch (error) {
+    handleApiError(error);
+  } 
+  };
+
 
 
 
@@ -63,9 +85,9 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
           }}
         >
           <div className="flex h-14 items-center justify-between gap-4">
-            <img src="/dashboard/LOGO.webp" loading="lazy" alt="Logo" width={100} />
+            <Image src="/dashboard/LOGO.webp" loading="lazy" alt="Logo" width={100} height={100} />
 
-            <DropdownMenu>
+            <DropdownMenu open={open} onOpenChange={setOpen}>
               <DropdownMenuTrigger className="lg:block hidden">
                 <div className="flex items-center gap-2">
                   <div className="flex flex-col items-end text-amber-950">
@@ -96,8 +118,10 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
                 <DropdownMenuItem className="text-xs" onSelect={(e) => e.preventDefault()}>
                   <ChangePasswordUser/>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-xs">
-                  <LogOut size={10}/><a href="/">Logout</a>
+                <DropdownMenuItem 
+                onClick={logout}
+                className="text-xs">
+                  <LogOut size={10}/>Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

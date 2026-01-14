@@ -25,9 +25,12 @@ import {
 } from "@/components/ui/accordion"
   
 import { ArrowLeft, ChevronRight, CircleUser, Home, Menu, User, Users } from 'lucide-react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { superadminRoutes } from '@/types/route';
 import Image from 'next/image';
+import axiosInstance from '@/lib/axiosInstance';
+import toast from 'react-hot-toast';
+import { handleApiError } from '@/lib/errorHandler';
 
 
 export default function Superadminlayout({
@@ -38,6 +41,19 @@ export default function Superadminlayout({
 
 const path = usePathname()
 const params = useSearchParams()
+const router = useRouter()
+ const logout = async () => {
+  try {
+    const response = await axiosInstance.get("/auth/logout");
+
+    toast.success('Logging out...')
+    router.replace('/auth/login')
+
+   
+  } catch (error) {
+    handleApiError(error);
+  } 
+  };
 
 
 
@@ -267,7 +283,10 @@ const matchedSubitem = matchedRoute?.subitems
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel className=' text-sm'>Superadmin</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className=' text-xs' ><a href="/">Logout</a></DropdownMenuItem>
+                <DropdownMenuItem 
+                onClick={logout}
+                className=' text-xs' >
+                  Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </header>

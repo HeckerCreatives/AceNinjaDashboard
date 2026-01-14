@@ -55,9 +55,6 @@ export default function EquipedItems() {
             </Table>
         </div>
 
-        
-
-
     </div>
   )
 }
