@@ -27,6 +27,7 @@ export const superadminRoutes: SuperadminRoute[] = [
       { route: '/superadmin/games/message', name: 'Messages', icon: <FaBullhorn size={15} />, subitems: [] },
       { route: '/superadmin/games/battlepass', name: 'Battle Pass', icon: null, subitems: [] },
       { route: '/superadmin/games/store', name: 'Store', icon: null, subitems: [] },
+      { route: '/superadmin/games/vippacks', name: 'VIP Packs', icon: null, subitems: [] },
       { route: '/superadmin/games/quest', name: 'Quest', icon: null, subitems: [] },
       { route: '/superadmin/games/leaderboards', name: 'Leaderboards', icon: null, subitems: [] },
       { route: '/superadmin/games/ranktier', name: 'Rank Tier', icon: null, subitems: [] },
@@ -85,7 +86,8 @@ export const superadminRoutes: SuperadminRoute[] = [
 
 //USER
 export const userRoutes = [
-    {name: 'Dashboard', path: '/user/dashboard' , icon: <GiWhirlpoolShuriken size={20}/>},
+    {name: 'Dashboard', path: '/user/dashboard' , icon: <GiWhirlpoolShuriken size={20}/>, subItems: []},
+  
     {name: 'Inventory', path: '/user/inventory' , icon: <Boxes size={20}/>},
     {name: 'PVP', path: '/user/pvp' , icon: <TbSwords size={20}/>},
     {name: 'Path', path: '/user/path' , icon: <PiPath size={20}/>},
@@ -95,4 +97,5 @@ export const userRoutes = [
     {name: 'Friends', path: '/user/friends' , icon: <Users size={20}/>},
     {name: 'Marketplace', path: '/user/purchase' , icon: <ShoppingBag size={20}/>},
     {name: 'Top Up', path: '/user/topup' , icon: <FaMoneyBill size={20}/>},
+    {name: 'Vip Packs', path: '/user/vippacks' , icon: <Boxes size={20}/>},
 ]

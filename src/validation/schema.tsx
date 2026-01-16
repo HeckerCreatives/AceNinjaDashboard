@@ -289,6 +289,81 @@ export const createShowcaseSchema = z.object({
 });
 
 
+export const packItemRewardSchema = z
+  .object({
+    rewardtype: z.enum([
+      "coins",
+      "exp",
+      "crystal",
+      "weapon",
+      "skill",
+      "badge",
+      "title",
+      "outfit",
+    ]),
+
+    amount: z.number().positive().optional(),
+
+    probability: z.number().min(0).max(100).optional(),
+
+    reward: z
+      .object({
+        id: z.any().optional(),
+        name: z.string().optional(),
+        fid: z.string().optional(),
+        fname: z.string().optional(),
+      })
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    // Amount-based rewards
+    if (["coins", "exp", "crystal"].includes(data.rewardtype)) {
+      if (!data.amount || data.amount <= 0) {
+        ctx.addIssue({
+          path: ["amount"],
+          message: "Amount is required for this reward type",
+          code: z.ZodIssueCode.custom,
+        })
+      }
+    }
+
+    // Item-based rewards
+    if (["weapon", "skill", "badge", "title"].includes(data.rewardtype)) {
+      if (!data.reward?.id) {
+        ctx.addIssue({
+          path: ["reward", "id"],
+          message: "Reward item is required",
+          code: z.ZodIssueCode.custom,
+        })
+      }
+    }
+
+    // Outfit requires male & female
+    if (data.rewardtype === "outfit") {
+      if (!data.reward?.id || !data.reward?.fid) {
+        ctx.addIssue({
+          path: ["reward"],
+          message: "Both male and female outfit are required",
+          code: z.ZodIssueCode.custom,
+        })
+      }
+    }
+  })
+
+
+export const createPackSchema = z.object({
+  packid: z.string().optional(),
+  name: z.string().min(1, "Name is required"),
+  currency: z.string().min(1, "Currency is required"),
+  amount: z.number().min(1, "Amount is required"),
+  description: z.string().optional(),
+  rarity: z.string().optional(),
+  rewards: z.array(packItemRewardSchema).min(1,'Add at least 1 reward'),
+
+});
+
+
+
 export type CreateNewsData = z.infer<typeof createNewsData>
 export type CreateAnnouncementData = z.infer<typeof createAnnouncementDataSchema>
 export type EditNewsData = z.infer<typeof editNewsdata>
@@ -310,3 +385,4 @@ export type StorePacksItems = z.infer<typeof storePacksSchema>
 export type BattlePassValidations = z.infer<typeof battlepassSchema>
 export type AddStoreItem = z.infer<typeof addStoreItemSchema>
 export type CreateShowcaseItem = z.infer<typeof createShowcaseSchema>
+export type CreatePackForm = z.infer<typeof createPackSchema>

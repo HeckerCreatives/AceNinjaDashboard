@@ -165,20 +165,25 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
             </Sheet>
           </div>
 
-          <nav className="hidden gap-4 lg:flex text-sm font-medium bg-light w-fit rounded-lg px-6">
-            {userRoutes.map((item, index) => (
-              <Link
-                key={index}
-                href={item.path}
-                className={`${
-                  path.includes(item.path) ? "text-yellow-500" : "text-zinc-100"
-                } font-bold text-xs flex items-center gap-2 rounded-lg px-3 py-2 transition-all`}
-              >
-                {item.icon}
-                {item.name}
-              </Link>
-            ))}
-          </nav>
+          <div className=" w-full overflow-auto">
+               <nav className="hidden gap-4 lg:flex text-sm font-medium bg-light w-fit rounded-lg px-6">
+                {userRoutes.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.path}
+                    className={`${
+                      path.includes(item.path) ? "text-yellow-500" : "text-zinc-100"
+                    } font-bold text-xs flex items-center gap-2 rounded-lg px-3 py-2 transition-all whitespace-nowrap`}
+                  >
+                    {item.icon}
+                    {item.name}
+                  </Link>
+                ))}
+              
+              </nav>
+          </div>
+
+       
         </header>
 
         <main className="relative flex flex-1 flex-col items-center gap-4 bg-black">
