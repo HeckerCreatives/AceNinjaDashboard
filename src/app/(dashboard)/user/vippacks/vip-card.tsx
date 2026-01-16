@@ -47,7 +47,7 @@ export function StoreCard({ item }: StoreCardProps) {
             <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-400">
               {item.amount}
             </span>
-            {/* <span className="text-sm text-slate-400 capitalize">{item.currency}</span> */}
+            <span className="text-sm text-slate-400 capitalize">{item.currency}</span>
           </div>
 
           <div className="mb-6">
