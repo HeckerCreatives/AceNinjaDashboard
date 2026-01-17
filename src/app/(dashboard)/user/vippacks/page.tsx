@@ -26,8 +26,8 @@ export default function page() {
 
                       
                       <div className=' w-full flex flex-col gap-8 p-4'>
-                        <div className=" flex items-center justify-center w-fit min-w-[300px]">
-                        <div className="flex flex-col gap-2 w-full h-auto bg-zinc-900 p-8 rounded-md">
+                        <div className=" flex items-center justify-center w-full max-w-[400px] ">
+                        <div className="flex flex-col gap-2 w-full h-auto bg-zinc-900 p-8 rounded-md border border-zinc-700">
                           <p className="text-sm uppercase text-amber-50">Credit Balance</p>
                           <div className=" flex items-center gap-2 mt-2">
                             <Wallet size={25}/>
