@@ -169,6 +169,7 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
             }
             className="border-amber-400 bg-[#4C4106] border-[1px]"
           />
+        </div>
       )
     }
 
