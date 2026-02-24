@@ -154,10 +154,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            min="1"
+            min="0"
+            step="0.01" // 👈 allows decimals like 0.05
             value={reward.probability?.toString() || ""}
-            onChange={(e) => handleRewardChange(index, { probability: Number(e.target.value) })}
-            className=" border-amber-400 bg-[#4C4106] border-[1px]"
+            onChange={(e) =>
+              handleRewardChange(index, {
+                probability: parseFloat(e.target.value),
+              })
+            }
+            className="border-amber-400 bg-[#4C4106] border-[1px]"
           />
         </div>
       )
@@ -188,11 +193,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            min="1"
+            min="0"
+            step="0.01" // 👈 allows decimals like 0.05
             value={reward.probability?.toString() || ""}
-            onChange={(e) => handleRewardChange(index, { probability: Number(e.target.value) })}
-            className=" border-amber-400 bg-[#4C4106] border-[1px]"
-
+            onChange={(e) =>
+              handleRewardChange(index, {
+                probability: parseFloat(e.target.value),
+              })
+            }
+            className="border-amber-400 bg-[#4C4106] border-[1px]"
           />
         </div>
       )
@@ -223,11 +232,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            min="1"
+            min="0"
+            step="0.01" // 👈 allows decimals like 0.05
             value={reward.probability?.toString() || ""}
-            onChange={(e) => handleRewardChange(index, { probability: Number(e.target.value) })}
-            className=" border-amber-400 bg-[#4C4106] border-[1px]"
-
+            onChange={(e) =>
+              handleRewardChange(index, {
+                probability: parseFloat(e.target.value),
+              })
+            }
+            className="border-amber-400 bg-[#4C4106] border-[1px]"
           />
         </div>
       )
@@ -259,11 +272,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            min="1"
+            min="0"
+            step="0.01" // 👈 allows decimals like 0.05
             value={reward.probability?.toString() || ""}
-            onChange={(e) => handleRewardChange(index, { probability: Number(e.target.value) })}
-            className=" border-amber-400 bg-[#4C4106] border-[1px]"
-
+            onChange={(e) =>
+              handleRewardChange(index, {
+                probability: parseFloat(e.target.value),
+              })
+            }
+            className="border-amber-400 bg-[#4C4106] border-[1px]"
           />
         </div>
       )
@@ -294,11 +311,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            min="1"
+            min="0"
+            step="0.01" // 👈 allows decimals like 0.05
             value={reward.probability?.toString() || ""}
-            onChange={(e) => handleRewardChange(index, { probability: Number(e.target.value) })}
-            className=" border-amber-400 bg-[#4C4106] border-[1px]"
-
+            onChange={(e) =>
+              handleRewardChange(index, {
+                probability: parseFloat(e.target.value),
+              })
+            }
+            className="border-amber-400 bg-[#4C4106] border-[1px]"
           />
         </div>
       )
@@ -353,11 +374,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
             <Label>Probability (%)</Label>
             <Input
               type="number"
-              min="1"
+              min="0"
+              step="0.01" // 👈 allows decimals like 0.05
               value={reward.probability?.toString() || ""}
-              onChange={(e) => handleRewardChange(index, { probability: Number(e.target.value) })}
-            className=" border-amber-400 bg-[#4C4106] border-[1px]"
-
+              onChange={(e) =>
+                handleRewardChange(index, {
+                  probability: parseFloat(e.target.value),
+                })
+              }
+              className="border-amber-400 bg-[#4C4106] border-[1px]"
             />
           </div>
         </div>
