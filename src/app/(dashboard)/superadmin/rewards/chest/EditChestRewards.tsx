@@ -155,16 +155,20 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Input
             type="number"
             min="0"
-            step="0.01" // 👈 allows decimals like 0.05
-            value={reward.probability?.toString() || ""}
+            step="0.01"
+            value={reward.probability ?? ""} // keep as string/number
             onChange={(e) =>
               handleRewardChange(index, {
-                probability: parseFloat(e.target.value),
+                probability: e.target.value, // 👈 DON'T parse yet
+              })
+            }
+            onBlur={(e) =>
+              handleRewardChange(index, {
+                probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
               })
             }
             className="border-amber-400 bg-[#4C4106] border-[1px]"
           />
-        </div>
       )
     }
 
@@ -194,11 +198,16 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Input
             type="number"
             min="0"
-            step="0.01" // 👈 allows decimals like 0.05
-            value={reward.probability?.toString() || ""}
+            step="0.01"
+            value={reward.probability ?? ""} // keep as string/number
             onChange={(e) =>
               handleRewardChange(index, {
-                probability: parseFloat(e.target.value),
+                probability: e.target.value, // 👈 DON'T parse yet
+              })
+            }
+            onBlur={(e) =>
+              handleRewardChange(index, {
+                probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
               })
             }
             className="border-amber-400 bg-[#4C4106] border-[1px]"
@@ -233,11 +242,16 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Input
             type="number"
             min="0"
-            step="0.01" // 👈 allows decimals like 0.05
-            value={reward.probability?.toString() || ""}
+            step="0.01"
+            value={reward.probability ?? ""} // keep as string/number
             onChange={(e) =>
               handleRewardChange(index, {
-                probability: parseFloat(e.target.value),
+                probability: e.target.value, // 👈 DON'T parse yet
+              })
+            }
+            onBlur={(e) =>
+              handleRewardChange(index, {
+                probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
               })
             }
             className="border-amber-400 bg-[#4C4106] border-[1px]"
@@ -270,18 +284,23 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
             </SelectContent>
           </Select>
           <Label>Probability (%)</Label>
-          <Input
-            type="number"
-            min="0"
-            step="0.01" // 👈 allows decimals like 0.05
-            value={reward.probability?.toString() || ""}
-            onChange={(e) =>
-              handleRewardChange(index, {
-                probability: parseFloat(e.target.value),
-              })
-            }
-            className="border-amber-400 bg-[#4C4106] border-[1px]"
-          />
+         <Input
+          type="number"
+          min="0"
+          step="0.01"
+          value={reward.probability ?? ""} // keep as string/number
+          onChange={(e) =>
+            handleRewardChange(index, {
+              probability: e.target.value, // 👈 DON'T parse yet
+            })
+          }
+          onBlur={(e) =>
+            handleRewardChange(index, {
+              probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
+            })
+          }
+          className="border-amber-400 bg-[#4C4106] border-[1px]"
+        />
         </div>
       )
     }
@@ -312,11 +331,16 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Input
             type="number"
             min="0"
-            step="0.01" // 👈 allows decimals like 0.05
-            value={reward.probability?.toString() || ""}
+            step="0.01"
+            value={reward.probability ?? ""} // keep as string/number
             onChange={(e) =>
               handleRewardChange(index, {
-                probability: parseFloat(e.target.value),
+                probability: e.target.value, // 👈 DON'T parse yet
+              })
+            }
+            onBlur={(e) =>
+              handleRewardChange(index, {
+                probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
               })
             }
             className="border-amber-400 bg-[#4C4106] border-[1px]"
@@ -375,11 +399,16 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
             <Input
               type="number"
               min="0"
-              step="0.01" // 👈 allows decimals like 0.05
-              value={reward.probability?.toString() || ""}
+              step="0.01"
+              value={reward.probability ?? ""} // keep as string/number
               onChange={(e) =>
                 handleRewardChange(index, {
-                  probability: parseFloat(e.target.value),
+                  probability: e.target.value, // 👈 DON'T parse yet
+                })
+              }
+              onBlur={(e) =>
+                handleRewardChange(index, {
+                  probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
                 })
               }
               className="border-amber-400 bg-[#4C4106] border-[1px]"
