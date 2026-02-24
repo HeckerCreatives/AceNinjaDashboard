@@ -56,13 +56,12 @@ export default function GrantCard(data: Items) {
 
 
   return (
-    <div className=' w-full h-auto flex flex-col cursor-pointer'>
-        <div className=' relative w-full h-[300px] bg-zinc-800 flex items-center justify-center'
-        style={{backgroundImage: `url('${data.imgUrl}')`, backgroundRepeat:'no-repeat', backgroundSize:'cover'}}
+    <div className=' w-full h-auto flex flex-col cursor-pointer bg-zinc-800 p-2 rounded-xl'>
+        <div className=' relative w-full aspect-square bg-zinc-800 flex items-center justify-center rounded-xl overflow-hidden'
         >
 
             <Image src={itemIcon(data.type)} alt="item" fill loading='lazy' className=' object-cover h-full opacity-50' />
-            <div className=' flex flex-col gap-1 absolute left-2 top-2 p-4'>
+            {/* <div className=' flex flex-col gap-1 absolute left-2 top-2 p-4'>
                 {data.damage > 0 && (
                 <div className='flex items-center'>
                     <p className='text-[.7rem] flex items-center gap-1'>
@@ -87,12 +86,12 @@ export default function GrantCard(data: Items) {
                 </div>
                 )}
 
-            </div>
-
+            </div> */}
+{/* 
             <div className=' w-full absolute bottom-0 p-4'>
                 <p className=' text-[.7rem] text-zinc-300'>{data.description}</p>
 
-            </div>
+            </div> */}
         </div>
 
         <div className=' w-full flex flex-col gap-1 py-2'>

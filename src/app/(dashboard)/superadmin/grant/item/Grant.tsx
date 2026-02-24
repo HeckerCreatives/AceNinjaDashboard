@@ -40,9 +40,26 @@ import GrantCard from '@/components/cards/GrantCard'
 import { useGrantItem } from '@/client_actions/superadmin/grant'
 import toast from 'react-hot-toast'
 import Loader from '@/components/common/Loader'
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { useGetUserList } from '@/client_actions/superadmin/manageplayer'
 
 const types = [
-  'skins', 'skills', 'chests', 'freebie'
+  'skins', 'skills', 'chests', 'freebie', 'weapon', 'badge', 'title'
 ]
 
 
@@ -56,11 +73,16 @@ export default function Grant() {
   const [type, setType] = useState('skins')
   const [rarity, setRarity] = useState('all')
   const [search, setSearch] = useState('')
+  const [searchUser, setSearchUser] = useState('')
   const {mutate: grantItem, isPending} = useGrantItem()
   const [selectedItems, setSelectedItems] = useState<{ itemId: string; itemname: string }[]>([]);
   const [username, setUsername] = useState('')
+  const [gender, setGender] = useState('')
+  const [selectUser, setSelectUser] = useState(false)
+  const [selectedUser, setSelectedUser] = useState('')
+  const {data: users} = useGetUserList(0,5,'',searchUser)
 
-  const {data, isLoading} = useGetItemsAdmin(type.replace(/\s+/g, ''), `${rarity !== 'all' ? rarity : ''}`, search, currentPage, 10)
+  const {data, isLoading} = useGetItemsAdmin(type.replace(/\s+/g, ''), `${rarity !== 'all' ? rarity : ''}`, search, currentPage, 10, '', gender)
 
   // Pagination
   const handlePageChange = (page: number) => {
@@ -115,8 +137,50 @@ export default function Grant() {
   return (
     <div className='w-full flex flex-col gap-8 overflow-hidden p-8'>
       <div className='flex flex-col gap-1 p-6 bg-amber-950 w-full max-w-[400px] rounded-sm'>
-        <label htmlFor="" className='text-xs'>Username</label>
-        <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Username' />
+        <label htmlFor="" className='text-xs'>Select User</label>
+        {/* <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Username' /> */}
+
+         <Popover open={selectUser} onOpenChange={setSelectUser}>
+                <PopoverTrigger className=' w-full bg-zinc-900 p-2 rounded-md flex items-center gap-2'>
+                  <Search size={20}/>
+                  {selectedUser ? (
+                  <p className=' text-sm font-semibold text-white'>{selectedUser}</p>
+                  ): (
+                  <p className=' text-sm text-zinc-300'>Select user</p>
+                  )}
+                </PopoverTrigger>
+                <PopoverContent className=' w-full min-w-48'>
+                  <Command className=' w-full'>
+                  <CommandInput value={searchUser} 
+                  onValueChange={(value) => {
+                    setSearchUser(value)
+                  }}
+                  placeholder="Search username..." />
+                  <CommandList>
+                    <CommandEmpty>No results found.</CommandEmpty>
+                    <CommandGroup heading="Suggestions">
+                      {users?.data?.playerListData?.flatMap((user) =>
+                        user?.character?.map((char) => (
+                          <CommandItem
+                            key={char.id}
+                            onSelect={() => {
+                              setSelectUser(false);
+                              setSelectedUser(char.username);
+                              setGender(char.gender === 1 ? "male" : "female");
+                            }}
+                          >
+                            {char.username}
+                          </CommandItem>
+                        ))
+                      )}
+
+                      
+                    </CommandGroup>
+                   
+                  </CommandList>
+                </Command>
+                </PopoverContent>
+              </Popover>
 
         <label htmlFor="" className='text-xs mt-2'>Selected Items</label>
 
@@ -137,15 +201,15 @@ export default function Grant() {
       <div className='w-full flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <DropdownMenu>
-            <DropdownMenuTrigger className='text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'>
+            <DropdownMenuTrigger className='text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm capitalize'>
               <ListFilter size={15} /> Type: {type}
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel className='text-xs'>Type</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {types.map((item, index) => (
-                <DropdownMenuItem onClick={() => setType(item)} key={index} className='text-[.7rem] cursor-pointer'>
-                  {item === type && <Check size={10} className='text-green-500' />} {item}
+                <DropdownMenuItem onClick={() => setType(item)} key={index} className='text-[.7rem] cursor-pointer capitalize'>
+                  {item === type && <Check size={10} className='text-green-500 capitalize' />} {item}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
@@ -153,12 +217,12 @@ export default function Grant() {
 
            {(type === 'skins' || type === 'skills' || type === 'chests') && (
                        <DropdownMenu>
-                        <DropdownMenuTrigger className=' text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'><ListFilter size={15}/>Rarity: {rarity}</DropdownMenuTrigger>
+                        <DropdownMenuTrigger className=' capitalize text-[.7rem] flex items-center gap-1 bg-zinc-800 px-2 py-1 rounded-sm'><ListFilter size={15}/>Rarity: {rarity}</DropdownMenuTrigger>
                         <DropdownMenuContent>
                           <DropdownMenuLabel className=' text-xs'>Rarity</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           {rarities.map((item, index) => (
-                          <DropdownMenuItem onClick={() => setRarity(item)} key={index} className=' text-[.7rem] cursor-pointer'>{item === rarity && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setRarity(item)} key={index} className=' capitalize text-[.7rem] cursor-pointer'>{item === rarity && <Check size={10} className=' text-green-500'/>}{item}</DropdownMenuItem>
                           ))}
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -179,12 +243,12 @@ export default function Grant() {
           <div className='loader'></div>
         </div>
       ) : (
-        <div className='w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6'>
+        <div className='w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] lg:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4'>
           {Object.values(data?.data || {}).map((item, index) => (
             <div
               key={index}
               onClick={() => toggleItemSelection(item)}
-              className={`transition-all p-2 ${selectedItems.some(selectedItem => selectedItem.itemId === item.itemId) ? 'border-2 border-yellow-500 rounded-sm' : ''}`}
+              className={`transition-all p-2 ${selectedItems.some(selectedItem => selectedItem.itemId === item.itemId) ? 'border-2 border-yellow-600 rounded-xl' : ''}`}
             >
               <GrantCard
                 key={item.itemId}

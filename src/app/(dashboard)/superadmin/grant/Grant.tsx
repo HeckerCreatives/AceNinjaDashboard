@@ -42,7 +42,7 @@ import toast from 'react-hot-toast'
 import Loader from '@/components/common/Loader'
 
 const types = [
-  'skins', 'skills', 'chests', 'freebie'
+  'skins', 'skills', 'chests', 'freebie', 'weapon'
 ]
 
 
@@ -145,7 +145,7 @@ export default function Grant() {
               <DropdownMenuSeparator />
               {types.map((item, index) => (
                 <DropdownMenuItem onClick={() => setType(item)} key={index} className='text-[.7rem] cursor-pointer'>
-                  {item === type && <Check size={10} className='text-green-500' />} {item}
+                  {item === type && <Check size={10} className='text-green-500 capitalize' />} {item}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>

@@ -93,19 +93,19 @@ export interface Skill {
 
 
 
-export const getItemsAdmin = async ( type: string, rarity: string, search: string, page: number, limit: number,markettype?: string): Promise<ApiResponse> => { 
+export const getItemsAdmin = async ( type: string, rarity: string, search: string, page: number, limit: number,markettype?: string, gender?: string): Promise<ApiResponse> => { 
   const response = await axiosInstance.get(
     "/marketplace/getmarketitemsadmin",
-    {params: {type, rarity, search, page, limit, markettype}}
+    {params: {type, rarity, search, page, limit, markettype, gender}}
   );
   return response.data;
 };
 
 
-export const useGetItemsAdmin = ( type: string, rarity: string, search: string, page: number, limit: number,markettype?: string) => {
+export const useGetItemsAdmin = ( type: string, rarity: string, search: string, page: number, limit: number,markettype?: string, gender?: string) => {
   return useQuery({
-    queryKey: ["store", type, rarity,search,page,limit,markettype ],
-    queryFn: () => getItemsAdmin( type, rarity,search,page,limit, markettype),
+    queryKey: ["store", type, rarity,search,page,limit,markettype, gender],
+    queryFn: () => getItemsAdmin( type, rarity,search,page,limit, markettype, gender),
     staleTime: 5 * 60 * 1000,
     refetchOnMount: false, 
     refetchOnWindowFocus: false,
