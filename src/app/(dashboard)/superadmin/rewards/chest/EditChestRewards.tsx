@@ -40,9 +40,9 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
   const { data: badgeItems } = useGetBadgeRewards()
 
   const [data, setData] = useState<ChestReward[]>([])
+  const [probabilityDrafts, setProbabilityDrafts] = useState<Record<number, string>>({})
   const {mutate: updateChestRewards, isPending} = useUpdateChestRewards()
 
-  console.log('Final', data)
 
    useEffect(() => {
       if (rewards) {
@@ -98,6 +98,44 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
 
   const handleDeleteReward = (index: number) => {
     setData((prev) => prev.filter((_, i) => i !== index))
+    setProbabilityDrafts((prev) => {
+      const next: Record<number, string> = {}
+      Object.entries(prev).forEach(([key, value]) => {
+        const currentIndex = Number(key)
+        if (currentIndex < index) next[currentIndex] = value
+        if (currentIndex > index) next[currentIndex - 1] = value
+      })
+      return next
+    })
+  }
+
+  const getProbabilityValue = (reward: ChestReward, index: number) => {
+    if (probabilityDrafts[index] !== undefined) {
+      return probabilityDrafts[index]
+    }
+    return reward.probability?.toString() || ""
+  }
+
+  const handleProbabilityInputChange = (index: number, value: string) => {
+    setProbabilityDrafts((prev) => ({ ...prev, [index]: value }))
+    const parsed = Number(value)
+    if (!Number.isNaN(parsed)) {
+      handleRewardChange(index, { probability: parsed })
+    }
+  }
+
+  const handleProbabilityInputBlur = (index: number) => {
+    setProbabilityDrafts((prev) => {
+      if (prev[index] === undefined) return prev
+      const next = { ...prev }
+      const rawValue = next[index]
+      const parsed = Number(rawValue)
+      if (!Number.isNaN(parsed)) {
+        handleRewardChange(index, { probability: parsed })
+      }
+      delete next[index]
+      return next
+    })
   }
 
   const handleSave = () => {
@@ -154,20 +192,12 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            min="0"
-            step="0.01"
-            value={reward.probability ?? ""} // keep as string/number
-            onChange={(e) =>
-              handleRewardChange(index, {
-                probability: e.target.value, // 👈 DON'T parse yet
-              })
-            }
-            onBlur={(e) =>
-              handleRewardChange(index, {
-                probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
-              })
-            }
-            className="border-amber-400 bg-[#4C4106] border-[1px]"
+            
+            step={'0.00001'}
+            value={getProbabilityValue(reward, index)}
+            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
+            onBlur={() => handleProbabilityInputBlur(index)}
+            className=" border-amber-400 bg-[#4C4106] border-[1px]"
           />
         </div>
       )
@@ -198,20 +228,12 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            min="0"
-            step="0.01"
-            value={reward.probability ?? ""} // keep as string/number
-            onChange={(e) =>
-              handleRewardChange(index, {
-                probability: e.target.value, // 👈 DON'T parse yet
-              })
-            }
-            onBlur={(e) =>
-              handleRewardChange(index, {
-                probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
-              })
-            }
-            className="border-amber-400 bg-[#4C4106] border-[1px]"
+            step={'0.00001'}
+            value={getProbabilityValue(reward, index)}
+            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
+            onBlur={() => handleProbabilityInputBlur(index)}
+            className=" border-amber-400 bg-[#4C4106] border-[1px]"
+
           />
         </div>
       )
@@ -242,20 +264,12 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            min="0"
-            step="0.01"
-            value={reward.probability ?? ""} // keep as string/number
-            onChange={(e) =>
-              handleRewardChange(index, {
-                probability: e.target.value, // 👈 DON'T parse yet
-              })
-            }
-            onBlur={(e) =>
-              handleRewardChange(index, {
-                probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
-              })
-            }
-            className="border-amber-400 bg-[#4C4106] border-[1px]"
+            step={'0.00001'}
+            value={getProbabilityValue(reward, index)}
+            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
+            onBlur={() => handleProbabilityInputBlur(index)}
+            className=" border-amber-400 bg-[#4C4106] border-[1px]"
+
           />
         </div>
       )
@@ -285,23 +299,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
             </SelectContent>
           </Select>
           <Label>Probability (%)</Label>
-         <Input
-          type="number"
-          min="0"
-          step="0.01"
-          value={reward.probability ?? ""} // keep as string/number
-          onChange={(e) =>
-            handleRewardChange(index, {
-              probability: e.target.value, // 👈 DON'T parse yet
-            })
-          }
-          onBlur={(e) =>
-            handleRewardChange(index, {
-              probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
-            })
-          }
-          className="border-amber-400 bg-[#4C4106] border-[1px]"
-        />
+          <Input
+            type="number"
+            step={'0.00001'}
+            value={getProbabilityValue(reward, index)}
+            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
+            onBlur={() => handleProbabilityInputBlur(index)}
+            className=" border-amber-400 bg-[#4C4106] border-[1px]"
+
+          />
         </div>
       )
     }
@@ -331,20 +337,12 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            min="0"
-            step="0.01"
-            value={reward.probability ?? ""} // keep as string/number
-            onChange={(e) =>
-              handleRewardChange(index, {
-                probability: e.target.value, // 👈 DON'T parse yet
-              })
-            }
-            onBlur={(e) =>
-              handleRewardChange(index, {
-                probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
-              })
-            }
-            className="border-amber-400 bg-[#4C4106] border-[1px]"
+            step={'0.00001'}
+            value={getProbabilityValue(reward, index)}
+            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
+            onBlur={() => handleProbabilityInputBlur(index)}
+            className=" border-amber-400 bg-[#4C4106] border-[1px]"
+
           />
         </div>
       )
@@ -399,20 +397,12 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
             <Label>Probability (%)</Label>
             <Input
               type="number"
-              min="0"
-              step="0.01"
-              value={reward.probability ?? ""} // keep as string/number
-              onChange={(e) =>
-                handleRewardChange(index, {
-                  probability: e.target.value, // 👈 DON'T parse yet
-                })
-              }
-              onBlur={(e) =>
-                handleRewardChange(index, {
-                  probability: parseFloat(e.target.value) || 0, // 👈 parse only when done
-                })
-              }
-              className="border-amber-400 bg-[#4C4106] border-[1px]"
+              step={'0.00001'}
+              value={getProbabilityValue(reward, index)}
+              onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
+              onBlur={() => handleProbabilityInputBlur(index)}
+            className=" border-amber-400 bg-[#4C4106] border-[1px]"
+
             />
           </div>
         </div>
