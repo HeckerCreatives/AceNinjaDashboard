@@ -21,7 +21,7 @@ export interface Chest {
 export type ChestReward = {
   rewardType: "coins" | "exp" | "crystal" | "weapon" | "skill" | "badge" | "title" | "outfit"
   amount?: number
-  probability?: number
+  probability?: string
   reward?: {
     id?: string
     name?: string

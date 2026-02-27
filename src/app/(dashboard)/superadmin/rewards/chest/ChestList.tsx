@@ -66,7 +66,7 @@ export default function Chestlist() {
                                 <EditChestRewards chestid={item.id} rewards={item.rewards} chest={item}/>
                             </TableCell>
                             <TableCell>
-                                <EditChest chestid={item.id} data={item}/>
+                                <EditChest chestid={item.id} data={item} />
                             </TableCell>
                           
                         </TableRow>

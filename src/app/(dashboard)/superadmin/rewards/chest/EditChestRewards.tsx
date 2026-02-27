@@ -24,23 +24,26 @@ import Loader from "@/components/common/Loader"
 type Props = {
   chestid: string
   rewards: ChestReward[],
-  chest: Chest
+  chest: Chest,
+
+
 }
 
 type RewardType = "coins" | "exp" | "crystal" | "weapon" | "skill" | "badge" | "title" | "outfit"
 
 const rewardTypes: RewardType[] = ["coins", "exp", "crystal", "weapon", "skill", "badge", "title", "outfit"]
 
-export default function EditChestRewards({ chestid, rewards, chest }: Props) {
+export default function EditChestRewards({ chestid, rewards, chest}: Props) {
   const { data: weaponItems } = useGetItemRewards("weapon", "unisex")
   const { data: maleItems } = useGetItemRewards("outfit", "male")
   const { data: femaleItems } = useGetItemRewards("outfit", "female")
   const { data: skillItems } = useGetItemRewards("skills", "")
   const { data: titleItems } = useGetTitleRewards()
   const { data: badgeItems } = useGetBadgeRewards()
+      const [open, setOpen] = useState(false)
+  
 
   const [data, setData] = useState<ChestReward[]>([])
-  const [probabilityDrafts, setProbabilityDrafts] = useState<Record<number, string>>({})
   const {mutate: updateChestRewards, isPending} = useUpdateChestRewards()
 
 
@@ -49,7 +52,7 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
         const normalized = rewards.map((r) => ({
           rewardType: r.rewardType,
           amount: r.amount ?? 0,
-          probability: r.probability ?? 0,
+          probability: r.probability ?? '0',
           reward: r.reward
             ? {
                 id: r.reward.id ?? "",
@@ -74,7 +77,7 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
     {
       rewardType: "coins",
       amount: 0,
-      probability: 0,
+      probability: "0",
     },
   ])
 }
@@ -98,64 +101,34 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
 
   const handleDeleteReward = (index: number) => {
     setData((prev) => prev.filter((_, i) => i !== index))
-    setProbabilityDrafts((prev) => {
-      const next: Record<number, string> = {}
-      Object.entries(prev).forEach(([key, value]) => {
-        const currentIndex = Number(key)
-        if (currentIndex < index) next[currentIndex] = value
-        if (currentIndex > index) next[currentIndex - 1] = value
-      })
-      return next
-    })
-  }
-
-  const getProbabilityValue = (reward: ChestReward, index: number) => {
-    if (probabilityDrafts[index] !== undefined) {
-      return probabilityDrafts[index]
-    }
-    return reward.probability?.toString() || ""
-  }
-
-  const handleProbabilityInputChange = (index: number, value: string) => {
-    setProbabilityDrafts((prev) => ({ ...prev, [index]: value }))
-    const parsed = Number(value)
-    if (!Number.isNaN(parsed)) {
-      handleRewardChange(index, { probability: parsed })
-    }
-  }
-
-  const handleProbabilityInputBlur = (index: number) => {
-    setProbabilityDrafts((prev) => {
-      if (prev[index] === undefined) return prev
-      const next = { ...prev }
-      const rawValue = next[index]
-      const parsed = Number(rawValue)
-      if (!Number.isNaN(parsed)) {
-        handleRewardChange(index, { probability: parsed })
-      }
-      delete next[index]
-      return next
-    })
   }
 
   const handleSave = () => {
 
-      const transformedRewards: ChestRewardUpdate[] = data.map(({ rewardType, reward, ...rest }) => {
-        const type = rewardType.toLowerCase() as ChestRewardUpdate["rewardtype"]
+      const transformedRewards: ChestRewardUpdate[] = data.map(
+        ({ rewardType, reward, probability, ...rest }) => {
 
-        if (type === "coins" || type === "exp" || type === "crystal") {
+          const numericProbability = Number(probability)
+
+          const type = rewardType.toLowerCase() as ChestRewardUpdate["rewardtype"]
+
+          if (type === "coins" || type === "exp" || type === "crystal") {
+            return {
+              ...rest,
+              probability: numericProbability,
+              rewardtype: type,
+
+            }
+          }
+
           return {
             ...rest,
+            probability: numericProbability,
             rewardtype: type,
+            reward,
           }
         }
-
-        return {
-          ...rest,
-          rewardtype: type,
-          reward,
-        }
-      })
+      )
 
    
       updateChestRewards(
@@ -163,6 +136,7 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
         {
           onSuccess: () => {
             toast.success(`Rewards  updated successfully.`)
+            setOpen(false)
           },
           onError: (error) => {
             console.error("Failed to update rank rewards:", error)
@@ -175,7 +149,6 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
   const renderRewardInputs = (reward: any, index: number) => {
     const isAmountType = ["coins", "exp", "crystal"].includes(reward.rewardType)
 
-    console.log('Inputs', reward)
 
     if (isAmountType) {
       return (
@@ -192,11 +165,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            
-            step={'0.00001'}
-            value={getProbabilityValue(reward, index)}
-            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
-            onBlur={() => handleProbabilityInputBlur(index)}
+            step="any"
+            min="0"
+            value={reward.probability?.toString() || ""}
+           onChange={(e) => {
+              const value = e.target.value
+              if (/^\d*\.?\d{0,4}$/.test(value)) {
+                handleRewardChange(index, { probability: (value) })
+              }
+            }}
             className=" border-amber-400 bg-[#4C4106] border-[1px]"
           />
         </div>
@@ -228,10 +205,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            step={'0.00001'}
-            value={getProbabilityValue(reward, index)}
-            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
-            onBlur={() => handleProbabilityInputBlur(index)}
+           step="any"
+            min="0"
+            value={reward.probability?.toString() || ""}
+             onChange={(e) => {
+              const value = e.target.value
+              if (/^\d*\.?\d{0,4}$/.test(value)) {
+                handleRewardChange(index, { probability: (value) })
+              }
+            }}
             className=" border-amber-400 bg-[#4C4106] border-[1px]"
 
           />
@@ -264,10 +246,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            step={'0.00001'}
-            value={getProbabilityValue(reward, index)}
-            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
-            onBlur={() => handleProbabilityInputBlur(index)}
+            step="any"
+            min="0"
+            value={reward.probability?.toString() || ""}
+            onChange={(e) => {
+              const value = e.target.value
+              if (/^\d*\.?\d{0,4}$/.test(value)) {
+                handleRewardChange(index, { probability: (value) })
+              }
+            }}
             className=" border-amber-400 bg-[#4C4106] border-[1px]"
 
           />
@@ -301,10 +288,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            step={'0.00001'}
-            value={getProbabilityValue(reward, index)}
-            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
-            onBlur={() => handleProbabilityInputBlur(index)}
+            step="0.0001"
+            min={'0'}
+            value={reward.probability?.toString() || ""}
+             onChange={(e) => {
+              const value = e.target.value
+              if (/^\d*\.?\d{0,4}$/.test(value)) {
+                handleRewardChange(index, { probability: (value) })
+              }
+            }}
             className=" border-amber-400 bg-[#4C4106] border-[1px]"
 
           />
@@ -316,7 +308,7 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
       return (
         <div className="space-y-2">
           <Label>Skill</Label>
-          <Select value={reward.reward.id?.toString() || ""} 
+          <Select value={reward.reward?.id?.toString() ?? ""} 
             onValueChange={(val) =>
             handleRewardChange(index, {
               reward: { id: val },
@@ -337,10 +329,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
           <Label>Probability (%)</Label>
           <Input
             type="number"
-            step={'0.00001'}
-            value={getProbabilityValue(reward, index)}
-            onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
-            onBlur={() => handleProbabilityInputBlur(index)}
+            step="any"
+            min="0"
+            value={reward.probability?.toString() || ""}
+             onChange={(e) => {
+              const value = e.target.value
+              if (/^\d*\.?\d{0,4}$/.test(value)) {
+                handleRewardChange(index, { probability: (value) })
+              }
+            }}
             className=" border-amber-400 bg-[#4C4106] border-[1px]"
 
           />
@@ -397,10 +394,15 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
             <Label>Probability (%)</Label>
             <Input
               type="number"
-              step={'0.00001'}
-              value={getProbabilityValue(reward, index)}
-              onChange={(e) => handleProbabilityInputChange(index, e.target.value)}
-              onBlur={() => handleProbabilityInputBlur(index)}
+              step="any"
+            min="0"
+              value={reward.probability?.toString() || ""}
+              onChange={(e) => {
+                const value = e.target.value
+                if (/^\d*\.?\d{0,4}$/.test(value)) {
+                  handleRewardChange(index, { probability: (value) })
+                }
+              }}
             className=" border-amber-400 bg-[#4C4106] border-[1px]"
 
             />
@@ -412,7 +414,7 @@ export default function EditChestRewards({ chestid, rewards, chest }: Props) {
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="flex items-center gap-1 bg-amber-700 rounded-md px-3 py-1">
         <Eye size={15} />
         Rewards
