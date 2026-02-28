@@ -40,7 +40,7 @@ export default function EditChestRewards({ chestid, rewards, chest}: Props) {
   const { data: skillItems } = useGetItemRewards("skills", "")
   const { data: titleItems } = useGetTitleRewards()
   const { data: badgeItems } = useGetBadgeRewards()
-      const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false)
   
 
   const [data, setData] = useState<ChestReward[]>([])
@@ -187,7 +187,7 @@ export default function EditChestRewards({ chestid, rewards, chest}: Props) {
           <Select value={reward.reward.id || ""} 
           onValueChange={(val) =>
             handleRewardChange(index, {
-              reward: { id: val },
+              reward: { id: val, name: badgeItems?.data.find((item) => String(item.index) === val)?.title ?? '' },
             })
           }
           >
@@ -228,7 +228,7 @@ export default function EditChestRewards({ chestid, rewards, chest}: Props) {
           <Select value={reward.reward.id?.toString() || ""} 
           onValueChange={(val) =>
             handleRewardChange(index, {
-              reward: { id: val },
+              reward: { id: val, name: titleItems?.data.find((item) => String(item.index) === val)?.title ?? ''  },
             })
           }
           >
@@ -270,7 +270,7 @@ export default function EditChestRewards({ chestid, rewards, chest}: Props) {
           <Select  value={reward.reward.id?.toString() || ''} 
           onValueChange={(val) =>
             handleRewardChange(index, {
-              reward: { id: val },
+              reward: { id: val, name: weaponItems?.data.items.find((item) => item.itemid === val)?.name ?? ''  },
             })
           }
           >
@@ -311,7 +311,7 @@ export default function EditChestRewards({ chestid, rewards, chest}: Props) {
           <Select value={reward.reward?.id?.toString() ?? ""} 
             onValueChange={(val) =>
             handleRewardChange(index, {
-              reward: { id: val },
+              reward: { id: val, name: skillItems?.data.items.find((item) => item.itemid === val)?.name ?? ''    },
             })
           }
           >
@@ -353,7 +353,7 @@ export default function EditChestRewards({ chestid, rewards, chest}: Props) {
             <Select value={reward.reward?.id?.toString() || ""} 
               onValueChange={(val) =>
             handleRewardChange(index, {
-              reward: { id: val },
+              reward: { id: val, name: maleItems?.data.items.find((item) => item.itemid === val)?.name ?? ''   },
             })
           }
             >
@@ -374,7 +374,7 @@ export default function EditChestRewards({ chestid, rewards, chest}: Props) {
             <Select value={reward.reward?.fid?.toString() || ""} 
               onValueChange={(val) =>
             handleRewardChange(index, {
-              reward: { fid: val },
+              reward: { fid: val, fname: femaleItems?.data.items.find((item) => item.itemid === val)?.name ?? '' },
             })
           }
             >
