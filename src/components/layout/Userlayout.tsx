@@ -102,7 +102,7 @@ export default function Userlayout({ children }: { children: React.ReactNode }) 
                 <DropdownMenuSeparator /> */}
                 <DropdownMenuLabel className="text-xs font-medium">Characters</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {data?.map((item, index) => (
+                {Object.values(data || {})?.map((item, index) => (
                    <DropdownMenuItem key={item.id} onClick={() => setCharacterid(item.id)} className="text-xs cursor-pointer">
                     {characterid === item.id ? (
                       <Check size={5} className=" text-green-400"/>

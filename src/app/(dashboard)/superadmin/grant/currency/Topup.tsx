@@ -15,10 +15,34 @@ import { SendCurrency, sendCurrencySchema } from '@/validation/schema';
 import { useSendAmount } from '@/client_actions/superadmin/topup'
 import toast from 'react-hot-toast'
 import Loader from '@/components/common/Loader'
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { useGetUserList } from '@/client_actions/superadmin/manageplayer'
+import { Search } from 'lucide-react'
 
 export default function Topup() {
     const {mutate: sendAmount, isPending} = useSendAmount()
     const [formattedValue, setFormattedValue] = useState('0')
+    const [selectUser, setSelectUser] = useState(false)
+    const [selectedUser, setSelectedUser] = useState('')
+    const [searchUser, setSearchUser] = useState('')
+    const {data: users} = useGetUserList(0,5,'',searchUser)
+    
+    
 
     const {
         register,
@@ -41,6 +65,10 @@ export default function Topup() {
                     amount: 0,
                     currency: ''
                     });
+
+                    setSearchUser('')
+                    setSelectedUser('')
+                    setSelectUser(false)
 
                     setFormattedValue('0')
     
@@ -71,13 +99,57 @@ export default function Topup() {
 
                 {/* Username Input */}
                 <label className='text-xs mt-4'>Character Name</label>
-                <Input 
+                {/* <Input 
                     placeholder='Character name' 
                     type='text' 
                     className='border-amber-400 bg-[#4C4106] text-white' 
                     {...register('username')} 
-                />
+                /> */}
+
+                <Popover open={selectUser} onOpenChange={setSelectUser}>
+                                <PopoverTrigger className=' w-full border-amber-400 bg-[#4C4106] border p-2 rounded-md flex items-center gap-2'>
+                                  <Search size={20}/>
+                                  {selectedUser ? (
+                                  <p className=' text-sm font-semibold text-white'>{selectedUser}</p>
+                                  ): (
+                                  <p className=' text-sm text-zinc-300'>Select user</p>
+                                  )}
+                                </PopoverTrigger>
+                                <PopoverContent className=' w-full min-w-48'>
+                                  <Command className=' w-full'>
+                                  <CommandInput value={searchUser} 
+                                  onValueChange={(value) => {
+                                    setSearchUser(value)
+                                    
+                                  }}
+                                  placeholder="Search username..." />
+                                  <CommandList>
+                                    <CommandEmpty>No results found.</CommandEmpty>
+                                    <CommandGroup heading="Suggestions">
+                                      {users?.data?.playerListData?.flatMap((user) =>
+                                        user?.character?.map((char) => (
+                                          <CommandItem
+                                            key={char.id}
+                                            onSelect={() => {
+                                              setSelectUser(false);
+                                              setSelectedUser(char.username);
+                                              setValue('username',char.username);
+                                            }}
+                                          >
+                                            {char.username}
+                                          </CommandItem>
+                                        ))
+                                      )}
+                
+                                      
+                                    </CommandGroup>
+                                   
+                                  </CommandList>
+                                </Command>
+                                </PopoverContent>
+                              </Popover>
                 {errors.username && <p className="text-red-500 text-xs">{errors.username.message}</p>}
+
 
                 {/* Currency Select */}
                 <label className='text-xs mt-2'>Currency</label>
