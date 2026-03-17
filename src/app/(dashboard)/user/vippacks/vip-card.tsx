@@ -17,6 +17,11 @@ interface Reward {
   probability?: number
 }
 
+interface Availability {
+  availableCount: number
+  smallest5: number[]
+}
+
 interface StoreItem {
   id: string
   name: string
@@ -24,6 +29,8 @@ interface StoreItem {
   currency: string
   rewards: Reward[]
   createdAt: string
+  vipTier?: string
+  availability?: Availability
 }
 
 interface StoreCardProps {
@@ -32,7 +39,20 @@ interface StoreCardProps {
 
 export function StoreCard({ item }: StoreCardProps) {
   const [showRewards, setShowRewards] = useState(false)
-  const isVIP = item.name.includes("VIP")
+  const [showPurchase, setShowPurchase] = useState(false)
+  const availableCount = item.availability?.availableCount
+  const hasAvailability = availableCount !== 0
+  const smallestFive = item.availability?.smallest5 ?? []
+
+  const itemPerPack = (data: string) => {
+    if(data.toLowerCase().includes('silver')){
+      return `Convert ID to 3 digits`
+    } else if(data.toLowerCase().includes('platinum')){
+      return `Convert ID to 1 digit`
+    } else if(data.toLowerCase().includes('gold')){
+      return `Convert ID to 2 digits`
+    }
+  }
 
   return (
     <>
@@ -43,6 +63,11 @@ export function StoreCard({ item }: StoreCardProps) {
 
         <div className="p-6 flex-1 flex flex-col">
           <h3 className="text-xl font-bold text-white mb-2">{item.name}</h3>
+          {item.vipTier && (
+            <p className="text-[0.6rem] uppercase tracking-widest text-amber-200 mb-2">
+              {item.vipTier} tier
+            </p>
+          )}
           <div className="flex items-baseline gap-2 mb-4">
             <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-400">
               {item.amount}
@@ -53,6 +78,28 @@ export function StoreCard({ item }: StoreCardProps) {
           <div className="mb-6">
             <p className="text-xs text-slate-400 uppercase tracking-wider mb-3">Contains</p>
             <div className="space-y-2">
+               <div  className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-400" />
+                    <span className="text-slate-300 capitalize">{itemPerPack(item.name)}</span>
+                  </div>
+
+                  {hasAvailability ? (
+                    <>
+                    <div className="flex justify-between text-[0.60rem] uppercase tracking-wide text-green-500">
+                      <span>Available</span>
+                    </div>
+                    </>
+                  ): (
+                    <>
+                     <div className="flex justify-between text-[0.60rem] uppercase tracking-wide text-red-500">
+                      <span>Not Available</span>
+                    </div>
+                    </>
+                  )}
+
+                
+                </div>
               {item.rewards.slice(0, 3).map((reward, idx) => (
                 <div key={idx} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
@@ -66,6 +113,7 @@ export function StoreCard({ item }: StoreCardProps) {
                 <p className="text-xs text-slate-500 mt-2 pl-4">+{item.rewards.length - 3} more rewards</p>
               )}
             </div>
+           
           </div>
 
           <div className="flex gap-2 mt-auto pt-4">
@@ -76,13 +124,17 @@ export function StoreCard({ item }: StoreCardProps) {
             >
               View Rewards
             </Button>
-            {/* <Button className="flex-1">
-              Buy Now
+            {/* <Button className="flex-1"
+              onClick={() => setShowPurchase(true)}
+              disabled={isSoldOut}
+            >
+              {isSoldOut ? "Sold out" : "Buy Now"}
             </Button> */}
           </div>
         </div>
       </Card>
-
+      
+      {/* <PurchaseDialog open={showPurchase} onOpenChange={setShowPurchase} item={item} /> */}
       <RewardsDialog open={showRewards} onOpenChange={setShowRewards} item={item} />
     </>
   )

@@ -19,7 +19,7 @@ export default function SellMarketHistory() {
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
   const { characterid } = useCharacterStore()
-  const {data, isLoading} = useGetUserHistory(characterid, currentPage, 10, '', 'market')
+  const {data, isLoading} = useGetUserHistory(characterid, currentPage, 10, 'sell', 'market')
 
 
 
@@ -40,7 +40,7 @@ console.log(data)
   return (
     <div className=' bg-zinc-950 p-4 w-full h-fit border-[1px] border-amber-900 rounded-md'>
     <Table>
-       {!data?.data && (
+       {data?.data.length === 0 && (
                  <TableCaption className=' text-xs'>No Data</TableCaption>
                  )}
                  {isLoading && (

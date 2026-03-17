@@ -39,7 +39,7 @@ export default function TopupHistory() {
   return (
     <div className=' bg-zinc-950 p-4 w-full h-fit border-[1px] border-amber-900 rounded-md'>
     <Table>
-       {!data?.data && (
+       {data?.data.length === 0 && (
                  <TableCaption className=' text-xs'>No Data</TableCaption>
                  )}
                  {isLoading && (

@@ -109,8 +109,8 @@ export const currencyImg = (data: string) => {
         return <img src="/Coins.png" alt="currency" width={20}/>
     } else if (data === 'crystal'){
         return <img src="/Emeralds.webp" alt="currency" width={20}/>
-    } else if (data === 'topupcredit'){
-        return '$'
+    } else if (data === 'topupcredit' || data === 'goldpacks'){
+        return <img src="/topup.png" alt="topup" width={30}/>
     } 
 }
 

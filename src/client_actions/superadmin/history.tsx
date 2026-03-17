@@ -40,7 +40,7 @@ export const getUserHistory = async (characterid: string,page: number, limit: nu
 
 export const useGetUserHistory = (characterid: string,page: number, limit: number, action: string, type: string) => {
   return useQuery({
-    queryKey: ["topup",characterid,page, limit, action, type],
+    queryKey: ["history",characterid,page, limit, action, type],
     queryFn: () => getUserHistory(characterid,page, limit, action, type),
     // staleTime: 5 * 60 * 1000,
     // refetchOnMount: false, 

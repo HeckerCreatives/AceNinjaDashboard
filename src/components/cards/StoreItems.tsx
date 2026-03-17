@@ -6,6 +6,7 @@ import UpdateStoreItems from '../forms/UpdateStoreItem'
 import { currencyImg } from '@/utils/findAsset'
 import EditFreebieForm from '../forms/store/EditFreebieData'
 import Image from 'next/image'
+import EditPacks from '../forms/store/EditPacks'
   
 
 type Items = {
@@ -16,6 +17,7 @@ speed: number
 itemid: string
 itemname: string
 itemprice: number
+amount?: number
 rarity: string
 description: string
 currency: string
@@ -39,6 +41,7 @@ const rarutyFilter = [
 ]
 
 export default function StoreItems(data: Items) {
+
 
     const rarityColor = (data: string) => {
         if(data === 'Basic'){
@@ -135,7 +138,7 @@ export default function StoreItems(data: Items) {
                 <div className=' flex flex-col w-full gap-1'>
                     <p className=' text-[.8rem] whitespace-pre-wrap'>{data.itemname} <span className={` text-[.6rem] ${rarityColor(data.rarity)}`}>{data.rarity}</span></p>
                     {data.type !== 'freebie' && (
-                      <p className=' text-sm font-semibold flex items-center gap-2'>{currencyImg(data.currency)}{displayValue.toLocaleString()}</p>
+                      <p className=' text-sm font-semibold flex items-center gap-2'>{currencyImg(data.type === 'goldpacks' ? data.type : data.currency)}{displayValue.toLocaleString()}</p>
                     )}
                 </div>
             
@@ -146,6 +149,10 @@ export default function StoreItems(data: Items) {
 
                   {data.editable && (
                     <UpdateStoreItems imgUrl={data.imgUrl} damage={data.damage} defense={data.defense} speed={data.speed} itemid={data.itemid} itemname={data.itemname} itemprice={data.itemprice} rarity={data.rarity} description={data.description} gender={data.gender} currency={data.currency} type={data.type} tab={data.tab}/>
+                  )}
+
+                  {(data.itemtype === 'goldpacks' || data.itemtype === 'crystalpacks') && (
+                    <EditPacks itemid={data.itemid} description={data.description} amount={data.type === 'crystalpacks' ? (data.crystal || 0) :( data.coins || 0)} price={data.itemprice} currency={data.currency} />
                   )}
 
                    {data.itemtype === 'freebie' && (

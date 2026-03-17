@@ -57,3 +57,24 @@ export const useUpdateFreebie = () => {
 };
 
 
+export const updatePacks = async (itemid: string, description: string, amount: number, price: number) => { 
+     const response = await axiosInstance.post("/marketplace/editpacks", {itemid, description, amount , price});
+     return response.data;
+ };
+  
+export const useUpdatePacks = () => {
+     const queryClient = useQueryClient();
+     return useMutation({
+       mutationFn: ({ itemid, description, amount, price}: {itemid: string, description: string, amount: number, price: number}) =>
+        updatePacks(  itemid, description, amount, price),
+         onError: (error) => {
+             handleApiError(error);
+         },
+         onSuccess: () => {
+             queryClient.invalidateQueries({ queryKey: ["store"] });
+         }
+     });
+};
+
+
+
